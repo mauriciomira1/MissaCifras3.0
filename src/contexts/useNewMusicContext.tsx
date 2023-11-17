@@ -12,36 +12,37 @@ interface SongDataProps {
   id?: number;
   musica: string;
   slug: string;
-  versao: string;
-  compositor: string;
+  versao?: string;
+  compositor?: string;
   tom: string;
-  bpm: number;
+  bpm?: number;
   video: string;
   letra: string;
   cifra: string;
+  chordsList?: string[];
   artistas: string[];
   hashtags: string;
-  momentoDaMissa: string;
-  qtdDeCliques?: number;
-  chordsList?: string[];
-  userWhoSent?: string;
+  classificacao: string;
   liturgica: boolean;
+  qtdDeCliques?: number;
+  userWhoSent?: string;
 }
 
 interface CifraProps {
   letra: string;
+  cifra: string;
   chordsList: chordsListProps[];
 }
 
 interface chordsListProps {
   acorde: string;
-  index: number;
 }
 
-interface ListSongsProps extends SongDataProps {
+// Será substituído pelo CifraProps
+/* interface ListSongsProps extends SongDataProps {
   letra: string;
   cifra: CifraProps;
-}
+} */
 
 interface ContextNewMusicProps {
   setSongData: Dispatch<SetStateAction<SongDataProps>>;
@@ -65,13 +66,13 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongDataProps>({
     musica: "",
     versao: "",
-    cantor: "",
+    artistas: "",
     compositor: "",
     tom: "",
     bpm: 0,
     video: "",
     hashtags: "",
-    momentoDaMissa: "",
+    classificacao: "",
     liturgica: false,
   });
   const [listSongs, setListSongs] = useState([{} as ListSongsProps]);
@@ -89,7 +90,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
       bpm: data.bpm,
       video: data.video,
       hashtags: data.hashtags,
-      momentoDaMissa: data.momentoDaMissa,
+      classificacao: data.classificacao,
       liturgica: data.liturgica,
     }));
   };

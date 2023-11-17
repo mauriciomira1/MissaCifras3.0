@@ -42,7 +42,7 @@ model Cifra {
   artistas         ArtistaCifra[]
   thumbnail        String?
   hashtags         String[]
-  momentoDaMissa   String[]
+  classificacao    String[]
   liturgica        Boolean
   qtdDeCliques     Int
   usuarioQueEnviou User           @relation(fields: [userId], references: [id])

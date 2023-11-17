@@ -12,7 +12,7 @@ interface DataProps {
   bpm: number;
   video: string;
   hashtags: string;
-  momentoDaMissa: string;
+  classificacao: string;
   liturgica: boolean;
 }
 
@@ -29,7 +29,6 @@ const Etapa01 = () => {
   useEffect(() => {
     localStorage.setItem("dataSong", JSON.stringify(data));
     EtapaSong01(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleChange = (ev: any) => {
@@ -116,12 +115,13 @@ const Etapa01 = () => {
       <select
         className="w-full rounded items-center focus:bg-white bg-gray-200 h-8 px-2 placeholder:text-sm text-gray-800 text-sm"
         onChange={handleChange}
-        value={data.momentoDaMissa}
-        name="momentoDaMissa"
+        value={data.classificacao}
+        name="classificacao"
       >
         <option value="" disabled>
-          Selecione o momento da missa
+          Classificação da música
         </option>
+        <option value="Grupo de Oração">Grupo de Oração/Outros</option>
         <option value="Canto de entrada">Canto de entrada</option>
         <option value="Ato Penitencial">Ato Penitencial</option>
         <option value="Glória">Glória</option>
