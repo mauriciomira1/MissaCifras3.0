@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+  /* Classes com paleta de cores do site para textos */
+  .text-primary {
+    @apply text-primaryColor;
+  }
+
+  .text-secondary {
+    @apply text-secondaryColor;
+  }
+
+  .text-tertiary {
+    @apply text-tertiaryColor;
+  }
+
+  /* Classes com paleta de cores do site para botões do submenu */
+  .btn-submenu {
+    @apply rounded px-2 py-4 border border-gray-400 text-primaryColor;
+  }
+
+  .btn-submenu-hover {
+    @apply rounded px-2 py-4 text-white bg-secondaryColor;
+  }
+
+  .btn-submenu-active {
+    @apply rounded px-2 py-4 text-white bg-primaryColor;
+  }
+}
