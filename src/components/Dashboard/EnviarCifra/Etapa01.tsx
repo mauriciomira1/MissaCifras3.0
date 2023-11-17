@@ -5,11 +5,11 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 interface DataProps {
   musica: string;
-  versao: string;
-  cantor: string;
-  compositor: string;
+  versao?: string;
+  artistas: string[];
+  compositor?: string;
   tom: string;
-  bpm: number;
+  bpm?: number;
   video: string;
   hashtags: string;
   classificacao: string;
@@ -29,6 +29,8 @@ const Etapa01 = () => {
   useEffect(() => {
     localStorage.setItem("dataSong", JSON.stringify(data));
     EtapaSong01(data);
+    console.log(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleChange = (ev: any) => {
@@ -41,30 +43,35 @@ const Etapa01 = () => {
       <h1 className="font-text text-primaryColor py-1 font-bold">
         ETAPA 01 - DADOS DA MÚSICA
       </h1>
+
       <InputData
         placeholder="Nome da música"
         name="musica"
         onChange={handleChange}
         value={data.musica}
       />
+
       <InputData
         placeholder="Versão (Ao Vivo em Brasília, Acústico, etc)"
         name="versao"
         onChange={handleChange}
         value={data.versao}
       />
+
       <InputData
-        placeholder="Cantor ou Banda"
-        name="cantor"
+        placeholder="Cantor(es) ou Banda (se houver mais de um, separe por vírgulas)"
+        name="artistas"
         onChange={handleChange}
-        value={data.cantor}
+        value={data.artistas}
       />
+
       <InputData
         placeholder="Nome do compositor (opcional)"
         name="compositor"
         onChange={handleChange}
         value={data.compositor}
       />
+
       <select
         className="w-full rounded items-center focus:bg-white bg-gray-200 h-8 px-2 placeholder:text-sm text-gray-800 text-sm"
         onChange={handleChange}
@@ -87,6 +94,7 @@ const Etapa01 = () => {
         <option value="A#">A#</option>
         <option value="B">B</option>
       </select>
+
       <div className="w-full flex items-center">
         <span className="mr-2 font-bold font-text text-sm w-28">
           BPM <span className="text-[.8em]">(opcional)</span>:
@@ -96,9 +104,10 @@ const Etapa01 = () => {
           type="text"
           name="bpm"
           onChange={handleChange}
-          value={+data.bpm}
+          value={data.bpm}
         />
       </div>
+
       <InputData
         placeholder="Vídeo do Youtube com a versão"
         type="url"
@@ -106,12 +115,14 @@ const Etapa01 = () => {
         onChange={handleChange}
         value={data.video}
       />
+
       <InputData
         placeholder="Palavras-chave (Exemplo: maria, jesus, amor de pai, etc)"
         name="hashtags"
         onChange={handleChange}
         value={data.hashtags}
       />
+
       <select
         className="w-full rounded items-center focus:bg-white bg-gray-200 h-8 px-2 placeholder:text-sm text-gray-800 text-sm"
         onChange={handleChange}

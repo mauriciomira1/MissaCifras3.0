@@ -9,7 +9,7 @@ import { prismaClient } from "@/lib/prisma";
 import { useState } from "react";
 
 const EnviarCifraComponent = () => {
-  const { songData, letra, cifra, chordsList } = useNewMusic();
+  const { songData } = useNewMusic();
 
   const hashtagsArray = songData.hashtags
     .split(/[.,; ]/)

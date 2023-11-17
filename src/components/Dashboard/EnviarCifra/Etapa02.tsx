@@ -4,9 +4,11 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { useEffect, useState } from "react";
 
 const Etapa02 = () => {
-  const { EtapaSong02, letra } = useNewMusic();
+  const { EtapaSong02, songData } = useNewMusic();
 
-  const [letraDaMusica, setLetraDaMusica] = useState<string>(letra || "");
+  const [letraDaMusica, setLetraDaMusica] = useState<string>(
+    songData.letra || ""
+  );
 
   useEffect(() => {
     EtapaSong02(letraDaMusica);
