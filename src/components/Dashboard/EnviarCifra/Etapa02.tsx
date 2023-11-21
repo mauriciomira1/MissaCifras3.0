@@ -15,7 +15,7 @@ const Etapa02 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [letraDaMusica]);
 
-  const handleChange = (ev: any) => {
+  const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLetraDaMusica(ev.target.value);
     EtapaSong02(letraDaMusica);
   };

@@ -34,10 +34,6 @@ interface CifraProps {
   chordsList: chordsListProps[];
 }
 
-interface chordsListProps {
-  acorde: string;
-}
-
 interface ContextNewMusicProps {
   setSongData: Dispatch<SetStateAction<SongDataProps>>;
   songData: SongDataProps;
@@ -75,7 +71,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
     chordsList: [],
   });
   /*   const [listSongs, setListSongs] = useState([{} as CifraProps]); */
-  const [chordsList, setChordsList] = useState<chordsListProps[]>([]);
+  const [chordsList, setChordsList] = useState<string[]>([]);
   const EtapaSong01 = (data: SongDataProps) => {
     setSongData((prevState) => ({
       ...prevState,

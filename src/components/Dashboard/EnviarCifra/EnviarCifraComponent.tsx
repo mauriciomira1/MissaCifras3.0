@@ -42,22 +42,27 @@ const EnviarCifraComponent = () => {
 
   const handleSend = async () => {
     // Juntando todos os dados para enviar a nova música para o servidor
-    if (!cifra || !songData || !letra || !chordsList) {
+    if (
+      !songData.cifra ||
+      !songData ||
+      !songData.letra ||
+      !songData.chordsList
+    ) {
       console.log("Falta dados para o envio ao servidor.");
       return;
     }
     const completeSong = await prismaClient.cifra.create({
       musica: songData.musica,
       versao: songData.versao,
-      cantor: songData.cantor,
+      artistas: songData.artistas,
       compositor: songData.compositor,
       tom: songData.tom,
-      bpm: +songData.bpm,
+      bpm: songData.bpm,
       video: songData.video,
-      letra: letra,
-      cifra: cifra,
+      letra: songData.letra,
+      cifra: songData.cifra,
       hashtags: hashtagsArray,
-      momentoDaMissa: songData.momentoDaMissa,
+      classificacao: songData.classificacao,
       liturgica: songData.liturgica,
       /*       chordsList: chordsList, */
       qtdDeCliques: 0,

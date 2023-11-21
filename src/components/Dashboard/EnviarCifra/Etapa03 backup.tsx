@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import "./etapa03e04.css";
 import { useNewMusic } from "@/contexts/useNewMusicContext";

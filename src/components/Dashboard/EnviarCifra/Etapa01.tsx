@@ -29,7 +29,6 @@ const Etapa01 = () => {
   useEffect(() => {
     localStorage.setItem("dataSong", JSON.stringify(data));
     EtapaSong01(data);
-    console.log(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
