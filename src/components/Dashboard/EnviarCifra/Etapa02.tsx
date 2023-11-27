@@ -4,26 +4,23 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { useEffect, useState } from "react";
 
 const Etapa02 = () => {
-  const { EtapaSong02, songData } = useNewMusic();
+  const { EtapaSong02 } = useNewMusic();
 
-  const [letraDaMusica, setLetraDaMusica] = useState<string>(
-    songData.letra || ""
-  );
+  const [letraDaMusica, setLetraDaMusica] = useState("");
+  const [musicaCifrada, setMusicaCifrada] = useState("");
+  const [acordes, setAcordes] = useState<string[]>([]);
 
-  useEffect(() => {
-    EtapaSong02(letraDaMusica);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [letraDaMusica]);
-
-  const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setLetraDaMusica(ev.target.value);
-    EtapaSong02(letraDaMusica);
+  const handleChangeCifra = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const novaCifra = ev.target.value;
+    setMusicaCifrada(novaCifra);
+    capturarAcordes(novaCifra);
+    EtapaSong03({ cifraDaMusica: musicaCifrada, acordes });
   };
 
   return (
     <div className="flex flex-col items-center gap-1.5">
       <h1 className="font-text text-primaryColor py-1 font-bold">
-        ETAPA 02 - LETRA DA MÚSICA
+        ETAPA 02 - CIFRA DA MÚSICA
       </h1>
       <textarea
         name=""

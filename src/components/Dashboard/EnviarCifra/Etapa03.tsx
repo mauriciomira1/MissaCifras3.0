@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const Etapa03 = () => {
   const { songData, EtapaSong03 } = useNewMusic();
-  const [formatedLetra, setFormatedLetra] = useState("");
-  const [musicaCifrada, setMusicaCifrada] = useState(formatedLetra);
+
+  const [musicaCifrada, setMusicaCifrada] = useState("");
   const [acordes, setAcordes] = useState<string[]>([]);
 
   const formatandoLetraDaMusica = useCallback(() => {

@@ -31,21 +31,22 @@ interface SongDataProps {
 interface CifraProps {
   letra: string;
   cifra: string;
-  chordsList: chordsListProps[];
+  chordsList: string[];
 }
 
 interface ContextNewMusicProps {
   setSongData: Dispatch<SetStateAction<SongDataProps>>;
   songData: SongDataProps;
-  setChordsList: Dispatch<SetStateAction<chordsListProps[]>>;
+  setChordsList: Dispatch<SetStateAction<string[]>>;
   EtapaSong01: (data: SongDataProps) => void;
-  EtapaSong02: (data: string) => void;
-  EtapaSong03: ({
+  EtapaSong02: ({
     cifraDaMusica,
+    letra,
     acordes,
   }: {
     cifraDaMusica: string;
     acordes: string[];
+    letra: string;
   }) => void;
 }
 
@@ -88,24 +89,20 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
     }));
   };
 
-  const EtapaSong02 = (letraDaMusica: string) => {
-    setSongData((prevState) => ({
-      ...prevState,
-      letra: letraDaMusica,
-    }));
-  };
-
-  const EtapaSong03 = ({
+  const EtapaSong02 = ({
     cifraDaMusica,
     acordes,
+    letra,
   }: {
     cifraDaMusica: string;
     acordes: string[];
+    letra: string;
   }) => {
     setSongData((prevState) => ({
       ...prevState,
       cifra: cifraDaMusica,
       chordsList: acordes,
+      letra: letra,
     }));
   };
 
@@ -117,7 +114,6 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
         setChordsList,
         EtapaSong01,
         EtapaSong02,
-        EtapaSong03,
       }}
     >
       {props.children}
