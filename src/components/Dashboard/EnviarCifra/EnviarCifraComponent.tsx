@@ -2,7 +2,7 @@
 import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
-import Etapa04 from "@/components/Dashboard/EnviarCifra/Etapa04";
+import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { prismaClient } from "@/lib/prisma";
 import { useState } from "react";
@@ -88,9 +88,6 @@ const EnviarCifraComponent = () => {
 
       case 2:
         return <Etapa03 />;
-
-      case 3:
-        return <Etapa04 />;
 
       default:
         return null;

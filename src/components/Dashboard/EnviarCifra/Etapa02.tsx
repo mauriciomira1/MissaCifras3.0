@@ -10,12 +10,39 @@ const Etapa02 = () => {
   const [musicaCifrada, setMusicaCifrada] = useState("");
   const [acordes, setAcordes] = useState<string[]>([]);
 
+  const capturarAcordes = (novaCifra: string) => {
+    const capturandoAcordes = novaCifra.match(/&[^&\s]+/g);
+    if (capturandoAcordes) {
+      const novosAcordes = capturandoAcordes.map((acorde: string) =>
+        acorde.slice(1)
+      );
+      setAcordes(novosAcordes);
+    }
+  };
+
+  const capturarLetraDaMusica = (novaCifra: string) => {
+    const capturandoLetraDaMusica = novaCifra.match(/[^&\s]+/g);
+    if (capturandoLetraDaMusica) {
+      const novaLetraDaMusica = capturandoLetraDaMusica.join("");
+      setLetraDaMusica(novaLetraDaMusica);
+    }
+  };
+
   const handleChangeCifra = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     const novaCifra = ev.target.value;
     setMusicaCifrada(novaCifra);
     capturarAcordes(novaCifra);
-    EtapaSong03({ cifraDaMusica: musicaCifrada, acordes });
+    capturarLetraDaMusica(novaCifra);
   };
+
+  useEffect(() => {
+    EtapaSong02({
+      cifraDaMusica: musicaCifrada,
+      letra: letraDaMusica,
+      acordes,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [letraDaMusica]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -29,7 +56,7 @@ const Etapa02 = () => {
         rows={18}
         className="bg-gray-200 w-full rounded text-sm"
         value={letraDaMusica}
-        onChange={handleChange}
+        onChange={handleChangeCifra}
       ></textarea>
     </div>
   );

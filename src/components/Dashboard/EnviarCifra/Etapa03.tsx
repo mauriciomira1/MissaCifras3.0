@@ -1,81 +1,87 @@
-"use client";
-import "./etapa03e04.css";
 import { useNewMusic } from "@/contexts/useNewMusicContext";
-import { useCallback, useEffect, useRef, useState } from "react";
+import "./etapa03e04.css";
+import { prismaClient } from "@/lib/prisma";
 
-const Etapa03 = () => {
-  const { songData, EtapaSong03 } = useNewMusic();
+const Etapa03 = async () => {
+  const { cifra, songData, letra } = useNewMusic();
 
-  const [musicaCifrada, setMusicaCifrada] = useState("");
-  const [acordes, setAcordes] = useState<string[]>([]);
+  const novaCifra = await prismaClient.cifra.create({
+    data: {
+      musica: songData.musica,
+      versao: songData.versao,
+      compositor: songData.compositor,
+      tom: songData.tom,
+      bpm: songData.bpm,
+      video: songData.video,
+      letra: songData.letra,
+      cifra: songData.chordsList,
+    },
+  });
 
-  const formatandoLetraDaMusica = useCallback(() => {
-    const letraComEspacamento = songData.letra?.replace(/\n/g, "\n\n");
-    setFormatedLetra(letraComEspacamento || "");
-  }, [songData.letra]);
-
-  const capturarAcordes = (novaCifra: any) => {
-    const capturandoAcordes = novaCifra.match(/&[^&\s]+/g);
-    if (capturandoAcordes) {
-      const novosAcordes = capturandoAcordes.map((acorde: any) =>
-        acorde.slice(1)
-      );
-
-      setAcordes(novosAcordes);
-    }
-  };
-
-  const handleChangeCifra = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const novaCifra = ev.target.value;
-    setMusicaCifrada(novaCifra);
-    capturarAcordes(novaCifra);
-    EtapaSong03({ cifraDaMusica: musicaCifrada, acordes });
-  };
-
-  /* 
-  SE O USUÁRIO TROCAR ALGUMA PALAVRA EM 'letra'
-  1 - mapear a string musicaCifrada, mapear a string letra (já modificada) 
-  2- Comparar e trazer a palavra que falta na musicaCifrada
-  3- Procurar a palavra que sobra na 'letra'
-  3 - Entrar em musicaCifrada e alterar a palavra de 2 pela palavra de 3
-  */
-
-  useEffect(() => {
-    formatandoLetraDaMusica();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [songData.letra]);
-
-  /*   useEffect(() => {
-    const capturandoAcordes = musicaCifrada.match(/&[^&\s]+/g);
-    if (capturandoAcordes) {
-      const novosAcordes = capturandoAcordes.map((acorde) => acorde.slice(1));
-
-      setAcordes(novosAcordes);
-    }
-  }, [musicaCifrada]); */
-
-  useEffect(() => {
-    const novaLetra = formatedLetra;
-    setMusicaCifrada(novaLetra);
-  }, [formatedLetra]);
-
-  console.log(songData.chordsList);
-  console.log(musicaCifrada);
+  const MusicaCifrada =
+    letra &&
+    letra?.split("").map((char, index) => {
+      if (char === "\n") {
+        return <br key={index} />;
+      } else {
+        return (
+          <span key={index} className="group relative">
+            <div className="chord-container">
+              <span className="chord font-bold font-cifra text-secondaryColor">
+                {cifra?.chordsList &&
+                  cifra.chordsList.find((chord) => chord.index === index)
+                    ?.acorde}
+              </span>
+              <span id={`char-${index}`}>{char}</span>
+            </div>
+          </span>
+        );
+      }
+    });
 
   return (
     <div className="flex flex-col items-center gap-1.5">
       <h1 className="font-text text-primaryColor py-1 font-bold">
-        ETAPA 03 - CIFRA
+        ETAPA 04 - REVISÃO
       </h1>
-      <textarea
-        name=""
-        id=""
-        cols={30}
-        rows={18}
-        className="bg-gray-200 w-full rounded text-sm"
-        value={musicaCifrada}
-        onChange={handleChangeCifra}
-      ></textarea>
+      <section className="flex justify-start w-4/5 rounded border border-gray-300 flex-col mt-2 mb-6">
+        <h2 className="py-1 rounded px-1 text-center font-text font-bold bg-primaryColor text-white">
+          Dados da música
+        </h2>
+        <hr />
+        <div className="pl-2 gap-2 flex flex-col font-text text-sm py-2">
+          <p>
+            Nome da música: <strong>{songData.musica}</strong>
+          </p>
+          <p>
+            Versão: <strong>{songData.versao}</strong>
+          </p>
+          <p>
+            Cantor/Banda: <strong>{songData.cantor}</strong>
+          </p>
+          <p>
+            Compositor: <strong>{songData.compositor}</strong>
+          </p>
+          <p>
+            Tom original: <strong>{songData.tom}</strong>
+          </p>
+          <p>
+            BPM: <strong>{songData.bpm}</strong>
+          </p>
+          <p>
+            Vídeo do Youtube: <strong>{songData.video}</strong>
+          </p>
+          <p>
+            Palavras-chave: <strong>{songData.hashtags}</strong>
+          </p>
+          <p>
+            Momento da Missa: <strong>{songData.momentoDaMissa}</strong>
+          </p>
+        </div>
+      </section>
+      <section className="whitespace-pre-wrap my-4 font-cifra w-4/5">
+        {MusicaCifrada}
+      </section>
     </div>
   );
 };
