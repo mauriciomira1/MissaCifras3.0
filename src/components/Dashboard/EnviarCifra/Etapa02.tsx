@@ -10,6 +10,7 @@ const Etapa02 = () => {
   const [musicaCifrada, setMusicaCifrada] = useState("");
   const [acordes, setAcordes] = useState<string[]>([]);
 
+// Obtendo acordes a partir da cifra inserida
   const capturarAcordes = (novaCifra: string) => {
     const capturandoAcordes = novaCifra.match(/&[^&\s]+/g);
     if (capturandoAcordes) {
@@ -20,6 +21,7 @@ const Etapa02 = () => {
     }
   };
 
+  // Obtendo letra a partir da cifra inserida
   const capturarLetraDaMusica = (novaCifra: string) => {
     const capturandoLetraDaMusica = novaCifra.match(/[^&\s]+/g);
     if (capturandoLetraDaMusica) {
@@ -33,16 +35,12 @@ const Etapa02 = () => {
     setMusicaCifrada(novaCifra);
     capturarAcordes(novaCifra);
     capturarLetraDaMusica(novaCifra);
-  };
-
-  useEffect(() => {
     EtapaSong02({
       cifraDaMusica: musicaCifrada,
       letra: letraDaMusica,
       acordes,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [letraDaMusica]);
+  };
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -55,7 +53,7 @@ const Etapa02 = () => {
         cols={30}
         rows={18}
         className="bg-gray-200 w-full rounded text-sm"
-        value={letraDaMusica}
+        value={musicaCifrada}
         onChange={handleChangeCifra}
       ></textarea>
     </div>

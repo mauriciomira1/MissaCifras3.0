@@ -19,7 +19,6 @@ const Etapa01 = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem("dataSong", JSON.stringify(data));
     EtapaSong01(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -91,7 +90,7 @@ const Etapa01 = () => {
           BPM <span className="text-[.8em]">(opcional)</span>:
         </span>
         <InputData
-          placeholder="BPM (batimentos por minuto)"
+          placeholder="BPM (batimentos por minuto) - opcional"
           type="text"
           name="bpm"
           onChange={handleChange}

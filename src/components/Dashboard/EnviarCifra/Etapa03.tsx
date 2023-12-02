@@ -1,9 +1,11 @@
 import { useNewMusic } from "@/contexts/useNewMusicContext";
+
 import "./etapa03e04.css";
+
 import { prismaClient } from "@/lib/prisma";
 
 const Etapa03 = async () => {
-  const { cifra, songData, letra } = useNewMusic();
+  const { songData } = useNewMusic();
 
   const novaCifra = await prismaClient.cifra.create({
     data: {
@@ -14,30 +16,9 @@ const Etapa03 = async () => {
       bpm: songData.bpm,
       video: songData.video,
       letra: songData.letra,
-      cifra: songData.chordsList,
+      cifra: songData.cifra,
     },
   });
-
-  const MusicaCifrada =
-    letra &&
-    letra?.split("").map((char, index) => {
-      if (char === "\n") {
-        return <br key={index} />;
-      } else {
-        return (
-          <span key={index} className="group relative">
-            <div className="chord-container">
-              <span className="chord font-bold font-cifra text-secondaryColor">
-                {cifra?.chordsList &&
-                  cifra.chordsList.find((chord) => chord.index === index)
-                    ?.acorde}
-              </span>
-              <span id={`char-${index}`}>{char}</span>
-            </div>
-          </span>
-        );
-      }
-    });
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -57,7 +38,7 @@ const Etapa03 = async () => {
             Versão: <strong>{songData.versao}</strong>
           </p>
           <p>
-            Cantor/Banda: <strong>{songData.cantor}</strong>
+            Cantor/Banda: <strong>{songData.artistas}</strong>
           </p>
           <p>
             Compositor: <strong>{songData.compositor}</strong>
@@ -75,12 +56,12 @@ const Etapa03 = async () => {
             Palavras-chave: <strong>{songData.hashtags}</strong>
           </p>
           <p>
-            Momento da Missa: <strong>{songData.momentoDaMissa}</strong>
+            Momento da Missa: <strong>{songData.classificacao}</strong>
           </p>
         </div>
       </section>
       <section className="whitespace-pre-wrap my-4 font-cifra w-4/5">
-        {MusicaCifrada}
+        {songData.cifra}
       </section>
     </div>
   );

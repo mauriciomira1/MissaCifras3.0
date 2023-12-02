@@ -13,7 +13,6 @@ import {
 type ContextNewMusicProps = {
   setSongData: Dispatch<SetStateAction<SongProps>>;
   songData: SongProps;
-  setChordsList: Dispatch<SetStateAction<string[]>>;
   EtapaSong01: (data: SongDataProps) => void;
   EtapaSong02: ({
     cifraDaMusica,
@@ -32,10 +31,8 @@ const ContextNewMusic = createContext<ContextNewMusicProps>(
 
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongProps>({} as SongProps);
-  /*   const [listSongs, setListSongs] = useState([{} as CifraProps]); */
-  const [chordsList, setChordsList] = useState<string[]>([]);
 
-  const EtapaSong01 = (data: SongProps) => {
+  const EtapaSong01 = (data: SongDataProps) => {
     setSongData((prevState) => ({
       ...prevState,
       musica: data.musica,
@@ -73,7 +70,6 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
       value={{
         songData,
         setSongData,
-        setChordsList,
         EtapaSong01,
         EtapaSong02,
       }}
