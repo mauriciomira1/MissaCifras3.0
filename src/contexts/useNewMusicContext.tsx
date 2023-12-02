@@ -1,4 +1,6 @@
 "use client";
+import { SongDataProps } from "@/types/songDataProps";
+import { SongProps } from "@/types/songProps";
 import {
   Dispatch,
   ReactNode,
@@ -8,35 +10,9 @@ import {
   useState,
 } from "react";
 
-interface SongDataProps {
-  id?: number;
-  musica: string;
-  slug?: string;
-  versao?: string;
-  compositor?: string;
-  tom: string;
-  bpm?: number;
-  video: string;
-  letra?: string;
-  cifra?: string;
-  chordsList?: string[];
-  artistas: string[];
-  hashtags: string;
-  classificacao: string;
-  liturgica: boolean;
-  qtdDeCliques?: number;
-  userWhoSent?: string;
-}
-
-interface CifraProps {
-  letra: string;
-  cifra: string;
-  chordsList: string[];
-}
-
-interface ContextNewMusicProps {
-  setSongData: Dispatch<SetStateAction<SongDataProps>>;
-  songData: SongDataProps;
+type ContextNewMusicProps = {
+  setSongData: Dispatch<SetStateAction<SongProps>>;
+  songData: SongProps;
   setChordsList: Dispatch<SetStateAction<string[]>>;
   EtapaSong01: (data: SongDataProps) => void;
   EtapaSong02: ({
@@ -48,32 +24,18 @@ interface ContextNewMusicProps {
     acordes: string[];
     letra: string;
   }) => void;
-}
+};
 
 const ContextNewMusic = createContext<ContextNewMusicProps>(
   {} as ContextNewMusicProps
 );
 
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
-  const [songData, setSongData] = useState<SongDataProps>({
-    musica: "",
-    slug: "",
-    versao: "",
-    artistas: [],
-    compositor: "",
-    tom: "",
-    bpm: 0,
-    video: "",
-    letra: "",
-    cifra: "",
-    hashtags: "",
-    classificacao: "",
-    liturgica: false,
-    chordsList: [],
-  });
+  const [songData, setSongData] = useState<SongProps>({} as SongProps);
   /*   const [listSongs, setListSongs] = useState([{} as CifraProps]); */
   const [chordsList, setChordsList] = useState<string[]>([]);
-  const EtapaSong01 = (data: SongDataProps) => {
+
+  const EtapaSong01 = (data: SongProps) => {
     setSongData((prevState) => ({
       ...prevState,
       musica: data.musica,

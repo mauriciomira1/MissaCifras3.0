@@ -1,29 +1,21 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InputData from "./InputData";
+
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
-interface DataProps {
-  musica: string;
-  versao?: string;
-  artistas: string[];
-  compositor?: string;
-  tom: string;
-  bpm?: number;
-  video: string;
-  hashtags: string;
-  classificacao: string;
-  liturgica: boolean;
-}
+import { SongDataProps } from "@/types/songDataProps";
+
+// ----------------------------------------------------------------
 
 const Etapa01 = () => {
   const { EtapaSong01, songData } = useNewMusic();
-  const [data, setData] = useState<DataProps>(songData || {});
-  const [checked, setChecked] = useState(false);
+  const [data, setData] = useState<SongDataProps>(songData || {});
+  const [liturgicaChecked, setLiturgicaChecked] = useState(false);
 
-  const handleChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(ev.target.checked);
-    data.liturgica = !checked;
+  const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setLiturgicaChecked(ev.target.checked);
+    data.liturgica = !liturgicaChecked;
   };
 
   useEffect(() => {
@@ -151,8 +143,8 @@ const Etapa01 = () => {
           type="checkbox"
           name="liturgica"
           id="liturgica"
-          checked={checked}
-          onChange={handleChecked}
+          checked={liturgicaChecked}
+          onChange={handleLiturgicaChecked}
         />
       </div>
     </div>

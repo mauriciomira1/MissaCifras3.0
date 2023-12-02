@@ -120,6 +120,7 @@ const EnviarCifraComponent = () => {
         >
           2
         </button>
+
         <button
           className={etapaAtual === 2 ? selectedBtn : inactiveBtn}
           id="btn03"
@@ -130,6 +131,7 @@ const EnviarCifraComponent = () => {
         >
           3
         </button>
+
         <button
           className={etapaAtual === 3 ? selectedBtn : inactiveBtn}
           id="btn04"
