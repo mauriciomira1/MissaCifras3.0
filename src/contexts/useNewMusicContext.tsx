@@ -33,6 +33,8 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongProps>({} as SongProps);
 
   const EtapaSong01 = (data: SongDataProps) => {
+    const arrayDeHashtags = data.hashtags.split(",");
+
     setSongData((prevState) => ({
       ...prevState,
       musica: data.musica,
@@ -42,7 +44,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
       tom: data.tom,
       bpm: data.bpm,
       video: data.video,
-      hashtags: data.hashtags,
+      hashtags: arrayDeHashtags,
       classificacao: data.classificacao,
       liturgica: data.liturgica,
     }));

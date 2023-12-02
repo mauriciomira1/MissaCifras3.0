@@ -6,7 +6,7 @@ export type SongDataProps = {
   bpm?: number;
   video: string;
   artistas: string[];
-  hashtags: string;
+  hashtags: string[];
   classificacao: string;
   liturgica: boolean;
 };

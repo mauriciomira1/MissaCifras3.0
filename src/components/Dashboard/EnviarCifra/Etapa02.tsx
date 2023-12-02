@@ -1,7 +1,7 @@
 "use client";
 
 import { useNewMusic } from "@/contexts/useNewMusicContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Etapa02 = () => {
   const { EtapaSong02 } = useNewMusic();
@@ -10,7 +10,7 @@ const Etapa02 = () => {
   const [musicaCifrada, setMusicaCifrada] = useState("");
   const [acordes, setAcordes] = useState<string[]>([]);
 
-// Obtendo acordes a partir da cifra inserida
+  // Obtendo acordes a partir da cifra inserida
   const capturarAcordes = (novaCifra: string) => {
     const capturandoAcordes = novaCifra.match(/&[^&\s]+/g);
     if (capturandoAcordes) {

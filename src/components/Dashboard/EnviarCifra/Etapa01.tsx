@@ -8,10 +8,15 @@ import { SongDataProps } from "@/types/songDataProps";
 
 // ----------------------------------------------------------------
 
+type Etapa01Props = SongDataProps & {
+  stringDeHashtags: string;
+};
+
 const Etapa01 = () => {
   const { EtapaSong01, songData } = useNewMusic();
   const [data, setData] = useState<SongDataProps>(songData || {});
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
+  let stringDeHashtags = "";
 
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setLiturgicaChecked(ev.target.checked);
@@ -109,8 +114,8 @@ const Etapa01 = () => {
       <InputData
         placeholder="Palavras-chave (Exemplo: maria, jesus, amor de pai, etc)"
         name="hashtags"
-        onChange={handleChange}
-        value={data.hashtags}
+        onChange={() => handleChange(stringDeHashtags.split(","))}
+        value={stringDeHashtags}
       />
 
       <select
