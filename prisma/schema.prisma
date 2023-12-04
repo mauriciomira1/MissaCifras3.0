@@ -10,13 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ChordsList {
-  id      String  @id @default(cuid())
-  acorde  String
-  Cifra   Cifra?  @relation(fields: [cifraId], references: [id])
-  cifraId String?
-}
-
 model Artista {
   id           String   @id @default(cuid())
   nome         String
@@ -28,7 +21,7 @@ model Artista {
 }
 
 model Cifra {
-  id               String       @id @default(cuid())
+  id               String     @id @default(cuid())
   musica           String
   slug             String
   versao           String?
@@ -38,7 +31,7 @@ model Cifra {
   video            String?
   letra            String
   cifra            String
-  acordes          ChordsList[]
+  acordes          String[]
   artistas         Artista[]
   thumbnail        String?
   hashtags         String[]
@@ -46,10 +39,10 @@ model Cifra {
   liturgica        Boolean
   qtdDeCliques     Int
   userId           String
-  usuarioQueEnviou User         @relation(fields: [userId], references: [id])
+  usuarioQueEnviou User       @relation(fields: [userId], references: [id])
   Playlists        Playlist[]
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @default(now())
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @default(now())
 }
 
 model User {
