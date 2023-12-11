@@ -8,15 +8,10 @@ import { SongDataProps } from "@/types/songDataProps";
 
 // ----------------------------------------------------------------
 
-type Etapa01Props = SongDataProps & {
-  stringDeHashtags: string;
-};
-
 const Etapa01 = () => {
   const { EtapaSong01, songData } = useNewMusic();
   const [data, setData] = useState<SongDataProps>(songData || {});
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
-  let stringDeHashtags = "";
 
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setLiturgicaChecked(ev.target.checked);
@@ -31,6 +26,12 @@ const Etapa01 = () => {
   const handleChange = (ev: any) => {
     const { name, value } = ev.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleHashtags = (ev: any) => {
+    const { name, value } = ev.target;
+    const arrayDeHashtags: string[] = value.split(/[.,; ]/);
+    setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
   return (
@@ -114,8 +115,8 @@ const Etapa01 = () => {
       <InputData
         placeholder="Palavras-chave (Exemplo: maria, jesus, amor de pai, etc)"
         name="hashtags"
-        onChange={() => handleChange(stringDeHashtags.split(","))}
-        value={stringDeHashtags}
+        onChange={handleHashtags}
+        value={data.hashtags}
       />
 
       <select
@@ -139,6 +140,7 @@ const Etapa01 = () => {
         <option value="Pós Comunhão">Pós Comunhão</option>
         <option value="Final">Final</option>
       </select>
+
       <div className="flex items-center gap-2">
         <label htmlFor="liturgica" className="font-cifra">
           Essa música é litúrgica:

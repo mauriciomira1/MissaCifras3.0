@@ -10,10 +10,6 @@ import { useState } from "react";
 const EnviarCifraComponent = () => {
   const { songData } = useNewMusic();
 
-  const hashtagsArray = songData.hashtags
-    .split(/[.,; ]/)
-    .map((item) => item.trim());
-
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [btnState, setBtnState] = useState(true);
 
@@ -60,7 +56,7 @@ const EnviarCifraComponent = () => {
       video: songData.video,
       letra: songData.letra,
       cifra: songData.cifra,
-      hashtags: hashtagsArray,
+      hashtags: songData.hashtags,
       classificacao: songData.classificacao,
       liturgica: songData.liturgica,
       /*       chordsList: chordsList, */
