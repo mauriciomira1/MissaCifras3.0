@@ -7,18 +7,18 @@ import { prismaClient } from "@/lib/prisma";
 const Etapa03 = async () => {
   const { songData } = useNewMusic();
 
-  const novaCifra = await prismaClient.cifra.create({
+  const criarNovaCifra = await prismaClient.cifra.create({
     data: {
       musica: songData.musica,
       versao: songData.versao,
       compositor: songData.compositor,
       slug: "",
       qtdDeCliques: 0,
-      usuarioQueEnviou: "",
-      /*       artistas: songData.artistas,
-       */ liturgica: songData.liturgica,
-      /*       acordes: songData.chordsList,
-      classificacao: songData.classificacao, */
+      usuarioQueEnviou: ,
+      artistas: songData.artistas,
+      liturgica: songData.liturgica,
+      acordes: songData.chordsList,
+      classificacao: songData.classificacao,
       hashtags: songData.hashtags,
       tom: songData.tom,
       bpm: songData.bpm,

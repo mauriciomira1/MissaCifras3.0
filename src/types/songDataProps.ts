@@ -1,3 +1,5 @@
+type Artistas = {};
+
 export type SongDataProps = {
   musica: string;
   versao?: string;

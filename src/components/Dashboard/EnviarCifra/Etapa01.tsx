@@ -18,11 +18,6 @@ const Etapa01 = () => {
     data.liturgica = !liturgicaChecked;
   };
 
-  useEffect(() => {
-    EtapaSong01(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
   const handleChange = (ev: any) => {
     const { name, value } = ev.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
@@ -33,6 +28,11 @@ const Etapa01 = () => {
     const arrayDeHashtags: string[] = value.split(/[.,; ]/);
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
+
+  useEffect(() => {
+    EtapaSong01(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">

@@ -32,10 +32,10 @@ model Cifra {
   letra            String
   cifra            String
   acordes          String[]
-  artistas         Artista[]
+  artistas         String[]
   thumbnail        String?
   hashtags         String[]
-  classificacao    String[]
+  classificacao    String
   liturgica        Boolean
   qtdDeCliques     Int
   userId           String
@@ -43,6 +43,8 @@ model Cifra {
   Playlists        Playlist[]
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @default(now())
+  Artista          Artista?   @relation(fields: [artistaId], references: [id])
+  artistaId        String?
 }
 
 model User {
