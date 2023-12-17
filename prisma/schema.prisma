@@ -14,7 +14,7 @@ model Artista {
   id           String   @id @default(cuid())
   nome         String
   qtdDeCliques Int
-  capa         String
+  capa         String?
   cifras       Cifra[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
@@ -50,10 +50,10 @@ model Cifra {
 model User {
   id        String     @id @default(cuid())
   nome      String
-  foto      String
+  foto      String?
   Playlist  Playlist[]
   Cifra     Cifra[]
-  createdAt DateTime   @default(now())
+  createdAt DateTime?  @default(now())
 }
 
 model Playlist {

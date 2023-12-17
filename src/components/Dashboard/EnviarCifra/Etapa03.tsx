@@ -1,11 +1,17 @@
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
-import "./etapa03e04.css";
+import "./etapa03.css";
 
 import { prismaClient } from "@/lib/prisma";
+import { UserProps } from "@/types/userProps";
 
 const Etapa03 = async () => {
   const { songData } = useNewMusic();
+
+  const usuarioDeTeste: UserProps = {
+    id: "123456",
+    nome: "Mauricio",
+  };
 
   const criarNovaCifra = await prismaClient.cifra.create({
     data: {
@@ -14,7 +20,7 @@ const Etapa03 = async () => {
       compositor: songData.compositor,
       slug: "",
       qtdDeCliques: 0,
-      usuarioQueEnviou: ,
+      usuarioQueEnviou: usuarioDeTeste,
       artistas: songData.artistas,
       liturgica: songData.liturgica,
       acordes: songData.chordsList,
