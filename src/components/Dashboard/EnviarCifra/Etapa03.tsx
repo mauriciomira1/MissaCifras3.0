@@ -3,7 +3,7 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 import "./etapa03.css";
 
 import { prismaClient } from "@/lib/prisma";
-import { UserProps } from "@/types/userProps";
+import { UserProps } from "@/dtos/userProps";
 
 const Etapa03 = async () => {
   const { songData } = useNewMusic();

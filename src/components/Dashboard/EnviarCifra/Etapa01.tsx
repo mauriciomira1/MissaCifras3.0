@@ -4,7 +4,7 @@ import InputData from "./InputData";
 
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
-import { SongDataProps } from "@/types/songDataProps";
+import { SongDataProps } from "@/dtos/songDataProps";
 
 // ----------------------------------------------------------------
 
@@ -128,7 +128,7 @@ const Etapa01 = () => {
         <option value="" disabled>
           Classificação da música
         </option>
-        <option value="Grupo de Oração">Grupo de Oração/Outros</option>
+        <option value="Grupo de Oração/Outros">Grupo de Oração/Outros</option>
         <option value="Canto de entrada">Canto de entrada</option>
         <option value="Ato Penitencial">Ato Penitencial</option>
         <option value="Glória">Glória</option>

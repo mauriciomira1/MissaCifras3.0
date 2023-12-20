@@ -1,6 +1,6 @@
 "use client";
-import { SongDataProps } from "@/types/songDataProps";
-import { SongProps } from "@/types/songProps";
+import { SongDataProps } from "@/dtos/songDataProps";
+import { SongProps } from "@/dtos/songProps";
 import {
   Dispatch,
   ReactNode,
