@@ -17,7 +17,7 @@ model Artista {
   capa         String?
   cifras       Cifra[]
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Cifra {
@@ -32,7 +32,6 @@ model Cifra {
   letra            String
   cifra            String
   acordes          String[]
-  artistas         String[]
   thumbnail        String?
   hashtags         String[]
   classificacao    String
@@ -41,19 +40,22 @@ model Cifra {
   userId           String
   usuarioQueEnviou User       @relation(fields: [userId], references: [id])
   Playlists        Playlist[]
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @default(now())
   Artista          Artista?   @relation(fields: [artistaId], references: [id])
   artistaId        String?
+  participacao     String[]
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }
 
 model User {
-  id        String     @id @default(cuid())
-  nome      String
-  foto      String?
-  Playlist  Playlist[]
-  Cifra     Cifra[]
-  createdAt DateTime?  @default(now())
+  id           String     @id @default(cuid())
+  nome         String?
+  email        String?    @unique
+  foto         String?
+  Playlist     Playlist[]
+  Colaboracoes String[]
+  Cifra        Cifra[]
+  createdAt    DateTime?  @default(now())
 }
 
 model Playlist {
@@ -63,5 +65,5 @@ model Playlist {
   userId    String
   criadoPor User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
