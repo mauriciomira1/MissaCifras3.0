@@ -14,8 +14,8 @@ export const metadata = {
 const Login = () => {
   return (
     <div className="bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] w-full h-screen flex-col md:flex-row flex items-center justify-start sm:justify-center gap-6">
-      <div className="flex flex-col justify-center md:items-end">
-        <h1 className="font-highlight font-semibold text-tertiaryColor text-3xl md:text-5xl max-sm:px-6 max-sm:mt-12 mb-2 text-center md:text-right">
+      <div className="flex flex-col justify-center md:items-end items-center">
+        <h1 className="max-sm:mx-4 font-highlight font-semibold text-tertiaryColor text-3xl md:text-5xl max-sm:px-6 max-sm:mt-12 mb-2 text-center md:text-right">
           Nada do que é feito por amor é pequeno.
         </h1>
         <cite className="italic text-white text-xs">
