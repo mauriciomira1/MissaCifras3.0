@@ -11,10 +11,10 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const Cadastro = () => {
   return (
-    <div className="bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] w-full h-screen flex flex-col gap-6 md:flex-row items-center justify-start sm:justify-center max-sm:pt-14">
+    <div className="flex h-screen w-full flex-col items-center justify-start gap-6 bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] max-sm:pt-14 sm:justify-center md:flex-row">
       <div className="flex flex-col items-center">
         <Link href="/">
-          <div className="flex items-center gap-2 font-text font-semibold mb-4 text-white">
+          <div className="mb-4 flex items-center gap-2 font-text font-semibold text-white">
             <FaArrowLeft />
             Voltar para Home
           </div>
@@ -22,12 +22,12 @@ const Cadastro = () => {
         <FormularioCadastro />
       </div>
       <div className="flex flex-col justify-start">
-        <h1 className="font-highlight font-semibold text-primaryColor md:text-left text-center text-4xl sm:text-5xl mb-2">
+        <h1 className="mb-2 text-center font-highlight text-4xl font-semibold text-primaryColor sm:text-5xl md:text-left">
           Cantar é próprio
           <br /> de quem ama.
         </h1>
-        <cite className="italic text-white text-xs">Santo Agostinho</cite>
-        <p className="text-white font-text font-semibold text-sm w-72 mt-10 sm:mt-16 md:text-left text-center">
+        <cite className="text-xs italic text-white">Santo Agostinho</cite>
+        <p className="mt-10 w-72 text-center font-text text-sm font-semibold text-white sm:mt-16 md:text-left">
           Cadastre-se e{" "}
           <span className="text-primaryColor">faça parte do nosso time </span>
           de evangelização através da música católica.

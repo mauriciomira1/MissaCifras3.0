@@ -77,21 +77,21 @@ const FormularioCadastro = () => {
 
   return (
     <form
-      className="md:w-[26rem] sm:w-96 max-w-7xl rounded-xl bg-white py-8 px-10 flex flex-col justify-center items-center max-sm:px-2 w-10/12"
+      className="flex w-11/12 max-w-7xl flex-col items-center justify-center rounded-xl bg-white px-10 py-8 max-sm:px-8 md:w-[26rem]"
       onSubmit={handleSubmit(createUser)}
     >
       <Image src={SiteLogo} alt="Missa Cifras" width={160} />
 
-      <h2 className="font-text font-bold text-xl mt-5 text-primaryColor">
+      <h2 className="mt-5 font-text text-xl font-bold text-primaryColor">
         Bem-vindo
       </h2>
 
-      <p className="font-text font-semibold text-xs text-gray-400 mb-5">
+      <p className="mb-5 font-text text-xs font-semibold text-gray-400">
         Cadastre-se <strong>grátis</strong> e seja um evangelizador
       </p>
 
       <button
-        className="duration-150 w-11/12 py-1.5 font-text text-sm font-semibold flex items-center justify-center gap-2 bg-white border rounded border-gray-300 hover:bg-gray-200 hover:border-gray-40000 active:bg-gray-300"
+        className="hover:border-gray-40000 flex w-11/12 items-center justify-center gap-2 rounded border border-gray-300 bg-white px-2 py-1.5 font-text text-sm font-semibold duration-150 hover:bg-gray-200 active:bg-gray-300"
         onClick={handleLoginWithGoogle}
       >
         <span className="text-lg">
@@ -184,11 +184,11 @@ const FormularioCadastro = () => {
           Cadastrar
         </button>
       </div> */}
-      <p className="font-text font-semibold text-sm mt-3 text-primaryColor cursor-default">
+      <p className="mt-3 cursor-default font-text text-sm font-semibold text-primaryColor">
         Já tem cadastro?
         <Link
           href="/pages/login"
-          className="text-secondaryColor font-bold hover:text-orange-800 ml-1"
+          className="ml-1 font-bold text-secondaryColor hover:text-orange-800"
         >
           Faça login
         </Link>
