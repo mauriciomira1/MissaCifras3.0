@@ -1,5 +1,9 @@
 // Bibliotecas intaladas: zod @hookform/resolvers react-hook-form
 "use client";
+
+// SignIn para Login com Google
+import { signIn } from "next-auth/react";
+
 // Imagens
 import Image from "next/image";
 import SiteLogo from "../../../public/images/generic/logo.png";
@@ -11,6 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Toast } from "@/components/shadcn/ui/toast";
 
 // Validação de formulário com Zod
 const createUserFormSchema = z
@@ -47,6 +52,13 @@ const FormularioLogin = () => {
     console.log(data);
   };
 
+  // Lidando com Login usando o Google
+  const handleLoginWithGoogle = () => {
+    signIn("google", {
+      callbackUrl: "http://localhost:3000/dashboard",
+    });
+  };
+
   return (
     <form
       className="md:w-[26rem] w-10/12 sm:w-96 max-w-md rounded-xl bg-white py-8 px-10 flex flex-col justify-center items-center"
@@ -62,7 +74,10 @@ const FormularioLogin = () => {
         Venha e levar a nossa santa música a todos os cantos do nosso país.
       </p>
 
-      <button className="duration-150 w-full py-2 font-text text-sm font-semibold flex items-center justify-center gap-2 bg-white border rounded border-gray-300 hover:bg-gray-200 hover:border-gray-40000 active:bg-gray-300">
+      <button
+        className="duration-150 w-full py-2 font-text text-sm font-semibold flex items-center justify-center gap-2 bg-white border rounded border-gray-300 hover:bg-gray-200 hover:border-gray-40000 active:bg-gray-300"
+        onClick={handleLoginWithGoogle}
+      >
         <span className="text-lg">
           <FcGoogle />
         </span>

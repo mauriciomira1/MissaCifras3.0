@@ -1,8 +1,14 @@
+"use client";
+
+import { useSession } from "next-auth/react";
+
 const Welcome = () => {
+  const { data } = useSession();
+
   return (
     <div className="flex flex-col w-full items-center p-4">
-      <h1 className="font-highlight font-semibold text-5xl sm:text-7xl my-8 text-secondaryColor">
-        Bem-vindo
+      <h1 className="font-highlight font-semibold text-4xl sm:text-5xl my-8 text-secondaryColor">
+        Bem-vindo, {data?.user?.name}
       </h1>
       <div className="flex flex-col items-center font-text font-bold">
         <p className="text-primaryColor text-center">

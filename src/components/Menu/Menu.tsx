@@ -1,4 +1,4 @@
-"use client"; // Usar o 'lado do cliente' ao invés do lado do servidor para esse componente
+"use client";
 
 //NextJS
 import Link from "next/link";

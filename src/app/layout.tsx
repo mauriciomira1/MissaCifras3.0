@@ -8,6 +8,7 @@ import "./globals.css";
 import { inter, quicksand, roboto, barlow } from "./fonts";
 import Footer from "@/components/Footer/Footer";
 import MenuMobile from "@/components/Menu/MenuMobile";
+import { NextAuthProvider } from "@/providers/auth";
 
 export const metadata = {
   title: "Missa Cifras - Música católica do jeito certo!",
@@ -24,10 +25,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${quicksand.variable} ${roboto.variable} ${barlow.variable}`}
       >
-        <MenuMobile />
-        <Menu />
-        <div className="flex flex-col items-center">{children}</div>
-        <Footer />
+        <NextAuthProvider>
+          <MenuMobile />
+          <Menu />
+          <div className="flex flex-col items-center">{children}</div>
+          <Footer />
+        </NextAuthProvider>
       </body>
     </html>
   );
