@@ -1,21 +1,22 @@
-import React from "react";
+import { IconType } from "react-icons";
 
 interface btnProps {
   btnTitle: string | "Botão";
   textFont?: string | "font-text";
   texSize?: string | "font-normal";
-  icon?: string;
+  icon?: IconType;
   className: string;
   id?: string;
 }
 
 const ButtonStyle01 = (props: btnProps) => {
+  const Icon = props.icon;
   return (
     <button
-      className={`uppercasefont-semibold ${props.textFont} ${props.texSize} py-1 first-letter:flex flex-wrap items-center justify-center gap-1 px-3 rounded ${props.className}`}
+      className={`uppercasefont-semibold flex ${props.textFont} ${props.texSize} flex-wrap items-center justify-center gap-1 rounded px-3 py-1 first-letter:flex ${props.className}`}
       id={props.id}
     >
-      {props.icon}
+      {Icon && <Icon size={20} />}
       {props.btnTitle}
     </button>
   );

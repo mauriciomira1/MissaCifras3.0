@@ -3,7 +3,7 @@ import MenuLateral from "./MenuLateral";
 
 export const metadata = {
   title: "Dashboard",
-  description: "Área do colaborador",
+  description: "Área do usuário",
 };
 
 export default function DashboardLayout({
@@ -13,14 +13,14 @@ export default function DashboardLayout({
 }) {
   return (
     <NewMusicContextProvider>
-      <div className="w-full flex min-h-screen">
-        <div className="bg-primaryColor shadow-lg shadow-gray-800 flex flex-col justify-start items-center h-auto w-12 pt-4 md:pt-1 md:w-72 md:pl-2 md:pr-5">
-          <h1 className="hidden md:block text-white font-semibold font-text text-xl py-4 uppercase mt-3">
+      <div className="flex min-h-screen w-full">
+        <div className="flex h-auto w-12 flex-col items-center justify-start bg-primaryColor pt-4 shadow-lg shadow-gray-800 md:w-72 md:pl-2 md:pr-5 md:pt-1">
+          <h1 className="mt-3 hidden py-4 font-text text-xl font-semibold uppercase text-white md:block">
             Dashboard
           </h1>
           <MenuLateral />
         </div>
-        <div className="flex items-center flex-col w-full px-3">{children}</div>
+        <div className="flex w-full flex-col items-center px-3">{children}</div>
       </div>
     </NewMusicContextProvider>
   );
