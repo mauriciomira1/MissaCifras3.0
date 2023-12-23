@@ -15,7 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Toast } from "@/components/shadcn/ui/toast";
+import { Toast } from "@/components/shadcn/toast";
 
 // Validação de formulário com Zod
 const createUserFormSchema = z
@@ -61,21 +61,21 @@ const FormularioLogin = () => {
 
   return (
     <form
-      className="md:w-[26rem] w-10/12 sm:w-96 max-w-md rounded-xl bg-white py-8 px-10 flex flex-col justify-center items-center"
+      className="flex w-10/12 max-w-md flex-col items-center justify-center rounded-xl bg-white px-10 py-8 sm:w-96 md:w-[26rem]"
       onSubmit={handleSubmit(createUser)}
     >
       <Image src={SiteLogo} alt="Missa Cifras" width={160} />
 
-      <h2 className="font-text font-bold text-xl mt-5 text-primaryColor">
+      <h2 className="mt-5 font-text text-xl font-bold text-primaryColor">
         Bem-vindo de volta!
       </h2>
 
-      <p className="font-text font-semibold text-xs text-gray-400 mb-5 sm:mx-6 text-center">
+      <p className="mb-5 text-center font-text text-xs font-semibold text-gray-400 sm:mx-6">
         Venha e levar a nossa santa música a todos os cantos do nosso país.
       </p>
 
       <button
-        className="duration-150 w-full py-2 font-text text-sm font-semibold flex items-center justify-center gap-2 bg-white border rounded border-gray-300 hover:bg-gray-200 hover:border-gray-40000 active:bg-gray-300"
+        className="hover:border-gray-40000 flex w-full items-center justify-center gap-2 rounded border border-gray-300 bg-white py-2 font-text text-sm font-semibold duration-150 hover:bg-gray-200 active:bg-gray-300"
         onClick={handleLoginWithGoogle}
       >
         <span className="text-lg">

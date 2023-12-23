@@ -9,65 +9,80 @@ import ItemMenuMobile from "./ItemMenuMobile";
 
 // Icons
 import userIcon from "../../public/images/generic/user.svg";
+import { MdLogout } from "react-icons/md";
 
 //Hooks
-import { useState } from "react";
 import { FiMenu } from "react-icons/fi";
 
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/shadcn/ui/sheet";
+import { useSession } from "next-auth/react";
+import ItemMenuMobileLogout from "./ItemMenuMobileLogout";
+import LoadingIcon from "../LoadingIcon/LoadingIcon";
+
 const MenuMobile = () => {
-  const [toogleClass, setToogleClass] = useState(true);
+  const { data, status } = useSession();
 
-  // Função para ocultar menu sanduiche
-  const toogleMenu = () => {
-    {
-      toogleClass ? setToogleClass(false) : setToogleClass(true);
-    }
-  };
+  return !data ? (
+    <LoadingIcon size={20} />
+  ) : (
+    <div className="absolute">
+      <Sheet>
+        <SheetTrigger asChild>
+          <div className="p-5">
+            <FiMenu className="rounded-full text-2xl text-primaryColor" />
+          </div>
+        </SheetTrigger>
 
-  return (
-    <div className="absolute h-full">
-      {/* Ícone sanduiche */}
-      <div
-        className="text-gray-400 absolute justify-end ml-3 mt-5 xl:hidden cursor-pointer"
-        onClick={toogleMenu}
-      >
-        <FiMenu className="text-2xl" />
-      </div>
-
-      <div
-        className={`lg:hidden z-10 ${
-          toogleClass ? "-left-72" : "left-0"
-        } duration-300 h-full absolute flex flex-col w-72 bg-primaryColor shadow-lg shadow-black`}
-      >
-        {/* Menu sanduiche */}
-        <div className="text-white font-text font-bold flex justify-end my-3 mr-4">
-          <span
-            className="active:text-tertiaryColor cursor-pointer"
-            onClick={toogleMenu}
-          >
-            X
-          </span>
-        </div>
-
-        <ul
-          className="flex flex-col items-center font-semibold gap-5 w-full"
-          onClick={toogleMenu}
+        <SheetContent
+          className="w-64 border-none bg-primaryColor text-white"
+          side="left"
         >
-          <ItemMenuMobile href="/" name="Home" />
-          <ItemMenuMobile href="/acordes" name="Acordes" />
-          <ItemMenuMobile href="/colabore" name="Colabore" />
-          <ItemMenuMobile href="/fale-conosco" name="Fale conosco" />
-          <ItemMenuMobile href="/enviar-cifra" name="Enviar cifra" />
-          <ItemMenuMobile href="/login" name="Login" />
+          <ul className="flex w-full flex-col items-center gap-5 pt-10 font-semibold">
+            <SheetClose asChild>
+              <ItemMenuMobile href="/" name="Home" />
+            </SheetClose>
 
-          <li className="font-text text-white  active:text-tertiaryColor bg-secondaryColor rounded px-3 py-1">
-            <Link href="/cadastro" className="flex items-center">
-              <Image src={userIcon} alt="Usuário" />
-              CADASTRE-SE
-            </Link>
-          </li>
-        </ul>
-      </div>
+            <SheetClose asChild>
+              <ItemMenuMobile href="/acordes" name="Acordes" />
+            </SheetClose>
+
+            <ItemMenuMobile href="/colabore" name="Colabore" />
+            <ItemMenuMobile href="/fale-conosco" name="Fale conosco" />
+            <ItemMenuMobile href="/enviar-cifra" name="Enviar cifra" />
+
+            <ItemMenuMobileLogout href="" name="Logout" icon={MdLogout} />
+
+            <li className=" rounded-md border border-tertiaryColor px-4 py-2 font-bold text-white hover:bg-tertiaryColor active:bg-secondaryColor active:text-tertiaryColor">
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 uppercase"
+              >
+                Minha dashboard
+              </Link>
+            </li>
+
+            {status === "authenticated" ? (
+              ""
+            ) : (
+              <>
+                <ItemMenuMobile href="/login" name="Login" />
+
+                <li className="flex rounded bg-secondaryColor px-3 py-1 font-text text-white active:text-tertiaryColor">
+                  <Link href="/cadastro" className="flex items-center">
+                    <Image src={userIcon} alt="Usuário" />
+                    CADASTRE-SE
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

@@ -28,16 +28,16 @@ const Menu = () => {
   const [search, setSearch] = useState("");
 
   return (
-    <div className="flex flex-wrap px-3 h-16 border-b-1 shadow-md items-center justify-between">
+    <div className="border-b-1 flex h-16 flex-wrap items-center justify-between px-3 shadow-md">
       {/* Logotipo min-width: 1024px */}
-      <div className="hidden xl:block hover:opacity-60 cursor-pointer">
+      <div className="hidden cursor-pointer hover:opacity-60 xl:block">
         <Link href="/">
           <Image src={logo} alt="Logotipo" width={150} />
         </Link>
       </div>
 
       {/* Logotipo mobile */}
-      <div className="xl:hidden hover:opacity-60 ml-8 cursor-pointer">
+      <div className="ml-12 cursor-pointer hover:opacity-60 xl:hidden">
         <Link href="/">
           <Image src={logoMobile} alt="Logotipo" width={40} />
         </Link>
@@ -51,7 +51,7 @@ const Menu = () => {
             <Image src={searchIcon} alt="Pesquisar" width={20} />
           </span>
           <input
-            className="placeholder:font-normal placeholder:text-gray-400 block bg-white w-full border border-slate-300 rounded-full py-1.5 pl-9 pr-3 shadow-sm focus:outline-none focus:border-gray-400 sm:text-sm hover:bg-gray-50"
+            className="block w-full rounded-full border border-slate-300 bg-white py-1.5 pl-9 pr-3 shadow-sm placeholder:font-normal placeholder:text-gray-400 hover:bg-gray-50 focus:border-gray-400 focus:outline-none sm:text-sm"
             placeholder="Vamos louvar?"
             type="text"
             name="search"
@@ -62,15 +62,15 @@ const Menu = () => {
       </div>
 
       {/* Links de navegação no site */}
-      <div className="hidden h-full xl:flex items-center">
-        <ul className="flex flex-wrap items-center h-full font-semibold text-xs">
+      <div className="hidden h-full items-center xl:flex">
+        <ul className="flex h-full flex-wrap items-center text-xs font-semibold">
           <ItemMenu href="/" name="home" />
           <ItemMenu href="/colabore" name="colabore" />
           <ItemMenu href="/fale-conosco" name="fale conosco" />
           <ItemMenu href="/enviar-cifra" name="enviar cifra" />
           <ItemMenu href="/login" name="login" />
 
-          <li className="h-8 flex font-text font-bold items-center justify-center text-white bg-secondaryColor px-2 rounded hover:bg-red-600 hover:cursor-pointer pr-3 pl-2 ml-2">
+          <li className="ml-2 flex h-8 items-center justify-center rounded bg-secondaryColor px-2 pl-2 pr-3 font-text font-bold text-white hover:cursor-pointer hover:bg-red-600">
             <Link href="/cadastro" className="flex items-center">
               <Image src={userIcon} alt="Usuário" />
               CADASTRE-SE

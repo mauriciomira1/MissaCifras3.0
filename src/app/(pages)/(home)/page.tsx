@@ -10,10 +10,10 @@ export default function Home() {
   return (
     <>
       <Submenu />
-      <main className="flex max-w-[70rem] flex-col items-center justify-center mx-4">
+      <main className="mx-4 flex max-w-[70rem] flex-col items-center justify-center">
         <CoverMain />
         <CoverSecondary />
-        <div className="h-4 w-full my-7 bg-gray-200"></div>
+        <div className="my-7 h-4 w-full bg-gray-200"></div>
         <TopMain />
         <Oracoes />
         <BannerApoie />
