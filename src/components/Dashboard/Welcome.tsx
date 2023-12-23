@@ -1,18 +1,13 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 
-// Ícones
-import { FaArrowRight } from "react-icons/fa6";
-import { FaCirclePlus } from "react-icons/fa6";
 import Loading from "@/app/(pages)/dashboard/loading";
-import ButtonStyle01 from "../Buttons/ButtonStyle01";
 
 const Welcome = () => {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
-  return !data ? (
+  return !status ? (
     <Loading />
   ) : (
     <div className=" p-4">

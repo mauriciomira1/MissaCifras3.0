@@ -8,6 +8,7 @@ import ButtonStyle01 from "@/components/Buttons/ButtonStyle01";
 import { FaArrowRight } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 import { IoGiftOutline } from "react-icons/io5";
+import { FiEdit } from "react-icons/fi";
 
 export const metadata = {
   title: "Minha Dashboard",
@@ -57,17 +58,39 @@ const Dashboard = () => {
           className="border border-gray-300 px-6 uppercase text-primaryColor hover:opacity-80 active:bg-tertiaryColor"
         />
       </div>
-      <div>
-        <h2 className="font-text text-lg font-bold text-primaryColor">
+
+      <div className="mt-10">
+        <h2 className="text-center font-text text-lg font-bold uppercase text-primaryColor">
           Saiba quem somos nós
         </h2>
-        <Link href="/quem-somos">
+        <Link
+          href="/quem-somos"
+          className="mt-2 flex w-full items-center justify-center"
+        >
           <ButtonStyle01
             btnTitle="sobre nós"
-            className="border border-gray-300 px-6 uppercase text-primaryColor hover:opacity-80 active:bg-tertiaryColor"
+            className="border border-gray-300 px-6 font-text font-bold uppercase text-primaryColor hover:opacity-80 active:bg-tertiaryColor"
           />
         </Link>
       </div>
+
+      <div className="my-12 h-[1px] w-full bg-gray-300"></div>
+
+      <div className="">
+        <h2 className="font-text text-lg font-bold uppercase text-primaryColor">
+          Quer enviar uma cifra?
+        </h2>
+        <Link href="/quem-somos" className="mt-2 flex w-full">
+          <ButtonStyle01
+            btnTitle="Enviar cifra"
+            icon={FiEdit}
+            className="bg-primaryColor px-6 py-2 font-text font-bold uppercase text-white hover:opacity-80 active:bg-tertiaryColor"
+          />
+        </Link>
+      </div>
+      <p className="mt-16 font-text text-sm font-semibold text-primaryColor">
+        Acesse o menu para mais opções
+      </p>
     </div>
   );
 };

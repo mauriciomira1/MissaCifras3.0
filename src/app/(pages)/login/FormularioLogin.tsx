@@ -15,7 +15,6 @@ import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Toast } from "@/components/shadcn/toast";
 
 // Validação de formulário com Zod
 const createUserFormSchema = z
