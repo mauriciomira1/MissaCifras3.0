@@ -18,7 +18,7 @@ const Dashboard = () => {
   return (
     <div className="flex w-full flex-col justify-center">
       {<Welcome />}
-      <div className="w-full rounded-lg border">
+      <div className="mb-4 w-full rounded-lg border">
         <h2 className="px-4 py-3 font-text text-lg font-bold text-primaryColor">
           Minhas playlists
         </h2>
@@ -39,12 +39,15 @@ const Dashboard = () => {
             Missa 12/12/2023 <FaArrowRight size={14} />
           </Link>
         </div>
-        <Link
-          href="/dashboard/playlists"
-          className="flex w-full items-center justify-center py-4 hover:opacity-70"
-        >
-          <FaCirclePlus color="orange" size={20} />
-        </Link>
+        <div className="flex justify-center">
+          <Link
+            href="/dashboard/playlists"
+            className="mb-6 mt-3 flex items-center gap-2 rounded-md border border-red-300 px-4 py-2 active:bg-red-300"
+          >
+            <p className="font-text font-bold text-primaryColor">Ver todos</p>
+            <FaCirclePlus color="orange" size={18} />
+          </Link>
+        </div>
       </div>
 
       <div className="flex w-full items-center justify-between py-5 font-text font-bold">
