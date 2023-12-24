@@ -11,7 +11,7 @@ import LoadingIcon from "../LoadingIcon/LoadingIcon";
 
 //Hooks
 import { FiMenu } from "react-icons/fi";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 // Components
 import ItemMenuMobile from "./ItemMenuMobile";
@@ -34,7 +34,7 @@ const MenuMobile = () => {
   return status === "loading" ? (
     <LoadingIcon size={20} />
   ) : (
-    <div className="absolute">
+    <div className="absolute xl:hidden">
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <div className="p-5">
@@ -47,6 +47,27 @@ const MenuMobile = () => {
           side="left"
         >
           <ul className="flex w-full flex-col items-center gap-5 pt-10 font-semibold">
+            {status === "authenticated" && (
+              <>
+                <li className="justify-betwee flex w-full content-between items-center">
+                  <h3 className="w-full font-text text-sm">
+                    Bem vindo,
+                    <br /> {data?.user?.name}
+                  </h3>
+                  <div className="w-12">
+                    <Image
+                      src={data?.user?.image!}
+                      width={0}
+                      height={0}
+                      alt="Foto do usuário"
+                      sizes="100vw"
+                      className="h-auto w-full rounded-full object-cover"
+                    />
+                  </div>
+                </li>
+                <div className="my-2 h-[1px] w-full bg-blue-900"></div>
+              </>
+            )}
             <ItemMenuMobile href="/" name="Home" openFunction={openToogle} />
             <ItemMenuMobile
               href="/acordes"

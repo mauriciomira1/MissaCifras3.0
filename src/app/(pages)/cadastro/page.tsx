@@ -11,7 +11,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const Cadastro = () => {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-start gap-6 bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] max-sm:pt-14 sm:justify-center md:flex-row">
+    <div className="flex h-screen w-full flex-col items-center justify-start gap-6 bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] max-sm:pt-14 sm:justify-center md:flex-row md:px-6">
       <div className="flex flex-col items-center">
         <Link href="/">
           <div className="mb-4 flex items-center gap-2 font-text font-semibold text-white">
@@ -22,7 +22,7 @@ const Cadastro = () => {
         <FormularioCadastro />
       </div>
       <div className="flex flex-col justify-start">
-        <h1 className="mb-2 text-center font-highlight text-4xl font-semibold text-primaryColor sm:text-5xl md:text-left">
+        <h1 className="mb-2 text-center font-highlight text-4xl font-bold text-primaryColor sm:text-4xl md:text-left">
           Cantar é próprio
           <br /> de quem ama.
         </h1>

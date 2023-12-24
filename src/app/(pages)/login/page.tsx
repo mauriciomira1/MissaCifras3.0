@@ -13,21 +13,21 @@ export const metadata = {
 
 const Login = () => {
   return (
-    <div className="bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] w-full h-screen flex-col md:flex-row flex items-center justify-start sm:justify-center gap-6">
-      <div className="flex flex-col justify-center md:items-end items-center">
-        <h1 className="max-sm:mx-4 font-highlight font-semibold text-tertiaryColor text-3xl md:text-5xl max-sm:px-6 max-sm:mt-12 mb-2 text-center md:text-right">
+    <div className="flex h-screen w-full flex-col items-center justify-start gap-6 bg-gradient-to-r from-[#1A3F78] to-[#EA9D9D] sm:justify-center md:flex-row md:px-10">
+      <div className="flex flex-col items-center justify-center md:items-end">
+        <h1 className="mb-2 max-w-xl text-center font-highlight text-3xl font-bold text-tertiaryColor max-sm:mx-4 max-sm:mt-12 max-sm:px-6 md:text-right lg:text-5xl">
           Nada do que é feito por amor é pequeno.
         </h1>
-        <cite className="italic text-white text-xs">
+        <cite className="text-xs italic text-white">
           Santa Terezinha do Menino Jesus
         </cite>
-        <p className="text-white font-text font-semibold text-sm w-72 mt-6 text-center max-sm: py-6 md:text-right">
+        <p className="max-sm: mt-6 w-72 py-6 text-center font-text text-sm font-semibold text-white md:text-right">
           Faça login na nossa plataforma e venha evangelizar através da música.
         </p>
       </div>
       <div className="flex flex-col items-center">
         <Link href="/">
-          <div className="flex items-center gap-2 font-text font-semibold mb-4 text-white">
+          <div className="mb-4 flex items-center gap-2 font-text font-semibold text-white">
             <FaArrowLeft />
             Voltar para Home
           </div>

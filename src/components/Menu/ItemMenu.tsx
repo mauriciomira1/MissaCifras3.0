@@ -4,11 +4,15 @@ import Link from "next/link";
 interface ItemMenuProps {
   href: Url;
   name: String;
+  onClickFunction?: () => void;
 }
 
-const ItemMenu = ({ href, name }: ItemMenuProps) => {
+const ItemMenu = ({ href, name, onClickFunction }: ItemMenuProps) => {
   return (
-    <li className="h-full px-2 hover:border-b-4 font-text font-bold border-primaryColor flex flex-wrap items-center justify-center gap-1 text-secondaryColor hover:text-primaryColor hover:cursor-pointer duration-100">
+    <li
+      className="flex h-full flex-wrap items-center justify-center gap-1 border-primaryColor px-2 font-text font-bold text-secondaryColor duration-100 hover:cursor-pointer hover:border-b-4 hover:text-primaryColor"
+      onClick={onClickFunction}
+    >
       <Link href={href} className="py-6 uppercase">
         {name}
       </Link>
