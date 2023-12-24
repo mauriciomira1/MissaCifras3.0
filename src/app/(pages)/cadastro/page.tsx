@@ -1,10 +1,8 @@
-import Image from "next/image";
-
-// Importando componente
-import FormularioCadastro from "./FormularioCadastro";
-
 // Hooks
 import Link from "next/link";
+
+// Componentes
+import FormularioCadastro from "./FormularioCadastro";
 
 // Ícones
 import { FaArrowLeft } from "react-icons/fa";

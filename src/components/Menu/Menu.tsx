@@ -21,6 +21,7 @@ import { useSession, signOut } from "next-auth/react";
 
 // Ícones
 import { FiUser } from "react-icons/fi";
+import { MdLogout } from "react-icons/md";
 
 interface MenuProps {
   pageSrc: string;
@@ -79,8 +80,6 @@ const Menu = () => {
           <ItemMenu href="/enviar-cifra" name="enviar cifra" />
           {status === "authenticated" ? (
             <>
-              <ItemMenu href="/" name="logout" onClickFunction={handleLogout} />
-
               <li className="ml-1 rounded-full border-2 border-secondaryColor bg-secondaryColor font-bold hover:opacity-80 active:bg-secondaryColor active:opacity-70">
                 <Link href="/dashboard" className="flex w-9">
                   {data.user ? (
@@ -97,6 +96,12 @@ const Menu = () => {
                   )}
                 </Link>
               </li>
+              <MdLogout
+                onClick={handleLogout}
+                size={22}
+                color="gray"
+                className="ml-4 cursor-pointer hover:fill-gray-700 active:fill-gray-400"
+              />
             </>
           ) : (
             <>

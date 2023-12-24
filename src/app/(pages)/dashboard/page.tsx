@@ -42,7 +42,7 @@ const Dashboard = () => {
         <div className="flex justify-center">
           <Link
             href="/dashboard/playlists"
-            className="mb-6 mt-3 flex items-center gap-2 rounded-md border border-red-300 px-4 py-2 active:bg-red-300"
+            className="mb-6 mt-3 flex items-center gap-2 rounded-md border border-red-300 px-4 py-2 hover:bg-red-200 active:bg-red-500"
           >
             <p className="font-text font-bold text-primaryColor">Ver todos</p>
             <FaCirclePlus color="orange" size={18} />
@@ -51,10 +51,12 @@ const Dashboard = () => {
       </div>
 
       <div className="flex w-full items-center justify-between py-5 font-text font-bold">
-        <ButtonStyle01
-          btnTitle="ir para home"
-          className="bg-primaryColor uppercase text-white hover:opacity-80 active:opacity-90"
-        />
+        <Link href="/">
+          <ButtonStyle01
+            btnTitle="ir para home"
+            className="bg-primaryColor uppercase text-white hover:opacity-80 active:opacity-90"
+          />
+        </Link>
         <ButtonStyle01
           btnTitle="indique"
           icon={IoGiftOutline}
@@ -62,17 +64,17 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 flex w-full flex-col items-center justify-center">
         <h2 className="text-center font-text text-lg font-bold uppercase text-primaryColor">
           Saiba quem somos nós
         </h2>
         <Link
           href="/quem-somos"
-          className="mt-2 flex w-full items-center justify-center"
+          className="mt-2 flex w-auto items-center justify-center"
         >
           <ButtonStyle01
             btnTitle="sobre nós"
-            className="border border-gray-300 px-6 font-text font-bold uppercase text-primaryColor hover:opacity-80 active:bg-tertiaryColor"
+            className="border border-gray-300 px-6 font-text font-bold uppercase text-primaryColor hover:bg-primaryColor hover:text-white active:bg-tertiaryColor"
           />
         </Link>
       </div>
@@ -83,7 +85,7 @@ const Dashboard = () => {
         <h2 className="font-text text-lg font-bold uppercase text-primaryColor">
           Quer enviar uma cifra?
         </h2>
-        <Link href="/quem-somos" className="mt-2 flex w-full">
+        <Link href="/dashboard/enviar-cifra" className="mt-2 flex w-full">
           <ButtonStyle01
             btnTitle="Enviar cifra"
             icon={FiEdit}

@@ -71,7 +71,7 @@ const FormularioCadastro = () => {
 
   const handleLoginWithGoogle = () => {
     signIn("google", {
-      callbackUrl: "http://localhost:3000/cadastro/welcome",
+      callbackUrl: "/dashboard",
     });
   };
 
