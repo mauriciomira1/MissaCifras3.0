@@ -29,14 +29,28 @@ const Etapa01 = () => {
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
+  const [artistasInseridosPeloUsuario, setArtistasInseridosPeloUsuario] =
+    useState<string>();
+
+  const lidandoComArtistasInseridos = (
+    artistasInseridosPeloUsuario: string,
+  ) => {
+    if (artistasInseridosPeloUsuario) {
+      const artistas = artistasInseridosPeloUsuario.split(/\W+/);
+      console.log(artistas);
+    }
+  };
+
   useEffect(() => {
     EtapaSong01(data);
+    artistasInseridosPeloUsuario &&
+      lidandoComArtistasInseridos(artistasInseridosPeloUsuario);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, artistasInseridosPeloUsuario]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <h1 className="font-text text-primaryColor py-1 font-bold">
+      <h1 className="py-1 font-text font-bold text-primaryColor">
         ETAPA 01 - DADOS DA MÚSICA
       </h1>
 
@@ -54,11 +68,22 @@ const Etapa01 = () => {
         value={data.versao}
       />
 
-      <InputData
+      {/*       <InputData
         placeholder="Cantor(es) ou Banda (se houver mais de um, separe por vírgulas)"
         name="artistas"
-        onChange={handleChange}
-        value={data.artistas}
+        onChange={(event) => {
+          setArtistasInseridosPeloUsuario(event.target);
+        }}
+        value={artistasInseridosPeloUsuario}
+      /> */}
+
+      <input
+        type="text"
+        placeholder="Cantor(es) ou Banda (se houver mais de um, separe por vírgulas)"
+        name="artistas"
+        onChange={(ev) => setArtistasInseridosPeloUsuario(ev.target.value)}
+        className="h-8 w-full items-center rounded bg-gray-200 px-2 placeholder:text-sm focus:bg-white"
+        value={artistasInseridosPeloUsuario}
       />
 
       <InputData
@@ -69,7 +94,7 @@ const Etapa01 = () => {
       />
 
       <select
-        className="w-full rounded items-center focus:bg-white bg-gray-200 h-8 px-2 placeholder:text-sm text-gray-800 text-sm"
+        className="h-8 w-full items-center rounded bg-gray-200 px-2 text-sm text-gray-800 placeholder:text-sm focus:bg-white"
         onChange={handleChange}
         value={data.tom}
         name="tom"
@@ -91,10 +116,11 @@ const Etapa01 = () => {
         <option value="B">B</option>
       </select>
 
-      <div className="w-full flex items-center">
-        <span className="mr-2 font-bold font-text text-sm w-28">
+      <div className="flex w-full items-center">
+        <span className="mr-2 w-28 font-text text-sm font-bold">
           BPM <span className="text-[.8em]">(opcional)</span>:
         </span>
+
         <InputData
           placeholder="BPM (batimentos por minuto) - opcional"
           type="text"
@@ -120,7 +146,7 @@ const Etapa01 = () => {
       />
 
       <select
-        className="w-full rounded items-center focus:bg-white bg-gray-200 h-8 px-2 placeholder:text-sm text-gray-800 text-sm"
+        className="h-8 w-full items-center rounded bg-gray-200 px-2 text-sm text-gray-800 placeholder:text-sm focus:bg-white"
         onChange={handleChange}
         value={data.classificacao}
         name="classificacao"
