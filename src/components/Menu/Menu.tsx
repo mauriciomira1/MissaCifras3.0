@@ -99,8 +99,7 @@ const Menu = () => {
               <MdLogout
                 onClick={handleLogout}
                 size={22}
-                color="gray"
-                className="ml-4 cursor-pointer hover:fill-gray-700 active:fill-gray-400"
+                className="ml-4 mr-2 cursor-pointer fill-gray-300 hover:fill-gray-700 active:fill-gray-400"
               />
             </>
           ) : (

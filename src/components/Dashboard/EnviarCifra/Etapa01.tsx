@@ -5,6 +5,9 @@ import InputData from "./InputData";
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 import { SongDataProps } from "@/dtos/songDataProps";
+import { prismaClient } from "@/lib/prisma";
+import { ArtistaProps } from "@/dtos/artistaProps";
+import Link from "next/link";
 
 // ----------------------------------------------------------------
 
@@ -29,24 +32,69 @@ const Etapa01 = () => {
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
-  const [artistasInseridosPeloUsuario, setArtistasInseridosPeloUsuario] =
-    useState<string>();
+  const [cantorPrincipal, setCantorPrincipal] = useState("");
+  const [todosOsArtistas, setTodosArtistas] = useState<ArtistaProps>();
 
-  const lidandoComArtistasInseridos = (
-    artistasInseridosPeloUsuario: string,
+  /*   const lidandoComParticipacaoEspecialInseridos = (
+    participacaoEspecialInseridosPeloUsuario: string,
   ) => {
-    if (artistasInseridosPeloUsuario) {
-      const artistas = artistasInseridosPeloUsuario.split(/\W+/);
-      console.log(artistas);
+    if (participacaoEspecialInseridosPeloUsuario) {
+      const participacaoEspecial =
+        participacaoEspecialInseridosPeloUsuario.split(/[,\.;]+/);
+      const participacaoEspecialFormatado = participacaoEspecial.map(
+        (artista) => artista.trimStart(),
+      );
+
+      participacaoEspecialFormatado.map((artista) => {
+        arrayDeParticipacaoEspecial.push({
+          nome: artista,
+          qtdDeCliques: 0,
+        });
+      });
+    }
+  }; */
+
+  // Mapeia artista no banco de dados pra ver se tem.
+  // Se já existir, ele pega o artistaId e insere na música
+  // Se não, ele cria o artista e procura de novo para pegar o artistaId e insere na música
+
+  const lidarComCantorPrincipal = async () => {
+    try {
+      const existeUmCantor = await prismaClient.artista.findMany({
+        where: {
+          nome: cantorPrincipal,
+        },
+      });
+
+      if (existeUmCantor.length === 0) {
+        await prismaClient.artista.create({
+          data: {
+            nome: cantorPrincipal,
+            qtdDeCliques: 0,
+          },
+        });
+      } else {
+        const artistasDoDB = await prismaClient.artista.findMany();
+        setTodosArtistas(artistasDoDB);
+      }
+    } catch (error) {
+      console.log("Erro na Etapa01, existeUmCantor =======>", error);
+    }
+  };
+
+  const listaArtistasdoDB = async () => {
+    try {
+      const listaArtistas = await prismaClient.artista.findMany();
+      return listaArtistas;
+    } catch (error) {
+      console.log("Erro no listaArtistasdoDB =======>", error);
     }
   };
 
   useEffect(() => {
     EtapaSong01(data);
-    artistasInseridosPeloUsuario &&
-      lidandoComArtistasInseridos(artistasInseridosPeloUsuario);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, artistasInseridosPeloUsuario]);
+  }, [data]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -68,23 +116,49 @@ const Etapa01 = () => {
         value={data.versao}
       />
 
-      {/*       <InputData
-        placeholder="Cantor(es) ou Banda (se houver mais de um, separe por vírgulas)"
-        name="artistas"
-        onChange={(event) => {
-          setArtistasInseridosPeloUsuario(event.target);
-        }}
-        value={artistasInseridosPeloUsuario}
-      /> */}
+      <div className="relative w-full">
+        <input
+          className="h-8 w-full items-center rounded bg-gray-200 px-2 placeholder:text-sm focus:bg-white"
+          placeholder="Nome do cantor/banda principal"
+          name="artista"
+          onChange={(ev) => setCantorPrincipal(ev.target.value)}
+          value={cantorPrincipal}
+        />
 
-      <input
+        {/* ------------------------------------------------------------------- */}
+
+        <div className="absolute top-9 flex w-full flex-col gap-2 rounded-md border border-gray-300 bg-white px-2 py-3 shadow-md">
+          <p className="font-text text-xs text-gray-500">Artistas</p>
+          <Link href="" className="font-text text-sm font-semibold">
+            Rosa de Saron
+          </Link>
+          <Link href="" className="font-text text-sm font-semibold">
+            Eugênio Jorge
+          </Link>
+          <Link href="" className="font-text text-sm font-semibold">
+            Eliana Ribeiro
+          </Link>
+          <Link href="" className="font-text text-sm font-semibold">
+            Adriana Arydes
+          </Link>
+        </div>
+      </div>
+
+      <InputData
+        placeholder="Participação especial (se houver mais de um, separe por vírgulas)"
+        name="participacao"
+        onChange={handleChange}
+        value={data.participacao}
+      />
+
+      {/* <input
         type="text"
-        placeholder="Cantor(es) ou Banda (se houver mais de um, separe por vírgulas)"
-        name="artistas"
+        placeholder="Participação (se houver mais de um, separe por vírgulas)"
+        name="participacao"
         onChange={(ev) => setArtistasInseridosPeloUsuario(ev.target.value)}
         className="h-8 w-full items-center rounded bg-gray-200 px-2 placeholder:text-sm focus:bg-white"
         value={artistasInseridosPeloUsuario}
-      />
+      /> */}
 
       <InputData
         placeholder="Nome do compositor (opcional)"
@@ -182,5 +256,4 @@ const Etapa01 = () => {
     </div>
   );
 };
-
 export default Etapa01;

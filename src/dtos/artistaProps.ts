@@ -1,5 +1,3 @@
-import { SongProps } from "./songProps";
-
 export type ArtistaProps = {
   nome: string;
   qtdDeCliques: number;
