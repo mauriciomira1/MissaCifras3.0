@@ -1,11 +1,13 @@
-import { ChangeEventHandler, ForwardedRef, MouseEventHandler } from "react";
+"use client";
+
+import { ChangeEventHandler, useState } from "react";
 
 interface InputDataProps {
   placeholder: string;
   type?: string | "text";
   name: string;
   onChange: ChangeEventHandler;
-  value: any;
+  value?: string | number;
 }
 
 const InputData = ({
@@ -15,13 +17,22 @@ const InputData = ({
   onChange,
   value,
 }: InputDataProps) => {
+  const [hasValue, setHasValue] = useState(false);
+
+  const handleChange = (ev: any) => {
+    onChange(ev.target.value);
+    ev.target.value ? setHasValue(true) : setHasValue(false);
+  };
+
   return (
     <input
       type={type}
       placeholder={placeholder}
       name={name}
-      onChange={onChange}
-      className="h-8 w-full items-center rounded bg-gray-200 px-2 placeholder:text-sm focus:bg-white"
+      onChange={handleChange}
+      className={`${
+        hasValue ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-200"
+      } h-9 w-full items-center rounded border-[1px]   px-2 outline-none placeholder:text-sm focus:border-[#2684FF] focus:bg-white`}
       value={value}
     />
   );

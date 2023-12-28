@@ -6,8 +6,14 @@ import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { prismaClient } from "@/lib/prisma";
 import { useState } from "react";
+import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
+import InputArtista from "./InputArtista";
 
-const EnviarCifraComponent = () => {
+const EnviarCifraComponent = ({
+  listaDeArtistas,
+}: {
+  listaDeArtistas: ArtistaBancodeDadosProps[];
+}) => {
   const { songData } = useNewMusic();
 
   const [etapaAtual, setEtapaAtual] = useState(0);
@@ -37,47 +43,43 @@ const EnviarCifraComponent = () => {
 
   const handleSend = async () => {
     // Juntando todos os dados para enviar a nova música para o servidor
-    if (
-      !songData.cifra ||
-      !songData ||
-      !songData.letra ||
-      !songData.chordsList
-    ) {
+    if (!songData.cifra || !songData || !songData.letra || !songData.acordes) {
       console.log("Falta dados para o envio ao servidor.");
       return;
     }
     const completeSong = await prismaClient.cifra.create({
-      musica: songData.musica,
-      versao: songData.versao,
-      artistas: songData.artistas,
-      compositor: songData.compositor,
-      tom: songData.tom,
-      bpm: songData.bpm,
-      video: songData.video,
-      letra: songData.letra,
-      cifra: songData.cifra,
-      hashtags: songData.hashtags,
-      classificacao: songData.classificacao,
-      liturgica: songData.liturgica,
-      /*       chordsList: chordsList, */
-      qtdDeCliques: 0,
-      /* usuarioQueEnviou, */
+      data: {
+        slug: "",
+        artistaId: songData.artistaId,
+        userId: songData.userId,
+        cifra: songData.cifra,
+        musica: songData.musica,
+        versao: songData.versao,
+        participacao: songData.participacao,
+        compositor: songData.compositor,
+        tom: songData.tom,
+        bpm: songData.bpm,
+        video: songData.video,
+        letra: songData.letra,
+        hashtags: songData.hashtags,
+        acordes: songData.acordes,
+        classificacao: songData.classificacao,
+        liturgica: songData.liturgica,
+        qtdDeCliques: 0,
+      },
     });
 
-    /*     fetch("http://localhost:3000/api/cifras", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(completeSong),
-    }).then((res) => alert(res)); */
     console.log(completeSong);
   };
 
   const renderDaEtapaAtual = () => {
     switch (etapaAtual) {
       case 0:
-        return <Etapa01 />;
+        return (
+          <Etapa01>
+            <InputArtista listaDeArtistas={listaDeArtistas} />
+          </Etapa01>
+        );
 
       case 1:
         return <Etapa02 />;
@@ -91,11 +93,11 @@ const EnviarCifraComponent = () => {
   };
 
   return (
-    <form className="flex flex-col w-full gap-2 items-center my-6">
-      <h1 className="font-text text-2xl md:text-4xl font-black text-primaryColor">
+    <form className="my-6 flex w-full flex-col items-center gap-2">
+      <h1 className="font-text text-2xl font-black text-primaryColor md:text-4xl">
         DASHBOARD
       </h1>
-      <div className="flex justify-center gap-1 mt-2 mb-5 w-full">
+      <div className="mb-5 mt-2 flex w-full justify-center gap-1">
         <button
           className={etapaAtual === 0 ? selectedBtn : inactiveBtn}
           id="btn01"
@@ -140,7 +142,7 @@ const EnviarCifraComponent = () => {
         </button>
       </div>
       <div className="w-full">{renderDaEtapaAtual()}</div>
-      <div className="flex justify-between w-full">
+      <div className="flex w-full justify-between">
         {etapaAtual === 0 ? (
           <div></div>
         ) : (

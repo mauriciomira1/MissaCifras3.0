@@ -26,7 +26,7 @@ type ContextNewMusicProps = {
 };
 
 const ContextNewMusic = createContext<ContextNewMusicProps>(
-  {} as ContextNewMusicProps
+  {} as ContextNewMusicProps,
 );
 
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
@@ -37,7 +37,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
       ...prevState,
       musica: data.musica,
       versao: data.versao,
-      artistas: data.artistas,
+      participacao: data.participacao,
       compositor: data.compositor,
       tom: data.tom,
       bpm: data.bpm,

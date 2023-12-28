@@ -1,9 +1,9 @@
 import { ArtistaProps } from "@/dtos/artistaProps";
 import { SongProps } from "@/dtos/songProps";
 import { UserProps } from "@/dtos/userProps";
-import { PrismaClient } from "@prisma/client";
+import { prismaClient } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
+const prisma = prismaClient;
 
 async function main() {
   try {
