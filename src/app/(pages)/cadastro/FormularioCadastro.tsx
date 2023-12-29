@@ -65,9 +65,7 @@ const FormularioCadastro = () => {
   });
 
   // Enviando dados (para o log por enquanto)
-  const createUser = (data: any) => {
-    console.log(data);
-  };
+  const createUser = (data: any) => {};
 
   const handleLoginWithGoogle = () => {
     signIn("google", {

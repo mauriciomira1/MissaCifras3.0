@@ -19,8 +19,8 @@ const InputData = ({
 }: InputDataProps) => {
   const [hasValue, setHasValue] = useState(false);
 
-  const handleChange = (ev: any) => {
-    onChange(ev.target.value);
+  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(ev);
     ev.target.value ? setHasValue(true) : setHasValue(false);
   };
 

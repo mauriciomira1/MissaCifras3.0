@@ -1,4 +1,4 @@
-import { AiOutlineLoading } from "react-icons/ai";
+import { VscLoading } from "react-icons/vsc";
 import "./styles.css";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 const LoadingIcon = ({ color, size }: Props) => {
   return (
     <div className="flex h-screen w-full items-center justify-center">
-      <AiOutlineLoading className="spin" color={color} size={size} />
+      <VscLoading className="spin" color={color} size={size} />
     </div>
   );
 };

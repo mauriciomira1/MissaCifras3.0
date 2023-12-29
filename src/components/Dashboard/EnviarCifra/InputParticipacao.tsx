@@ -1,64 +1,22 @@
-"use client";
-
+import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 import { defaults } from "autoprefixer";
-import { useState } from "react";
 import Select, { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 
 const animatedComponent = makeAnimated();
 
-const options = [
-  {
-    value: "c",
-    label: "C",
-  },
-  {
-    value: "c#",
-    label: "C#",
-  },
-  {
-    value: "d",
-    label: "D",
-  },
-  {
-    value: "d#",
-    label: "D#",
-  },
-  {
-    value: "e",
-    label: "E",
-  },
-  {
-    value: "f",
-    label: "F",
-  },
-  {
-    value: "f#",
-    label: "F#",
-  },
-  {
-    value: "g",
-    label: "G",
-  },
-  {
-    value: "g#",
-    label: "G#",
-  },
-  {
-    value: "a",
-    label: "A",
-  },
-  {
-    value: "a#",
-    label: "A#",
-  },
-  {
-    value: "b",
-    label: "B",
-  },
-];
+// ----------------------------------------------------------------------------
 
-const InputTonalidade = () => {
+const InputParticipacao = async ({
+  listaDeArtistas,
+}: {
+  listaDeArtistas: ArtistaBancodeDadosProps[];
+}) => {
+  const options = listaDeArtistas.map((artista) => ({
+    value: artista.id,
+    label: artista.nome,
+  }));
+
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
       ...styles,
@@ -103,8 +61,6 @@ const InputTonalidade = () => {
     },
   };
 
-  const [valor, setValor] = useState("");
-
   return (
     <div className="w-full">
       <Select
@@ -112,11 +68,10 @@ const InputTonalidade = () => {
         isSearchable
         components={animatedComponent}
         styles={colorStyles}
-        placeholder="Tonalidade da música"
-        value={valor}
+        placeholder="Adicione artistas participantes (opcional)"
       />
     </div>
   );
 };
 
-export default InputTonalidade;
+export default InputParticipacao;

@@ -1,19 +1,48 @@
+"use client";
 import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 import { defaults } from "autoprefixer";
+import { Dispatch, SetStateAction, useState } from "react";
 import Select, { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
+import CreatableSelect from "react-select/creatable";
 
 const animatedComponent = makeAnimated();
 
-const InputArtista = async ({
-  listaDeArtistas,
-}: {
+export type Option = {
+  readonly label: string;
+};
+
+type InputArtistaProps = {
   listaDeArtistas: ArtistaBancodeDadosProps[];
-}) => {
-  const options = listaDeArtistas.map((artista) => ({
-    value: artista.id,
-    label: artista.nome,
-  }));
+  setArtistaAtual: Dispatch<SetStateAction<string>>;
+};
+
+const createOption = (label: string) => ({
+  label,
+});
+
+// ----------------------------------------------------------------------------
+
+const InputArtista = ({
+  listaDeArtistas,
+  setArtistaAtual,
+}: InputArtistaProps) => {
+  const defaultOptions = listaDeArtistas.map((item) => createOption(item.nome));
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [options, setOptions] = useState(defaultOptions);
+  const [value, setValue] = useState<Option | null>();
+
+  /*   const handleCreate = (inputValue: string) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const newOption = createOption(inputValue);
+      
+      setIsLoading(false);
+      setOptions((prev) => [...prev, newOption]);
+      setValue(newOption);
+    }, 1000);
+  }; */
 
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
@@ -60,13 +89,31 @@ const InputArtista = async ({
   };
 
   return (
-    <Select
-      options={options}
-      isSearchable
-      components={animatedComponent}
-      styles={colorStyles}
-      placeholder="Selecione um cantor/banda"
-    />
+    <div className="w-full">
+      <CreatableSelect
+        isClearable
+        isDisabled={isLoading}
+        isLoading={isLoading}
+        onChange={(newValue: unknown) => {
+          if (
+            newValue === null ||
+            newValue === undefined ||
+            (typeof newValue === "object" &&
+              "label" in newValue &&
+              "value" in newValue)
+          ) {
+            setValue(newValue as Option | null);
+          }
+        }}
+        options={options}
+        components={animatedComponent}
+        styles={colorStyles}
+        // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
+        onCreateOption={(value) => value && setArtistaAtual(value)}
+        placeholder="Selecione um cantor/banda"
+        value={value}
+      />
+    </div>
   );
 };
 

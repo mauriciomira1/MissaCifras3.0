@@ -2,6 +2,8 @@ import { defaults } from "autoprefixer";
 import Select, { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 
+// ----------------------------------------------------------------------------
+
 const animatedComponent = makeAnimated();
 
 const options = [

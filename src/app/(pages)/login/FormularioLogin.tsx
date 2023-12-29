@@ -47,9 +47,7 @@ const FormularioLogin = () => {
   });
 
   // Enviando dados (para o log por enquanto)
-  const createUser = (data: any) => {
-    console.log(data);
-  };
+  const createUser = (data: any) => {};
 
   // Lidando com Login usando o Google
   const handleLoginWithGoogle = () => {

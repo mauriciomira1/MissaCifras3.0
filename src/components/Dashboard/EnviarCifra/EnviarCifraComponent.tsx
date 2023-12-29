@@ -1,23 +1,41 @@
 "use client";
+
+// Hooks
+import { useEffect, useState } from "react";
+
+// Contextos
+import { useNewMusic } from "@/contexts/useNewMusicContext";
+
+// Banco de dados
+import { prismaClient } from "@/lib/prisma";
+
+// Tipagem
+import { ArtistaBancodeDadosProps, ArtistaProps } from "@/dtos/artistaProps";
+
+// Componentes
+import InputArtista, { Option } from "./InputArtista";
+import InputParticipacao from "./InputParticipacao";
 import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
-import { useNewMusic } from "@/contexts/useNewMusicContext";
-import { prismaClient } from "@/lib/prisma";
-import { useState } from "react";
-import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
-import InputArtista from "./InputArtista";
+
+type EnviarCifraComponentProps = {
+  criarNovoArtista: (artista: string) => Promise<void>;
+  listaDeArtistas: ArtistaBancodeDadosProps[];
+};
+
+// ----------------------------------------------------------------------------
 
 const EnviarCifraComponent = ({
   listaDeArtistas,
-}: {
-  listaDeArtistas: ArtistaBancodeDadosProps[];
-}) => {
+  criarNovoArtista,
+}: EnviarCifraComponentProps) => {
   const { songData } = useNewMusic();
 
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [btnState, setBtnState] = useState(true);
+  const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
 
   const selectedBtn =
     "font-text text-green-400 text-xl align-middle font-bold border-2 border-green-400 rounded-md h-8 w-8";
@@ -68,16 +86,26 @@ const EnviarCifraComponent = ({
         qtdDeCliques: 0,
       },
     });
-
-    console.log(completeSong);
   };
+
+  // useEffect para salvar o Artista (inclui criar um novo artista, caso não exista no Banco de dados) quando artistaAtual for alterado
+  useEffect(() => {
+    async () => {
+      await criarNovoArtista(artistaAtual);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [artistaAtual]);
 
   const renderDaEtapaAtual = () => {
     switch (etapaAtual) {
       case 0:
         return (
           <Etapa01>
-            <InputArtista listaDeArtistas={listaDeArtistas} />
+            <InputArtista
+              listaDeArtistas={listaDeArtistas}
+              setArtistaAtual={setArtistaAtual}
+            />
+            <InputParticipacao listaDeArtistas={listaDeArtistas} />
           </Etapa01>
         );
 

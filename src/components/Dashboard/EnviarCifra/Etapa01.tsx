@@ -12,32 +12,38 @@ import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 // Subcomponentes
 import InputTonalidade from "./InputTonalidade";
 import InputClassificacao from "./InputClassificacao";
+import { Option } from "./InputArtista";
 
-// ----------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 const Etapa01 = ({ children }: { children: ReactNode }) => {
+  // useContext
   const { EtapaSong01, songData } = useNewMusic();
 
+  // Criação de useStates
   const [data, setData] = useState<SongDataProps>(songData || {});
+  const [stringDeHashtags, setStringDeHashtags] = useState("");
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
-
-  const [cantorPrincipal, setCantorPrincipal] = useState("");
   const [listaDeArtistas, setListaDeArtistas] =
     useState<ArtistaBancodeDadosProps[]>();
 
+  // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setLiturgicaChecked(ev.target.checked);
     data.liturgica = !liturgicaChecked;
   };
 
-  const handleChange = (ev: any) => {
-    /*     const { name, value } = ev.target;
-    setData((prevData) => ({ ...prevData, [name]: value })); */
+  // Função para salvar os dados da música inseridos pelo usuário
+  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = ev.target;
+    setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleHashtags = (ev: any) => {
-    const { name, value } = ev.target;
-    const arrayDeHashtags: string[] = value.split(/[.,; ]/);
+  // Função para lidar com hashtags (transformando em Array)
+  const handleHashtags = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setStringDeHashtags(ev.target.value);
+    const { name } = ev.target;
+    const arrayDeHashtags: string[] = stringDeHashtags.split(/[.,; ]/);
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
@@ -64,10 +70,10 @@ const Etapa01 = ({ children }: { children: ReactNode }) => {
   // Se já existir, ele pega o artistaId e insere na música
   // Se não, ele cria o artista e procura de novo para pegar o artistaId e insere na música
 
-  useEffect(() => {
+  /*   useEffect(() => {
     EtapaSong01(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data]); */
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -89,23 +95,7 @@ const Etapa01 = ({ children }: { children: ReactNode }) => {
         value={data.versao}
       />
 
-      <div className="relative w-full">
-        {/*         <input
-          className="h-8 w-full items-center rounded bg-gray-200 px-2 placeholder:text-sm focus:bg-white"
-          placeholder="Nome do cantor/banda principal"
-          name="artista"
-          onChange={(ev) => setCantorPrincipal(ev.target.value)}
-          value={cantorPrincipal}
-        /> */}
-        {children}
-      </div>
-
-      <InputData
-        placeholder="Participação especial (se houver mais de um, separe por vírgulas)"
-        name="participacao"
-        onChange={handleChange}
-        value={data.participacao}
-      />
+      <div className="flex w-full gap-2">{children}</div>
 
       {/* <input
         type="text"
@@ -151,7 +141,7 @@ const Etapa01 = ({ children }: { children: ReactNode }) => {
         placeholder="Palavras-chave (Exemplo: maria, jesus, amor de pai, etc)"
         name="hashtags"
         onChange={handleHashtags}
-        value={data.hashtags}
+        value={stringDeHashtags}
       />
 
       <InputClassificacao />
