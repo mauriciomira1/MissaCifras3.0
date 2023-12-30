@@ -12,11 +12,17 @@ import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 // Subcomponentes
 import InputTonalidade from "./InputTonalidade";
 import InputClassificacao from "./InputClassificacao";
-import { Option } from "./InputArtista";
+import InputArtista, { Option } from "./InputArtista";
+import InputParticipacao from "./InputParticipacao";
+
+type Etapa01Props = {
+  listaDeArtistas: ArtistaBancodeDadosProps[];
+  criarNovoArtista: (artista: string) => Promise<ArtistaBancodeDadosProps>;
+};
 
 // ----------------------------------------------------------------------------
 
-const Etapa01 = ({ children }: { children: ReactNode }) => {
+const Etapa01 = ({ listaDeArtistas, criarNovoArtista }: Etapa01Props) => {
   // useContext
   const { EtapaSong01, songData } = useNewMusic();
 
@@ -24,8 +30,10 @@ const Etapa01 = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<SongDataProps>(songData || {});
   const [stringDeHashtags, setStringDeHashtags] = useState("");
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
-  const [listaDeArtistas, setListaDeArtistas] =
-    useState<ArtistaBancodeDadosProps[]>();
+  const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
+
+  /*   const [listaDeArtistas, setListaDeArtistas] =
+    useState<ArtistaBancodeDadosProps[]>(); */
 
   // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +83,20 @@ const Etapa01 = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]); */
 
+  useEffect(() => {
+    const artistaEncontrado = listaDeArtistas.find(
+      (artista) => artista.nome === artistaAtual,
+    );
+    if (artistaEncontrado?.id) {
+      const idDoArtista = artistaEncontrado!.id;
+      setData((prevData) => ({ ...prevData, artistaId: idDoArtista }));
+    } else {
+      criarNovoArtista(artistaAtual);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listaDeArtistas, artistaAtual]);
+
   return (
     <div className="flex flex-col items-center gap-1.5">
       <h1 className="py-1 font-text font-bold text-primaryColor">
@@ -95,7 +117,14 @@ const Etapa01 = ({ children }: { children: ReactNode }) => {
         value={data.versao}
       />
 
-      <div className="flex w-full gap-2">{children}</div>
+      <div className="flex w-full gap-2">
+        {" "}
+        <InputArtista
+          listaDeArtistas={listaDeArtistas}
+          setArtistaAtual={setArtistaAtual}
+        />
+        <InputParticipacao listaDeArtistas={listaDeArtistas} />
+      </div>
 
       {/* <input
         type="text"

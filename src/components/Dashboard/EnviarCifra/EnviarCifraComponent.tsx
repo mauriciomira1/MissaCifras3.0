@@ -13,7 +13,7 @@ import { prismaClient } from "@/lib/prisma";
 import { ArtistaBancodeDadosProps, ArtistaProps } from "@/dtos/artistaProps";
 
 // Componentes
-import InputArtista, { Option } from "./InputArtista";
+import InputArtista from "./InputArtista";
 import InputParticipacao from "./InputParticipacao";
 import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
@@ -21,7 +21,14 @@ import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
 
 type EnviarCifraComponentProps = {
-  criarNovoArtista: (artista: string) => Promise<void>;
+  criarNovoArtista: (artista: string) => Promise<{
+    id: string;
+    nome: string;
+    qtdDeCliques: number;
+    capa: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }>;
   listaDeArtistas: ArtistaBancodeDadosProps[];
 };
 
@@ -88,11 +95,14 @@ const EnviarCifraComponent = ({
     });
   };
 
+  const lidarComArtistaInserido = () => {
+    // verificar se existe no banco. Se sim, só salva ele no data
+    // se não, cria um novo artistan no banco e salva ele no data
+  };
+
   // useEffect para salvar o Artista (inclui criar um novo artista, caso não exista no Banco de dados) quando artistaAtual for alterado
   useEffect(() => {
-    async () => {
-      await criarNovoArtista(artistaAtual);
-    };
+    /* criarNovoArtista(artistaAtual); */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [artistaAtual]);
 
@@ -100,13 +110,10 @@ const EnviarCifraComponent = ({
     switch (etapaAtual) {
       case 0:
         return (
-          <Etapa01>
-            <InputArtista
-              listaDeArtistas={listaDeArtistas}
-              setArtistaAtual={setArtistaAtual}
-            />
-            <InputParticipacao listaDeArtistas={listaDeArtistas} />
-          </Etapa01>
+          <Etapa01
+            listaDeArtistas={listaDeArtistas}
+            criarNovoArtista={criarNovoArtista}
+          />
         );
 
       case 1:

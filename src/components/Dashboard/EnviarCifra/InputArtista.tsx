@@ -110,7 +110,7 @@ const InputArtista = ({
         styles={colorStyles}
         // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
         onCreateOption={(value) => value && setArtistaAtual(value)}
-        placeholder="Selecione um cantor/banda"
+        placeholder="Adicione um cantor/banda"
         value={value}
       />
     </div>
