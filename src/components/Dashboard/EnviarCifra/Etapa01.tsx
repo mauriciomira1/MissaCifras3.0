@@ -91,7 +91,7 @@ const Etapa01 = ({ listaDeArtistas, criarNovoArtista }: Etapa01Props) => {
       const idDoArtista = artistaEncontrado!.id;
       setData((prevData) => ({ ...prevData, artistaId: idDoArtista }));
     } else {
-      criarNovoArtista(artistaAtual);
+      artistaAtual.length > 0 && criarNovoArtista(artistaAtual);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
