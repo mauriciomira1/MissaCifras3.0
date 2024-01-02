@@ -1,7 +1,7 @@
 "use client";
 
 // Hooks
-import { useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 // Contextos
 import { useNewMusic } from "@/contexts/useNewMusicContext";
@@ -20,24 +20,9 @@ import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
 
-type EnviarCifraComponentProps = {
-  criarNovoArtista: (artista: string) => Promise<{
-    id: string;
-    nome: string;
-    qtdDeCliques: number;
-    capa: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-  }>;
-  listaDeArtistas: ArtistaBancodeDadosProps[];
-};
-
 // ----------------------------------------------------------------------------
 
-const EnviarCifraComponent = ({
-  listaDeArtistas,
-  criarNovoArtista,
-}: EnviarCifraComponentProps) => {
+const EnviarCifraComponent = () => {
   const { songData } = useNewMusic();
 
   const [etapaAtual, setEtapaAtual] = useState(0);
@@ -109,12 +94,7 @@ const EnviarCifraComponent = ({
   const renderDaEtapaAtual = () => {
     switch (etapaAtual) {
       case 0:
-        return (
-          <Etapa01
-            listaDeArtistas={listaDeArtistas}
-            criarNovoArtista={criarNovoArtista}
-          />
-        );
+        return <Etapa01 />;
 
       case 1:
         return <Etapa02 />;

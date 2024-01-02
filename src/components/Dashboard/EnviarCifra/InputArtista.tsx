@@ -1,10 +1,18 @@
 "use client";
-import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
-import { defaults } from "autoprefixer";
 import { Dispatch, SetStateAction, useState } from "react";
-import Select, { StylesConfig } from "react-select";
+import { defaults } from "autoprefixer";
+
+// Props
+import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
+
+// Biblioteca React-select
+import { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
+
+// Funções
+import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
+import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
 
 const animatedComponent = makeAnimated();
 
@@ -13,7 +21,6 @@ export type Option = {
 };
 
 type InputArtistaProps = {
-  listaDeArtistas: ArtistaBancodeDadosProps[];
   setArtistaAtual: Dispatch<SetStateAction<string>>;
 };
 
@@ -23,29 +30,26 @@ const createOption = (label: string) => ({
 
 // ----------------------------------------------------------------------------
 
-const InputArtista = ({
-  listaDeArtistas,
-  setArtistaAtual,
-}: InputArtistaProps) => {
+const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
+  const [listaDeArtistas, setListaDeArtistas] = useState<
+    ArtistaBancodeDadosProps[]
+  >([]);
+
+  const obtendoListaDeArtistas = async () => {
+    const lista = await obterArtistas();
+    setListaDeArtistas(lista);
+  };
+
+  obtendoListaDeArtistas();
+
   const defaultOptions = listaDeArtistas.map((item) => createOption(item.nome));
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState(defaultOptions);
   const [value, setValue] = useState<Option | null>();
 
-  /*   const handleCreate = (inputValue: string) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newOption = createOption(inputValue);
-      
-      setIsLoading(false);
-      setOptions((prev) => [...prev, newOption]);
-      setValue(newOption);
-    }, 1000);
-  }; */
-
   const colorStyles: StylesConfig = {
-    control: (styles, { hasValue, isFocused }) => ({
+    control: (styles, { hasValue }) => ({
       ...styles,
       backgroundColor: hasValue ? "white" : "rgb(229 231 235)",
       border: hasValue ? defaults : 0,
@@ -109,7 +113,11 @@ const InputArtista = ({
         components={animatedComponent}
         styles={colorStyles}
         // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
-        onCreateOption={(value) => value && setArtistaAtual(value)}
+        formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
+        onCreateOption={(value: string) => {
+          criarNovoArtista(value);
+          setArtistaAtual(value);
+        }}
         placeholder="Adicione um cantor/banda"
         value={value}
       />

@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InputData from "./InputData";
 
 // Contextos
@@ -10,19 +10,18 @@ import { SongDataProps } from "@/dtos/songDataProps";
 import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 
 // Subcomponentes
+import InputArtista from "./InputArtista";
 import InputTonalidade from "./InputTonalidade";
-import InputClassificacao from "./InputClassificacao";
-import InputArtista, { Option } from "./InputArtista";
 import InputParticipacao from "./InputParticipacao";
+import InputClassificacao from "./InputClassificacao";
 
-type Etapa01Props = {
-  listaDeArtistas: ArtistaBancodeDadosProps[];
-  criarNovoArtista: (artista: string) => Promise<ArtistaBancodeDadosProps>;
-};
+// Funções
+import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
+import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
 
 // ----------------------------------------------------------------------------
 
-const Etapa01 = ({ listaDeArtistas, criarNovoArtista }: Etapa01Props) => {
+const Etapa01 = () => {
   // useContext
   const { EtapaSong01, songData } = useNewMusic();
 
@@ -31,9 +30,19 @@ const Etapa01 = ({ listaDeArtistas, criarNovoArtista }: Etapa01Props) => {
   const [stringDeHashtags, setStringDeHashtags] = useState("");
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
   const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
+  const [artistasExistentes, setArtistasExistentes] =
+    useState<ArtistaBancodeDadosProps[]>();
 
-  /*   const [listaDeArtistas, setListaDeArtistas] =
-    useState<ArtistaBancodeDadosProps[]>(); */
+  const obtendoArtistasExistentes = async () => {
+    try {
+      const fetch = await obterArtistas();
+      setArtistasExistentes(fetch);
+    } catch (error) {
+      console.log("Erro no fetch obterArtistas da Etapa01 ====>", error);
+    }
+  };
+
+  obtendoArtistasExistentes();
 
   // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,18 +93,30 @@ const Etapa01 = ({ listaDeArtistas, criarNovoArtista }: Etapa01Props) => {
   }, [data]); */
 
   useEffect(() => {
-    const artistaEncontrado = listaDeArtistas.find(
+    /*     const artistaEncontrado = artistasExistentes!.find(
       (artista) => artista.nome === artistaAtual,
     );
     if (artistaEncontrado?.id) {
-      const idDoArtista = artistaEncontrado!.id;
-      setData((prevData) => ({ ...prevData, artistaId: idDoArtista }));
+      const idDoArtistaEncontrado = artistaEncontrado!.id;
+      setData((prevData) => ({
+        ...prevData,
+        artistaId: idDoArtistaEncontrado,
+      }));
     } else {
       artistaAtual.length > 0 && criarNovoArtista(artistaAtual);
-    }
-
+      obtendoArtistasExistentes();
+    } */
+    obtendoArtistasExistentes();
+    const artistaEncontrado = artistasExistentes!.find(
+      (artista) => artista.id === artistaAtual,
+    );
+    const idDoArtistaEncontrado = artistaEncontrado!.id;
+    setData((prevData) => ({
+      ...prevData,
+      artistaId: idDoArtistaEncontrado!,
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listaDeArtistas, artistaAtual]);
+  }, [artistaAtual]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -119,11 +140,8 @@ const Etapa01 = ({ listaDeArtistas, criarNovoArtista }: Etapa01Props) => {
 
       <div className="flex w-full gap-2">
         {" "}
-        <InputArtista
-          listaDeArtistas={listaDeArtistas}
-          setArtistaAtual={setArtistaAtual}
-        />
-        <InputParticipacao listaDeArtistas={listaDeArtistas} />
+        <InputArtista setArtistaAtual={setArtistaAtual} />
+        {/* <InputParticipacao /> */}
       </div>
 
       {/* <input
