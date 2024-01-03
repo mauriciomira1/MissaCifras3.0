@@ -34,6 +34,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
   const [value, setValue] = useState<Option | unknown>();
+
   const [valorEmString, setValorEmString] = useState("");
 
   const colorStyles: StylesConfig = {
@@ -80,33 +81,46 @@ const InputParticipacao = ({ setData, data }: Props) => {
     },
   };
 
+  const obtendoListaDeArtistas = async () => {
+    try {
+      const lista = await obterArtistas();
+      const defaultOptions = lista.map((item) => createOption(item.nome));
+
+      setOptions(defaultOptions);
+    } catch (error) {
+      console.log(
+        "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
+        error,
+      );
+    }
+  };
+
+  const handleCreate = (value: string) => {
+    const criarArtista = async () => {
+      await criarNovoArtista(value);
+      obtendoListaDeArtistas();
+    };
+    criarArtista();
+    setValue({ label: value });
+    setValorEmString(value);
+  };
+
   useEffect(() => {
     setIsLoading(true);
-
-    const obtendoListaDeArtistas = async () => {
-      try {
-        const lista = await obterArtistas();
-        const defaultOptions = lista.map((item) => createOption(item.nome));
-
-        setOptions(defaultOptions);
-      } catch (error) {
-        console.log(
-          "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
-          error,
-        );
-      }
-    };
     obtendoListaDeArtistas();
-
     setIsLoading(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     setData((prevData) => ({ ...prevData, valorEmString }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valorEmString]);
+  }, [valorEmString]); */
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   return (
     <div className="w-full">
@@ -123,10 +137,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
         styles={colorStyles}
         // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
         formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
-        onCreateOption={(value: string) => {
-          criarNovoArtista(value);
-          setValue(value);
-        }}
+        onCreateOption={handleCreate}
         placeholder="Adicione cantores participantes"
         value={value ? value : "Carregando..."}
       />

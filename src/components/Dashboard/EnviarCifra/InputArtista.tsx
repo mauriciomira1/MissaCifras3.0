@@ -88,19 +88,32 @@ const InputArtista = ({ setData, data }: Props) => {
     },
   };
 
-  useEffect(() => {
-    const obtendoListaDeArtistas = async () => {
-      try {
-        const lista = await obterArtistas();
-        const defaultOptions = lista.map((item) => createOption(item.nome));
-        setOptions(defaultOptions);
-      } catch (error) {
-        console.log(
-          "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
-          error,
-        );
-      }
+  // Obtendo lista de artistas do banco de dados e adicionando na lista de opções do select
+  const obtendoListaDeArtistas = async () => {
+    try {
+      const lista = await obterArtistas();
+      const defaultOptions = lista.map((item) => createOption(item.nome));
+      setOptions(defaultOptions);
+    } catch (error) {
+      console.log(
+        "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
+        error,
+      );
+    }
+  };
+
+  // Função que cria um novo artista pelo input, caso não exista no banco, e adicionando na lista de opções do select
+  const handleCreate = (value: string) => {
+    const criarArtista = async () => {
+      await criarNovoArtista(value);
+      obtendoListaDeArtistas();
     };
+    criarArtista();
+    setValue({ label: value });
+    setValorEmString(value);
+  };
+
+  useEffect(() => {
     obtendoListaDeArtistas();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -135,10 +148,7 @@ const InputArtista = ({ setData, data }: Props) => {
         styles={colorStyles}
         // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
         formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
-        onCreateOption={(value: string) => {
-          criarNovoArtista(value);
-          setValue(value);
-        }}
+        onCreateOption={handleCreate}
         placeholder="Cantor/banda"
         value={value ? value : "Carregando..."}
       />
