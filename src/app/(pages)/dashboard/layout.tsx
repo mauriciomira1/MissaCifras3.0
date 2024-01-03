@@ -2,7 +2,7 @@ import { NewMusicContextProvider } from "@/contexts/useNewMusicContext";
 import MenuLateral from "./MenuLateral";
 
 export const metadata = {
-  title: "Dashboard",
+  title: "Dashboard | MissaCifras",
   description: "Área do usuário",
 };
 

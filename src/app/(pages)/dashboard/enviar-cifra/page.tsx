@@ -4,16 +4,7 @@ import EnviarCifraComponent from "@/components/Dashboard/EnviarCifra/EnviarCifra
 import { EnviarCifraContext } from "@/providers/enviarcifra";
 
 const EnviarCifra = async () => {
-  const obterArtistas = await prismaClient.artista.findMany({
-    orderBy: {
-      nome: "asc",
-    },
-  });
-
-  return (
-    <EnviarCifraComponent
-    />
-  );
+  return <EnviarCifraComponent />;
 };
 
 export default EnviarCifra;

@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { defaults } from "autoprefixer";
 
 // Props
@@ -28,6 +28,10 @@ const createOption = (label: string) => ({
   label,
 });
 
+type NewValueProps = {
+  label: string;
+};
+
 // ----------------------------------------------------------------------------
 
 const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
@@ -35,19 +39,12 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
     ArtistaBancodeDadosProps[]
   >([]);
 
-  const obtendoListaDeArtistas = async () => {
-    const lista = await obterArtistas();
-    setListaDeArtistas(lista);
-  };
-
-  obtendoListaDeArtistas();
-
-  const defaultOptions = listaDeArtistas.map((item) => createOption(item.nome));
-
   const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState(defaultOptions);
-  const [value, setValue] = useState<Option | null>();
+  const [options, setOptions] = useState<{ label: string }[]>();
+  const [value, setValue] = useState<Option | unknown>();
+  const [valorEmString, setValorEmString] = useState("");
 
+  // Estilização
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue }) => ({
       ...styles,
@@ -92,6 +89,29 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
     },
   };
 
+  useEffect(() => {
+    const obtendoListaDeArtistas = async () => {
+      try {
+        const lista = await obterArtistas();
+        /*         setListaDeArtistas(lista); */
+        const defaultOptions = lista.map((item) => createOption(item.nome));
+        setOptions(defaultOptions);
+      } catch (error) {
+        console.log(
+          "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
+          error,
+        );
+      }
+    };
+    obtendoListaDeArtistas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setArtistaAtual(valorEmString);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
   return (
     <div className="w-full">
       <CreatableSelect
@@ -99,15 +119,9 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
         isDisabled={isLoading}
         isLoading={isLoading}
         onChange={(newValue: unknown) => {
-          if (
-            newValue === null ||
-            newValue === undefined ||
-            (typeof newValue === "object" &&
-              "label" in newValue &&
-              "value" in newValue)
-          ) {
-            setValue(newValue as Option | null);
-          }
+          const valueString = newValue as NewValueProps;
+          setValue(newValue);
+          setValorEmString(valueString.label);
         }}
         options={options}
         components={animatedComponent}
@@ -116,7 +130,7 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
         formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
         onCreateOption={(value: string) => {
           criarNovoArtista(value);
-          setArtistaAtual(value);
+          setValue(value);
         }}
         placeholder="Adicione um cantor/banda"
         value={value}

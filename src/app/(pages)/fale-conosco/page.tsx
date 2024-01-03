@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Fale Conosco",
+  title: "Fale Conosco | MissaCifras",
 };
 
 const FaleConosco = () => {

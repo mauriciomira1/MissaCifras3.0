@@ -1,7 +1,7 @@
 import React from "react";
 
 export const metadata = {
-  title: "Quem Somos",
+  title: "Quem Somos | MissaCifras",
 };
 
 const QuemSomos = () => {

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Colabore",
+  title: "Colabore | MissaCifras",
 };
 
 const Colabore = () => {

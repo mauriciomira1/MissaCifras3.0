@@ -8,7 +8,7 @@ import FormularioLogin from "./FormularioLogin";
 import { FaArrowLeft } from "react-icons/fa";
 
 export const metadata = {
-  title: "Login",
+  title: "Login | MissaCifras",
 };
 
 const Login = () => {

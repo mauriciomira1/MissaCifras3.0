@@ -11,7 +11,7 @@ import { IoGiftOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 
 export const metadata = {
-  title: "Minha Dashboard",
+  title: "Dashboard | MissaCifras",
 };
 
 const Dashboard = () => {

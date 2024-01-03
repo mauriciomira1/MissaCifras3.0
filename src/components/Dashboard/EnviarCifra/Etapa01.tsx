@@ -10,7 +10,7 @@ import { SongDataProps } from "@/dtos/songDataProps";
 import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 
 // Subcomponentes
-import InputArtista from "./InputArtista";
+import InputArtista, { Option } from "./InputArtista";
 import InputTonalidade from "./InputTonalidade";
 import InputParticipacao from "./InputParticipacao";
 import InputClassificacao from "./InputClassificacao";
@@ -18,6 +18,7 @@ import InputClassificacao from "./InputClassificacao";
 // Funções
 import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
 import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
+import obterUmArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/obterUmArtista";
 
 // ----------------------------------------------------------------------------
 
@@ -32,17 +33,6 @@ const Etapa01 = () => {
   const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
   const [artistasExistentes, setArtistasExistentes] =
     useState<ArtistaBancodeDadosProps[]>();
-
-  const obtendoArtistasExistentes = async () => {
-    try {
-      const fetch = await obterArtistas();
-      setArtistasExistentes(fetch);
-    } catch (error) {
-      console.log("Erro no fetch obterArtistas da Etapa01 ====>", error);
-    }
-  };
-
-  obtendoArtistasExistentes();
 
   // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,31 +82,35 @@ const Etapa01 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]); */
 
+  // useEffect(() => {
+  //   obtendoArtistasExistentes();
+  //   const artistaEncontrado = artistasExistentes!.find(
+  //     (artista) => artista.id === artistaAtual,
+  //   );
+  //   const idDoArtistaEncontrado = artistaEncontrado!.id;
+  //   setData((prevData) => ({
+  //     ...prevData,
+  //     artistaId: idDoArtistaEncontrado!,
+  //   }));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [artistaAtual]);
+
   useEffect(() => {
-    /*     const artistaEncontrado = artistasExistentes!.find(
-      (artista) => artista.nome === artistaAtual,
-    );
-    if (artistaEncontrado?.id) {
-      const idDoArtistaEncontrado = artistaEncontrado!.id;
-      setData((prevData) => ({
-        ...prevData,
-        artistaId: idDoArtistaEncontrado,
-      }));
-    } else {
-      artistaAtual.length > 0 && criarNovoArtista(artistaAtual);
-      obtendoArtistasExistentes();
-    } */
-    obtendoArtistasExistentes();
-    const artistaEncontrado = artistasExistentes!.find(
-      (artista) => artista.id === artistaAtual,
-    );
-    const idDoArtistaEncontrado = artistaEncontrado!.id;
-    setData((prevData) => ({
-      ...prevData,
-      artistaId: idDoArtistaEncontrado!,
-    }));
+    const fetchArtista = async () => {
+      const artista = await obterUmArtista(artistaAtual);
+      return (
+        artista &&
+        setData((prevData) => ({ ...prevData, artistaId: artista?.id }))
+      );
+    };
+
+    fetchArtista();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [artistaAtual]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">
