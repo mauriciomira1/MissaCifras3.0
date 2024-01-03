@@ -13,6 +13,8 @@ import CreatableSelect from "react-select/creatable";
 // Funções
 import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
 import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
+import { SongDataProps } from "@/dtos/songDataProps";
+import obterUmArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/obterUmArtista";
 
 const animatedComponent = makeAnimated();
 
@@ -20,8 +22,9 @@ export type Option = {
   readonly label: string;
 };
 
-type InputArtistaProps = {
-  setArtistaAtual: Dispatch<SetStateAction<string>>;
+type Props = {
+  setData: Dispatch<SetStateAction<SongDataProps>>;
+  data: SongDataProps;
 };
 
 const createOption = (label: string) => ({
@@ -34,14 +37,10 @@ type NewValueProps = {
 
 // ----------------------------------------------------------------------------
 
-const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
-  const [listaDeArtistas, setListaDeArtistas] = useState<
-    ArtistaBancodeDadosProps[]
-  >([]);
-
+const InputArtista = ({ setData, data }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
-  const [value, setValue] = useState<Option | unknown>();
+  const [value, setValue] = useState<Option | string | unknown>();
   const [valorEmString, setValorEmString] = useState("");
 
   // Estilização
@@ -93,7 +92,6 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
     const obtendoListaDeArtistas = async () => {
       try {
         const lista = await obterArtistas();
-        /*         setListaDeArtistas(lista); */
         const defaultOptions = lista.map((item) => createOption(item.nome));
         setOptions(defaultOptions);
       } catch (error) {
@@ -108,20 +106,29 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
   }, []);
 
   useEffect(() => {
-    setArtistaAtual(valorEmString);
+    setIsLoading(true);
+    const fetchArtista = async () => {
+      const artista = await obterUmArtista(valorEmString);
+      return (
+        artista &&
+        setData((prevData) => ({ ...prevData, artistaId: artista?.id }))
+      );
+    };
+
+    fetchArtista();
+
+    setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [valorEmString]);
 
   return (
     <div className="w-full">
       <CreatableSelect
-        isClearable
-        isDisabled={isLoading}
         isLoading={isLoading}
         onChange={(newValue: unknown) => {
           const valueString = newValue as NewValueProps;
           setValue(newValue);
-          setValorEmString(valueString.label);
+          valorEmString && setValorEmString(valueString.label);
         }}
         options={options}
         components={animatedComponent}
@@ -132,8 +139,8 @@ const InputArtista = ({ setArtistaAtual }: InputArtistaProps) => {
           criarNovoArtista(value);
           setValue(value);
         }}
-        placeholder="Adicione um cantor/banda"
-        value={value}
+        placeholder="Cantor/banda"
+        value={value ? value : "Carregando..."}
       />
     </div>
   );

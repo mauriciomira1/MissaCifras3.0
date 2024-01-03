@@ -31,8 +31,6 @@ const Etapa01 = () => {
   const [stringDeHashtags, setStringDeHashtags] = useState("");
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
   const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
-  const [artistasExistentes, setArtistasExistentes] =
-    useState<ArtistaBancodeDadosProps[]>();
 
   // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,19 +94,6 @@ const Etapa01 = () => {
   // }, [artistaAtual]);
 
   useEffect(() => {
-    const fetchArtista = async () => {
-      const artista = await obterUmArtista(artistaAtual);
-      return (
-        artista &&
-        setData((prevData) => ({ ...prevData, artistaId: artista?.id }))
-      );
-    };
-
-    fetchArtista();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [artistaAtual]);
-
-  useEffect(() => {
     console.log(data);
   }, [data]);
 
@@ -134,8 +119,8 @@ const Etapa01 = () => {
 
       <div className="flex w-full gap-2">
         {" "}
-        <InputArtista setArtistaAtual={setArtistaAtual} />
-        {/* <InputParticipacao /> */}
+        <InputArtista setData={setData} data={data} />
+        <InputParticipacao setData={setData} data={data} />
       </div>
 
       {/* <input

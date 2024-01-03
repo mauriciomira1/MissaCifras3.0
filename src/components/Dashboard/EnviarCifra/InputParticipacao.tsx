@@ -1,21 +1,40 @@
-import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
+"use client";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+// Biblioteca React select
 import { defaults } from "autoprefixer";
-import Select, { StylesConfig } from "react-select";
+import { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
+import CreatableSelect from "react-select/creatable";
+
+// Tipagem
+import { SongDataProps } from "@/dtos/songDataProps";
+import { Option } from "./InputArtista";
+import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
+import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
 
 const animatedComponent = makeAnimated();
 
+type Props = {
+  setData: Dispatch<SetStateAction<SongDataProps>>;
+  data: SongDataProps;
+};
+
+const createOption = (label: string) => ({
+  label,
+});
+
+type NewValueProps = {
+  label: string;
+};
+
 // ----------------------------------------------------------------------------
 
-const InputParticipacao = async ({
-  listaDeArtistas,
-}: {
-  listaDeArtistas: ArtistaBancodeDadosProps[];
-}) => {
-  const options = listaDeArtistas.map((artista) => ({
-    value: artista.id,
-    label: artista.nome,
-  }));
+const InputParticipacao = ({ setData, data }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [options, setOptions] = useState<{ label: string }[]>();
+  const [value, setValue] = useState<Option | unknown>();
+  const [valorEmString, setValorEmString] = useState("");
 
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
@@ -61,14 +80,55 @@ const InputParticipacao = async ({
     },
   };
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    const obtendoListaDeArtistas = async () => {
+      try {
+        const lista = await obterArtistas();
+        const defaultOptions = lista.map((item) => createOption(item.nome));
+
+        setOptions(defaultOptions);
+      } catch (error) {
+        console.log(
+          "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
+          error,
+        );
+      }
+    };
+    obtendoListaDeArtistas();
+
+    setIsLoading(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setData((prevData) => ({ ...prevData, valorEmString }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valorEmString]);
+
   return (
     <div className="w-full">
-      <Select
+      <CreatableSelect
+        isMulti
+        isLoading={isLoading}
+        onChange={(newValue: unknown) => {
+          const valueString = newValue as NewValueProps;
+          setValue(newValue);
+          setValorEmString(valueString.label);
+        }}
         options={options}
-        isSearchable
         components={animatedComponent}
         styles={colorStyles}
-        placeholder="Adicione artistas participantes (opcional)"
+        // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
+        formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
+        onCreateOption={(value: string) => {
+          criarNovoArtista(value);
+          setValue(value);
+        }}
+        placeholder="Adicione cantores participantes"
+        value={value ? value : "Carregando..."}
       />
     </div>
   );
