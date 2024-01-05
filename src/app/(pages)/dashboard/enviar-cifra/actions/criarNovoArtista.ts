@@ -2,9 +2,17 @@
 import { prismaClient } from "@/lib/prisma";
 
 const criarNovoArtista = async (artista: string) => {
+  // Remove acentos, substitui espaço por traço e coloca tudo em minúsculo
+  const slug = artista
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/ /g, "-");
+
   const novoArtista = await prismaClient.artista.create({
     data: {
       nome: artista,
+      slug,
       qtdDeCliques: 0,
     },
   });

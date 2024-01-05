@@ -10,6 +10,7 @@ export type ArtistaBancodeDadosProps = {
   nome: string;
   qtdDeCliques: number;
   capa?: string | null;
+  slug: string;
   createdAt?: Date;
   updatedAt?: Date;
 };

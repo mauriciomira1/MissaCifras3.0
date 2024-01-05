@@ -15,6 +15,7 @@ model Artista {
   nome         String
   qtdDeCliques Int
   capa         String?
+  slug         String
   cifras       Cifra[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
