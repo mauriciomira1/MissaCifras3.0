@@ -1,16 +1,18 @@
 "use server";
 import { prismaClient } from "@/lib/prisma";
-import { z } from "zod";
-
-const zodSchema = {};
 
 const criarNovoArtista = async (artista: string) => {
-  const slugName = artista.toString().toLowerCase().replace(" ", "-");
+  // Remove acentos, substitui espaço por traço e coloca tudo em minúsculo
+  const slug = artista
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/ /g, "-");
 
   const novoArtista = await prismaClient.artista.create({
     data: {
       nome: artista,
-      slug: slugName,
+      slug,
       qtdDeCliques: 0,
     },
   });

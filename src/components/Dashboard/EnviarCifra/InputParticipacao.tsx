@@ -85,7 +85,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
     try {
       const lista = await obterArtistas();
       const defaultOptions = lista.map((item) => createOption(item.nome));
-
+      console.log("Rodou setOptions");
       setOptions(defaultOptions);
     } catch (error) {
       console.log(
@@ -93,6 +93,12 @@ const InputParticipacao = ({ setData, data }: Props) => {
         error,
       );
     }
+  };
+
+  const handleChange = (newValue: unknown) => {
+    const valueString = newValue as NewValueProps;
+    setValue(newValue);
+    setValorEmString(valueString.label);
   };
 
   const handleCreate = (value: string) => {
@@ -127,11 +133,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
       <CreatableSelect
         isMulti
         isLoading={isLoading}
-        onChange={(newValue: unknown) => {
-          const valueString = newValue as NewValueProps;
-          setValue(newValue);
-          setValorEmString(valueString.label);
-        }}
+        onChange={handleChange}
         options={options}
         components={animatedComponent}
         styles={colorStyles}
