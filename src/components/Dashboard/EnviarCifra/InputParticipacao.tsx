@@ -22,6 +22,7 @@ type Props = {
 
 const createOption = (label: string) => ({
   label,
+  value: label,
 });
 
 type NewValueProps = {
@@ -42,7 +43,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
       ...styles,
       backgroundColor: hasValue ? "white" : "rgb(229 231 235)",
       border: hasValue ? defaults : 0,
-      height: 20,
+      minHeight: 20,
     }),
     option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
@@ -85,7 +86,6 @@ const InputParticipacao = ({ setData, data }: Props) => {
     try {
       const lista = await obterArtistas();
       const defaultOptions = lista.map((item) => createOption(item.nome));
-      console.log("Rodou setOptions");
       setOptions(defaultOptions);
     } catch (error) {
       console.log(
@@ -96,12 +96,18 @@ const InputParticipacao = ({ setData, data }: Props) => {
   };
 
   const handleChange = (newValue: unknown) => {
-    const valueString = newValue as NewValueProps;
+    setIsLoading(true);
+
     setValue(newValue);
+    const valueString = newValue as NewValueProps;
     setValorEmString(valueString.label);
+
+    setIsLoading(false);
   };
 
   const handleCreate = (value: string) => {
+    setIsLoading(true);
+
     const criarArtista = async () => {
       await criarNovoArtista(value);
       obtendoListaDeArtistas();
@@ -109,13 +115,16 @@ const InputParticipacao = ({ setData, data }: Props) => {
     criarArtista();
     setValue({ label: value });
     setValorEmString(value);
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
     setIsLoading(true);
-    obtendoListaDeArtistas();
-    setIsLoading(false);
 
+    obtendoListaDeArtistas();
+
+    setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,14 +142,16 @@ const InputParticipacao = ({ setData, data }: Props) => {
       <CreatableSelect
         isMulti
         isLoading={isLoading}
+        hideSelectedOptions={true}
+        closeMenuOnSelect={false}
         onChange={handleChange}
-        options={options}
         components={animatedComponent}
+        noOptionsMessage={() => "Nenhuma opção disponível"}
         styles={colorStyles}
-        // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
         formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
         onCreateOption={handleCreate}
-        placeholder="Adicione cantores participantes"
+        placeholder="Cantores participantes"
+        options={options}
         value={value ? value : "Carregando..."}
       />
     </div>

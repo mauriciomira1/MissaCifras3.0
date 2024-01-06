@@ -117,7 +117,7 @@ const Etapa01 = () => {
         value={data.versao}
       />
 
-      <div className="flex w-full gap-2">
+      <div className="flex w-full flex-col gap-2">
         {" "}
         <InputArtista setData={setData} data={data} />
         <InputParticipacao setData={setData} data={data} />

@@ -29,6 +29,7 @@ type Props = {
 
 const createOption = (label: string) => ({
   label,
+  value: label,
 });
 
 type NewValueProps = {
@@ -138,6 +139,7 @@ const InputArtista = ({ setData, data }: Props) => {
     <div className="w-full">
       <CreatableSelect
         isLoading={isLoading}
+        hideSelectedOptions={true}
         onChange={(newValue: unknown) => {
           const valueString = newValue as NewValueProps;
           setValue(newValue);
