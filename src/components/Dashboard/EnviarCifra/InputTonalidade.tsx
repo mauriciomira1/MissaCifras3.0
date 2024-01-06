@@ -1,7 +1,8 @@
 "use client";
 
+import { SongDataProps } from "@/dtos/songDataProps";
 import { defaults } from "autoprefixer";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Select, { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 
@@ -9,56 +10,75 @@ const animatedComponent = makeAnimated();
 
 const options = [
   {
-    value: "c",
+    value: "C",
     label: "C",
   },
   {
-    value: "c#",
+    value: "C#",
     label: "C#",
   },
   {
-    value: "d",
+    value: "D",
     label: "D",
   },
   {
-    value: "d#",
+    value: "D#",
     label: "D#",
   },
   {
-    value: "e",
+    value: "E",
     label: "E",
   },
   {
-    value: "f",
+    value: "F",
     label: "F",
   },
   {
-    value: "f#",
+    value: "F#",
     label: "F#",
   },
   {
-    value: "g",
+    value: "G",
     label: "G",
   },
   {
-    value: "g#",
+    value: "G#",
     label: "G#",
   },
   {
-    value: "a",
+    value: "A",
     label: "A",
   },
   {
-    value: "a#",
+    value: "A#",
     label: "A#",
   },
   {
-    value: "b",
+    value: "B",
     label: "B",
   },
 ];
 
-const InputTonalidade = () => {
+type Props = {
+  setData: Dispatch<SetStateAction<SongDataProps>>;
+};
+
+type TomProps = SongDataProps["tom"];
+
+type ValueProps = {
+  label: string;
+  value: string;
+};
+
+const InputTonalidade = ({ setData }: Props) => {
+  const [valor, setValor] = useState<unknown>();
+
+  const handleChange = (value: unknown) => {
+    setValor(value);
+    const tonalidade = value as ValueProps;
+    setData((prevData) => ({ ...prevData, tom: tonalidade.label as TomProps }));
+  };
+
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
       ...styles,
@@ -103,13 +123,13 @@ const InputTonalidade = () => {
     },
   };
 
-  const [valor, setValor] = useState("");
-
   return (
     <div className="w-full">
       <Select
         options={options}
         isSearchable
+        onChange={handleChange}
+        noOptionsMessage={() => "Carregando..."}
         components={animatedComponent}
         styles={colorStyles}
         placeholder="Tonalidade da música"

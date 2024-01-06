@@ -7,30 +7,23 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 // Tipagem
 import { SongDataProps } from "@/dtos/songDataProps";
-import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
 
 // Subcomponentes
-import InputArtista, { Option } from "./InputArtista";
+import InputArtista from "./InputArtista";
 import InputTonalidade from "./InputTonalidade";
 import InputParticipacao from "./InputParticipacao";
 import InputClassificacao from "./InputClassificacao";
-
-// Funções
-import criarNovoArtista from "@/functions/dashboard/artista/postNovoArtista";
-import obterArtistas from "@/functions/dashboard/artista/getObterArtistas";
-import obterUmArtista from "@/functions/dashboard/artista/obterUmArtista";
 
 // ----------------------------------------------------------------------------
 
 const Etapa01 = () => {
   // useContext
-  const { EtapaSong01, songData } = useNewMusic();
+  const { songData } = useNewMusic();
 
   // Criação de useStates
   const [data, setData] = useState<SongDataProps>(songData || {});
   const [stringDeHashtags, setStringDeHashtags] = useState("");
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
-  const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
 
   // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,50 +41,9 @@ const Etapa01 = () => {
   const handleHashtags = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setStringDeHashtags(ev.target.value);
     const { name } = ev.target;
-    const arrayDeHashtags: string[] = stringDeHashtags.split(/[.,; ]/);
+    const arrayDeHashtags: string[] = stringDeHashtags.split(/[.,;/]/g);
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
-
-  /*   const lidandoComParticipacaoEspecialInseridos = (
-    participacaoEspecialInseridosPeloUsuario: string,
-  ) => {
-    if (participacaoEspecialInseridosPeloUsuario) {
-      const participacaoEspecial =
-        participacaoEspecialInseridosPeloUsuario.split(/[,\.;]+/);
-      const participacaoEspecialFormatado = participacaoEspecial.map(
-        (artista) => artista.trimStart(),
-      );
-
-      participacaoEspecialFormatado.map((artista) => {
-        arrayDeParticipacaoEspecial.push({
-          nome: artista,
-          qtdDeCliques: 0,
-        });
-      });
-    }
-  }; */
-
-  // Mapeia artista no banco de dados pra ver se tem.
-  // Se já existir, ele pega o artistaId e insere na música
-  // Se não, ele cria o artista e procura de novo para pegar o artistaId e insere na música
-
-  /*   useEffect(() => {
-    EtapaSong01(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]); */
-
-  // useEffect(() => {
-  //   obtendoArtistasExistentes();
-  //   const artistaEncontrado = artistasExistentes!.find(
-  //     (artista) => artista.id === artistaAtual,
-  //   );
-  //   const idDoArtistaEncontrado = artistaEncontrado!.id;
-  //   setData((prevData) => ({
-  //     ...prevData,
-  //     artistaId: idDoArtistaEncontrado!,
-  //   }));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [artistaAtual]);
 
   useEffect(() => {
     console.log(data);
@@ -106,6 +58,7 @@ const Etapa01 = () => {
       <InputData
         placeholder="Nome da música"
         name="musica"
+        maxLength={40}
         onChange={handleChange}
         value={data.musica}
       />
@@ -113,33 +66,26 @@ const Etapa01 = () => {
       <InputData
         placeholder="Versão (Ao Vivo em Brasília, Acústico, etc)"
         name="versao"
+        maxLength={40}
         onChange={handleChange}
         value={data.versao}
       />
 
       <div className="flex w-full flex-col gap-2">
-        {" "}
         <InputArtista setData={setData} data={data} />
+
         <InputParticipacao setData={setData} data={data} />
       </div>
-
-      {/* <input
-        type="text"
-        placeholder="Participação (se houver mais de um, separe por vírgulas)"
-        name="participacao"
-        onChange={(ev) => setArtistasInseridosPeloUsuario(ev.target.value)}
-        className="h-8 w-full items-center rounded bg-gray-200 px-2 placeholder:text-sm focus:bg-white"
-        value={artistasInseridosPeloUsuario}
-      /> */}
 
       <InputData
         placeholder="Nome do compositor (opcional)"
         name="compositor"
+        maxLength={40}
         onChange={handleChange}
         value={data.compositor}
       />
 
-      <InputTonalidade />
+      <InputTonalidade setData={setData} />
 
       <div className="flex w-full items-center">
         <span className="mr-2 w-28 font-text text-sm font-bold">
@@ -150,6 +96,7 @@ const Etapa01 = () => {
           placeholder="BPM (batimentos por minuto) - opcional"
           type="text"
           name="bpm"
+          maxLength={3}
           onChange={handleChange}
           value={data.bpm}
         />
@@ -159,6 +106,7 @@ const Etapa01 = () => {
         placeholder="Vídeo do Youtube com a versão"
         type="url"
         name="video"
+        maxLength={80}
         onChange={handleChange}
         value={data.video}
       />
@@ -166,11 +114,12 @@ const Etapa01 = () => {
       <InputData
         placeholder="Palavras-chave (Exemplo: maria, jesus, amor de pai, etc)"
         name="hashtags"
+        maxLength={50}
         onChange={handleHashtags}
         value={stringDeHashtags}
       />
 
-      <InputClassificacao />
+      <InputClassificacao setData={setData} />
 
       <div className="flex items-center gap-2">
         <label htmlFor="liturgica" className="font-text">

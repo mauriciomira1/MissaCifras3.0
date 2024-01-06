@@ -1,10 +1,23 @@
+import { SongDataProps } from "@/dtos/songDataProps";
 import { defaults } from "autoprefixer";
+import { Dispatch, SetStateAction } from "react";
 import Select, { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 
 // ----------------------------------------------------------------------------
 
 const animatedComponent = makeAnimated();
+
+type Props = {
+  setData: Dispatch<SetStateAction<SongDataProps>>;
+};
+
+type ClassificacaoProps = SongDataProps["classificacao"];
+
+type ValueProps = {
+  label: string;
+  value: string;
+};
 
 const options = [
   {
@@ -53,7 +66,7 @@ const options = [
   },
 ];
 
-const InputClassificacao = () => {
+const InputClassificacao = ({ setData }: Props) => {
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
       ...styles,
@@ -98,12 +111,21 @@ const InputClassificacao = () => {
     },
   };
 
+  const handleChange = (value: unknown) => {
+    const classificacao = value as ValueProps;
+    setData((prevData) => ({
+      ...prevData,
+      classificacao: classificacao.label as ClassificacaoProps,
+    }));
+  };
+
   return (
     <div className="w-full">
       <Select
         options={options}
         isSearchable
         components={animatedComponent}
+        onChange={handleChange}
         styles={colorStyles}
         placeholder="Classificação..."
       />
