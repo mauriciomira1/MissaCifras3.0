@@ -1,6 +1,7 @@
 export type ArtistaProps = {
   nome: string;
   qtdDeCliques: number;
+  slug?: string;
   capa?: string;
   cifras?: string[];
 };
