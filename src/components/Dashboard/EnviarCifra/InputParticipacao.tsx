@@ -10,8 +10,23 @@ import CreatableSelect from "react-select/creatable";
 // Tipagem
 import { SongDataProps } from "@/dtos/songDataProps";
 import { Option } from "./InputArtista";
-import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
-import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
+import criarNovoArtista from "@/functions/dashboard/artista/postNovoArtista";
+import obterArtistas from "@/functions/dashboard/artista/getObterArtistas";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/shadcn/ui/alert-dialog";
+import ObterArtistas from "@/functions/dashboard/artista/obterArtistas";
+import {
+  HandleCreate,
+  OpenConfirmWindow,
+} from "@/functions/dashboard/artista/criarNovoArtista";
 
 const animatedComponent = makeAnimated();
 
@@ -27,6 +42,7 @@ const createOption = (label: string) => ({
 
 type NewValueProps = {
   label: string;
+  value: string;
 };
 
 // ----------------------------------------------------------------------------
@@ -35,8 +51,11 @@ const InputParticipacao = ({ setData, data }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
   const [value, setValue] = useState<Option | unknown>();
-
-  const [valorEmString, setValorEmString] = useState("");
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [newArtist, setNewArtist] = useState("");
+  const [arrayDeParticipantes, setArrayDeParticipantes] = useState<string[]>([
+    "",
+  ]);
 
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
@@ -82,63 +101,75 @@ const InputParticipacao = ({ setData, data }: Props) => {
     },
   };
 
-  const obtendoListaDeArtistas = async () => {
-    try {
-      const lista = await obterArtistas();
-      const defaultOptions = lista.map((item) => createOption(item.nome));
-      setOptions(defaultOptions);
-    } catch (error) {
-      console.log(
-        "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
-        error,
-      );
-    }
-  };
-
-  const handleChange = (newValue: unknown) => {
+  const handleChange = (value: unknown) => {
     setIsLoading(true);
 
-    setValue(newValue);
-    const valueString = newValue as NewValueProps;
-    setValorEmString(valueString.label);
+    // [
+    //   { label: 'Eugênio Jorge', value: 'Eugênio Jorge' },
+    //   { label: 'Nelsinho Corrêa', value: 'Nelsinho Corrêa' }
+    // ]
+
+    setValue(value);
+    const valueFormatted = value as NewValueProps[];
+
+    const arrayDeParticipantes = valueFormatted.map((value) => value.label);
+
+    setArrayDeParticipantes(arrayDeParticipantes);
 
     setIsLoading(false);
   };
 
-  const handleCreate = (value: string) => {
-    setIsLoading(true);
-
-    const criarArtista = async () => {
-      await criarNovoArtista(value);
-      obtendoListaDeArtistas();
-    };
-    criarArtista();
-    setValue({ label: value });
-    setValorEmString(value);
-
-    setIsLoading(false);
-  };
-
+  // Obtendo lista atualizada de artistas no banco de dados
   useEffect(() => {
     setIsLoading(true);
 
-    obtendoListaDeArtistas();
+    ObterArtistas({ setOptions });
 
     setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /*   useEffect(() => {
-    setData((prevData) => ({ ...prevData, valorEmString }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valorEmString]); */
-
+  // Enviando lista de participantes para o 'data' de nova música
   useEffect(() => {
-    console.log(value);
-  }, [value]);
+    setData((prevData) => ({
+      ...prevData,
+      participacao: arrayDeParticipantes,
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrayDeParticipantes]);
 
   return (
     <div className="w-full">
+      <AlertDialog open={isConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{newArtist}</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja criar um novo artista com esse nome?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setIsConfirmOpen(false);
+              }}
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                HandleCreate({
+                  newArtist,
+                  setIsConfirmOpen,
+                  setOptions,
+                  setValue,
+                })
+              }
+            >
+              Criar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <CreatableSelect
         isMulti
         isLoading={isLoading}
@@ -149,7 +180,13 @@ const InputParticipacao = ({ setData, data }: Props) => {
         noOptionsMessage={() => "Nenhuma opção disponível"}
         styles={colorStyles}
         formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
-        onCreateOption={handleCreate}
+        onCreateOption={(inputValue) =>
+          OpenConfirmWindow({
+            setIsConfirmOpen,
+            setNewArtist,
+            value: inputValue,
+          })
+        }
         placeholder="Cantores participantes"
         options={options}
         value={value ? value : "Carregando..."}

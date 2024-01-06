@@ -2,19 +2,33 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { defaults } from "autoprefixer";
 
-// Props
-import { ArtistaBancodeDadosProps } from "@/dtos/artistaProps";
-
 // Biblioteca React-select
 import { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
 
-// Funções
-import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
-import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
+// Tipagem
 import { SongDataProps } from "@/dtos/songDataProps";
-import obterUmArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/obterUmArtista";
+
+// Janela de confirmação
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/shadcn/ui/alert-dialog";
+
+// Funções
+import ObterArtistas from "@/functions/dashboard/artista/obterArtistas";
+import obterUmArtista from "@/functions/dashboard/artista/obterUmArtista";
+import {
+  HandleCreate,
+  OpenConfirmWindow,
+} from "@/functions/dashboard/artista/criarNovoArtista";
 
 const animatedComponent = makeAnimated();
 
@@ -27,11 +41,6 @@ type Props = {
   data: SongDataProps;
 };
 
-const createOption = (label: string) => ({
-  label,
-  value: label,
-});
-
 type NewValueProps = {
   label: string;
 };
@@ -43,6 +52,8 @@ const InputArtista = ({ setData, data }: Props) => {
   const [options, setOptions] = useState<{ label: string }[]>();
   const [value, setValue] = useState<Option | string | unknown>();
   const [valorEmString, setValorEmString] = useState("");
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [newArtist, setNewArtist] = useState("");
 
   // Estilização
   const colorStyles: StylesConfig = {
@@ -89,47 +100,30 @@ const InputArtista = ({ setData, data }: Props) => {
     },
   };
 
-  // Obtendo lista de artistas do banco de dados e adicionando na lista de opções do select
-  const obtendoListaDeArtistas = async () => {
-    try {
-      const lista = await obterArtistas();
-      const defaultOptions = lista.map((item) => createOption(item.nome));
-      setOptions(defaultOptions);
-    } catch (error) {
-      console.log(
-        "Erro no fetch obtendoListaDeArtistas de InputArtista ====>",
-        error,
-      );
-    }
-  };
-
-  // Função que cria um novo artista pelo input, caso não exista no banco, e adicionando na lista de opções do select
-  const handleCreate = (value: string) => {
-    const criarArtista = async () => {
-      await criarNovoArtista(value);
-      obtendoListaDeArtistas();
-    };
-    criarArtista();
-    setValue({ label: value });
-    setValorEmString(value);
-  };
-
   useEffect(() => {
-    obtendoListaDeArtistas();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setIsLoading(true);
+
+    ObterArtistas({ setOptions });
+
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     setIsLoading(true);
-    const fetchArtista = async () => {
-      const artista = await obterUmArtista(valorEmString);
-      return (
-        artista &&
-        setData((prevData) => ({ ...prevData, artistaId: artista?.id }))
-      );
-    };
 
-    fetchArtista();
+    try {
+      const fetchArtista = async () => {
+        const artista = await obterUmArtista(valorEmString);
+        return (
+          artista &&
+          setData((prevData) => ({ ...prevData, artistaId: artista.id }))
+        );
+      };
+
+      fetchArtista();
+    } catch (error) {
+      console.log("Adicionar artista no data falhou. (InputArtista.tsx)");
+    }
 
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,20 +131,59 @@ const InputArtista = ({ setData, data }: Props) => {
 
   return (
     <div className="w-full">
+      <AlertDialog open={isConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{newArtist}</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja criar um novo artista com esse nome?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setIsConfirmOpen(false);
+              }}
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                HandleCreate({
+                  newArtist,
+                  setIsConfirmOpen,
+                  setOptions,
+                  setValorEmString,
+                  setValue,
+                })
+              }
+            >
+              Criar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <CreatableSelect
         isLoading={isLoading}
         hideSelectedOptions={true}
         onChange={(newValue: unknown) => {
-          const valueString = newValue as NewValueProps;
           setValue(newValue);
-          valorEmString && setValorEmString(valueString.label);
+          const valueString = newValue as NewValueProps;
+          setValorEmString(valueString.label);
         }}
         options={options}
         components={animatedComponent}
         styles={colorStyles}
         // Passo esse valor para o setArtistaAtual do componente 'EnviarCifraComponent'
         formatCreateLabel={(inputValue) => `Criar novo: ${inputValue}`}
-        onCreateOption={handleCreate}
+        onCreateOption={(inputValue) =>
+          OpenConfirmWindow({
+            setIsConfirmOpen,
+            setNewArtist,
+            value: inputValue,
+          })
+        }
         placeholder="Cantor/banda"
         value={value ? value : "Carregando..."}
       />

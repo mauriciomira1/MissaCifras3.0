@@ -1,7 +1,7 @@
 "use server";
 import { prismaClient } from "@/lib/prisma";
 
-const criarNovoArtista = async (artista: string) => {
+const postNovoArtista = async (artista: string) => {
   // Remove acentos, substitui espaço por traço e coloca tudo em minúsculo
   const slug = artista
     .normalize("NFD")
@@ -19,4 +19,4 @@ const criarNovoArtista = async (artista: string) => {
   return novoArtista;
 };
 
-export default criarNovoArtista;
+export default postNovoArtista;

@@ -1,7 +1,7 @@
 "use server";
 import { prismaClient } from "@/lib/prisma";
 
-const obterArtistas = async () => {
+const GetObterArtistas = async () => {
   const lista = await prismaClient.artista.findMany({
     orderBy: {
       nome: "asc",
@@ -10,4 +10,4 @@ const obterArtistas = async () => {
   return lista;
 };
 
-export default obterArtistas;
+export default GetObterArtistas;

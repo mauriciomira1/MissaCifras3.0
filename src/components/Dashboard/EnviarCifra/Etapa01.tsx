@@ -16,9 +16,9 @@ import InputParticipacao from "./InputParticipacao";
 import InputClassificacao from "./InputClassificacao";
 
 // Funções
-import criarNovoArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/criarNovoArtista";
-import obterArtistas from "@/app/(pages)/dashboard/enviar-cifra/actions/obterArtistas";
-import obterUmArtista from "@/app/(pages)/dashboard/enviar-cifra/actions/obterUmArtista";
+import criarNovoArtista from "@/functions/dashboard/artista/postNovoArtista";
+import obterArtistas from "@/functions/dashboard/artista/getObterArtistas";
+import obterUmArtista from "@/functions/dashboard/artista/obterUmArtista";
 
 // ----------------------------------------------------------------------------
 
