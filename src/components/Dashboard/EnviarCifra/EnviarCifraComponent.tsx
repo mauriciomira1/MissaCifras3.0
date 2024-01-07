@@ -9,17 +9,11 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 // Banco de dados
 import { prismaClient } from "@/lib/prisma";
 
-// Tipagem
-import { ArtistaBancodeDadosProps, ArtistaProps } from "@/dtos/artistaProps";
-
 // Componentes
-import InputArtista from "./InputArtista";
-import InputParticipacao from "./InputParticipacao";
 import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
-import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 
 // ----------------------------------------------------------------------------
 

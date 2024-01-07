@@ -21,11 +21,11 @@ import InputClassificacao from "./InputClassificacao";
 
 // ----------------------------------------------------------------------------
 
-const newSongDataFormSchema = z.object({
+/* const newSongDataFormSchema = z.object({
   musica: z
     .string()
-    .min(3, "O nome da música é obrigatório.")
-    .max(40, "O limite máximo são 40 caracteres."),
+    .min(1, { message: "O nome da música é obrigatório." })
+    .max(40, { message: "O limite máximo são 40 caracteres." }),
   versao: z.string().max(40, "O limite máximo são 40 caracteres."),
   compositor: z.string().max(40, "O limite máximo são 40 caracteres."),
   tom: z.string().min(1, "A tonalidade da música é obrigatória.").max(2),
@@ -42,19 +42,19 @@ const newSongDataFormSchema = z.object({
   liturgica: z.boolean(),
 });
 
-type newSongDataFormProps = z.infer<typeof newSongDataFormSchema>;
+type newSongDataFormProps = z.infer<typeof newSongDataFormSchema>; */
 
 // ----------------------------------------------------------------------------
 
 const Etapa01 = () => {
   // Validação dos inputs
-  const {
+  /*   const {
     register,
     formState: { errors },
   } = useForm<newSongDataFormProps>({
     resolver: zodResolver(newSongDataFormSchema),
-    mode: "onChange",
-  });
+    mode: "onBlur",
+  }); */
 
   // useContext
   const { songData } = useNewMusic();
@@ -84,8 +84,6 @@ const Etapa01 = () => {
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
-  errors.musica && console.log(errors.musica);
-
   useEffect(() => {
     console.log(data);
   }, [data]);
@@ -98,15 +96,12 @@ const Etapa01 = () => {
 
       <InputData
         placeholder="Nome da música"
+        name="musica"
         maxLength={40}
-        /*         value={data.musica} */
-        {...register("musica", {
-          onChange: handleChange,
-        })}
+        onChange={handleChange}
+        value={data.musica}
+        required
       />
-      {errors.musica && (
-        <span className="text-xs">{errors.musica.message}</span>
-      )}
 
       <InputData
         placeholder="Versão (Ao Vivo em Brasília, Acústico, etc)"

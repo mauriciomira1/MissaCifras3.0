@@ -165,6 +165,7 @@ const InputArtista = ({ setData, data }: Props) => {
       </AlertDialog>
 
       <CreatableSelect
+        required
         isLoading={isLoading}
         hideSelectedOptions={true}
         onChange={(newValue: unknown) => {
