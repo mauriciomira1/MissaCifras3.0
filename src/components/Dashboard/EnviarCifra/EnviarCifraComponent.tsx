@@ -19,6 +19,7 @@ import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
+import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 
 // ----------------------------------------------------------------------------
 
@@ -107,6 +108,15 @@ const EnviarCifraComponent = () => {
     }
   };
 
+  const submitEtapa01 = (handleSubmit: any) => {
+    handleSubmit();
+  };
+  /*   const submitEtapa01 = ({
+    handleSubmit,
+  }: UseFormHandleSubmit<FieldValues, undefined>) => {
+    handleSubmit();
+  }; */
+
   return (
     <form className="my-6 flex w-full flex-col items-center gap-2">
       <h1 className="font-text text-2xl font-black text-primaryColor md:text-4xl">
@@ -120,6 +130,7 @@ const EnviarCifraComponent = () => {
             ev.preventDefault();
             setEtapaAtual(0);
           }}
+          onSubmit={submitEtapa01}
         >
           1
         </button>

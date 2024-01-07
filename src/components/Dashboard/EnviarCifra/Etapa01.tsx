@@ -2,6 +2,11 @@
 import { useEffect, useState } from "react";
 import InputData from "./InputData";
 
+//Importações de formulário
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 // Contextos
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
@@ -16,7 +21,41 @@ import InputClassificacao from "./InputClassificacao";
 
 // ----------------------------------------------------------------------------
 
+const newSongDataFormSchema = z.object({
+  musica: z
+    .string()
+    .min(3, "O nome da música é obrigatório.")
+    .max(40, "O limite máximo são 40 caracteres."),
+  versao: z.string().max(40, "O limite máximo são 40 caracteres."),
+  compositor: z.string().max(40, "O limite máximo são 40 caracteres."),
+  tom: z.string().min(1, "A tonalidade da música é obrigatória.").max(2),
+  bpm: z.number().max(3).int(),
+  video: z.string().max(50, "O limite máximo são 50 caracteres."),
+  participacao: z.array(
+    z.string().max(40, "O limite máximo são 40 caracteres."),
+  ),
+  hashtags: z.array(z.string().max(20, "O limite máximo são 20 caracteres.")),
+  classificacao: z
+    .string()
+    .max(20)
+    .min(1, "É obrigatório escolher uma classificação."),
+  liturgica: z.boolean(),
+});
+
+type newSongDataFormProps = z.infer<typeof newSongDataFormSchema>;
+
+// ----------------------------------------------------------------------------
+
 const Etapa01 = () => {
+  // Validação dos inputs
+  const {
+    register,
+    formState: { errors },
+  } = useForm<newSongDataFormProps>({
+    resolver: zodResolver(newSongDataFormSchema),
+    mode: "onChange",
+  });
+
   // useContext
   const { songData } = useNewMusic();
 
@@ -45,6 +84,8 @@ const Etapa01 = () => {
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
+  errors.musica && console.log(errors.musica);
+
   useEffect(() => {
     console.log(data);
   }, [data]);
@@ -57,11 +98,15 @@ const Etapa01 = () => {
 
       <InputData
         placeholder="Nome da música"
-        name="musica"
         maxLength={40}
-        onChange={handleChange}
-        value={data.musica}
+        /*         value={data.musica} */
+        {...register("musica", {
+          onChange: handleChange,
+        })}
       />
+      {errors.musica && (
+        <span className="text-xs">{errors.musica.message}</span>
+      )}
 
       <InputData
         placeholder="Versão (Ao Vivo em Brasília, Acústico, etc)"
