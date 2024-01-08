@@ -12,7 +12,7 @@ type InputDataProps =
 
 const InputData = ({
   onChange,
-  value,
+  value = "",
   required = false,
   ...props
 }: InputDataProps) => {
@@ -40,7 +40,7 @@ const InputData = ({
         {...props}
       />
       {emptyMessage && (
-        <div className="-mt-1 mb-1 flex w-full">
+        <div className="-mt-1.5 ml-1 flex w-full">
           <span className="text-xs text-red-600">
             Preenchimento obrigatório.
           </span>

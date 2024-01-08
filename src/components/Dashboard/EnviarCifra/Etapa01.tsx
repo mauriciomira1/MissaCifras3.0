@@ -56,6 +56,8 @@ const Etapa01 = () => {
     mode: "onBlur",
   }); */
 
+  const { register } = useForm();
+
   // useContext
   const { songData } = useNewMusic();
 

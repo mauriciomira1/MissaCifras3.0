@@ -38,7 +38,6 @@ export type Option = {
 
 type Props = {
   setData: Dispatch<SetStateAction<SongDataProps>>;
-  data: SongDataProps;
 };
 
 type NewValueProps = {
@@ -47,7 +46,7 @@ type NewValueProps = {
 
 // ----------------------------------------------------------------------------
 
-const InputArtista = ({ setData, data }: Props) => {
+const InputArtista = ({ setData }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
   const [value, setValue] = useState<Option | string | unknown>();
