@@ -1,3 +1,4 @@
+import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { SongDataProps } from "@/dtos/songDataProps";
 import { defaults } from "autoprefixer";
 import { Dispatch, SetStateAction } from "react";
@@ -67,6 +68,8 @@ const options = [
 ];
 
 const InputClassificacao = ({ setData }: Props) => {
+  const { songData } = useNewMusic();
+
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
       ...styles,
@@ -127,6 +130,7 @@ const InputClassificacao = ({ setData }: Props) => {
         components={animatedComponent}
         onChange={handleChange}
         styles={colorStyles}
+        defaultInputValue={songData.classificacao}
         placeholder="Classificação..."
       />
     </div>

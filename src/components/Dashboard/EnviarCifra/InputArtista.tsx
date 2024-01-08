@@ -22,13 +22,17 @@ import {
   AlertDialogTitle,
 } from "@/components/shadcn/ui/alert-dialog";
 
+// Contextos
+import { useNewMusic } from "@/contexts/useNewMusicContext";
+
 // Funções
 import ObterArtistas from "@/functions/dashboard/artista/obterArtistas";
-import obterUmArtista from "@/functions/dashboard/artista/obterUmArtista";
+import obterUmArtista from "@/functions/dashboard/artista/obterUmArtistaPorNome";
 import {
   HandleCreate,
   OpenConfirmWindow,
 } from "@/functions/dashboard/artista/criarNovoArtista";
+import { unknown } from "zod";
 
 const animatedComponent = makeAnimated();
 
@@ -47,6 +51,8 @@ type NewValueProps = {
 // ----------------------------------------------------------------------------
 
 const InputArtista = ({ setData }: Props) => {
+  const { setNomeDoArtista, nomeDoArtista } = useNewMusic();
+
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
   const [value, setValue] = useState<Option | string | unknown>();
@@ -99,13 +105,18 @@ const InputArtista = ({ setData }: Props) => {
     },
   };
 
+  const labelDeNomeDeArtista = {
+    label: nomeDoArtista,
+    value: nomeDoArtista,
+  };
+
   useEffect(() => {
     setIsLoading(true);
 
     ObterArtistas({ setOptions });
 
     setIsLoading(false);
-  }, []);
+  }, [nomeDoArtista]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -167,9 +178,11 @@ const InputArtista = ({ setData }: Props) => {
         required
         isLoading={isLoading}
         hideSelectedOptions={true}
+        noOptionsMessage={() => "Carregando..."}
         onChange={(newValue: unknown) => {
           setValue(newValue);
           const valueString = newValue as NewValueProps;
+          setNomeDoArtista(valueString.label);
           setValorEmString(valueString.label);
         }}
         options={options}
@@ -185,7 +198,8 @@ const InputArtista = ({ setData }: Props) => {
           })
         }
         placeholder="Cantor/banda"
-        value={value ? value : "Carregando..."}
+        defaultInputValue={nomeDoArtista}
+        value={nomeDoArtista ? labelDeNomeDeArtista : unknown}
       />
     </div>
   );

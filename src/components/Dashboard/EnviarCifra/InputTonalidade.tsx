@@ -1,5 +1,6 @@
 "use client";
 
+import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { SongDataProps } from "@/dtos/songDataProps";
 import { defaults } from "autoprefixer";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -71,6 +72,8 @@ type ValueProps = {
 };
 
 const InputTonalidade = ({ setData }: Props) => {
+  const { songData } = useNewMusic();
+
   const [valor, setValor] = useState<unknown>();
 
   const handleChange = (value: unknown) => {
@@ -133,6 +136,7 @@ const InputTonalidade = ({ setData }: Props) => {
         components={animatedComponent}
         styles={colorStyles}
         placeholder="Tonalidade da música"
+        defaultInputValue={songData.tom}
         value={valor}
       />
     </div>

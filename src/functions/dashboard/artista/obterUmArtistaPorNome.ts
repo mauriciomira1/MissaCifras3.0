@@ -2,12 +2,12 @@
 import { prismaClient } from "@/lib/prisma";
 
 const obterUmArtista = async (nomeDoArtista: string) => {
-  const lista = await prismaClient.artista.findFirst({
+  const artista = await prismaClient.artista.findFirst({
     where: {
       nome: nomeDoArtista,
     },
   });
-  return lista;
+  return artista;
 };
 
 export default obterUmArtista;

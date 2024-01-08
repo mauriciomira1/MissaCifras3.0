@@ -2,11 +2,6 @@
 import { useEffect, useState } from "react";
 import InputData from "./InputData";
 
-//Importações de formulário
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
 // Contextos
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
@@ -21,73 +16,46 @@ import InputClassificacao from "./InputClassificacao";
 
 // ----------------------------------------------------------------------------
 
-/* const newSongDataFormSchema = z.object({
-  musica: z
-    .string()
-    .min(1, { message: "O nome da música é obrigatório." })
-    .max(40, { message: "O limite máximo são 40 caracteres." }),
-  versao: z.string().max(40, "O limite máximo são 40 caracteres."),
-  compositor: z.string().max(40, "O limite máximo são 40 caracteres."),
-  tom: z.string().min(1, "A tonalidade da música é obrigatória.").max(2),
-  bpm: z.number().max(3).int(),
-  video: z.string().max(50, "O limite máximo são 50 caracteres."),
-  participacao: z.array(
-    z.string().max(40, "O limite máximo são 40 caracteres."),
-  ),
-  hashtags: z.array(z.string().max(20, "O limite máximo são 20 caracteres.")),
-  classificacao: z
-    .string()
-    .max(20)
-    .min(1, "É obrigatório escolher uma classificação."),
-  liturgica: z.boolean(),
-});
-
-type newSongDataFormProps = z.infer<typeof newSongDataFormSchema>; */
-
-// ----------------------------------------------------------------------------
-
 const Etapa01 = () => {
-  // Validação dos inputs
-  /*   const {
-    register,
-    formState: { errors },
-  } = useForm<newSongDataFormProps>({
-    resolver: zodResolver(newSongDataFormSchema),
-    mode: "onBlur",
-  }); */
-
-  const { register } = useForm();
-
   // useContext
-  const { songData } = useNewMusic();
+  const { songData, EtapaSong01, hashtagsEmString, setHashtagsEmString } =
+    useNewMusic();
 
   // Criação de useStates
   const [data, setData] = useState<SongDataProps>(songData || {});
-  const [stringDeHashtags, setStringDeHashtags] = useState("");
   const [liturgicaChecked, setLiturgicaChecked] = useState(false);
 
   // Função para marcar se música é litúrgica ou não
   const handleLiturgicaChecked = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setLiturgicaChecked(ev.target.checked);
     data.liturgica = !liturgicaChecked;
+    setData((prevData) => ({ ...prevData, liturgica: ev.target.checked }));
   };
 
   // Função para salvar os dados da música inseridos pelo usuário
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = ev.target;
+
+    if (name === "bpm") {
+      setData((prevData) => ({ ...prevData, [name]: +value }));
+
+      return;
+    }
+
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   // Função para lidar com hashtags (transformando em Array)
   const handleHashtags = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setStringDeHashtags(ev.target.value);
+    setHashtagsEmString(ev.target.value);
     const { name } = ev.target;
-    const arrayDeHashtags: string[] = stringDeHashtags.split(/[.,;/]/g);
+    const arrayDeHashtags: string[] = hashtagsEmString.split(/[.,;/]/g);
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 
   useEffect(() => {
-    console.log(data);
+    EtapaSong01(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
@@ -101,7 +69,7 @@ const Etapa01 = () => {
         name="musica"
         maxLength={40}
         onChange={handleChange}
-        value={data.musica}
+        value={data.musica || ""}
         required
       />
 
@@ -110,11 +78,11 @@ const Etapa01 = () => {
         name="versao"
         maxLength={40}
         onChange={handleChange}
-        value={data.versao}
+        value={data.versao || ""}
       />
 
       <div className="flex w-full flex-col gap-2">
-        <InputArtista setData={setData} data={data} />
+        <InputArtista setData={setData} />
 
         <InputParticipacao setData={setData} data={data} />
       </div>
@@ -124,7 +92,7 @@ const Etapa01 = () => {
         name="compositor"
         maxLength={40}
         onChange={handleChange}
-        value={data.compositor}
+        value={data.compositor || ""}
       />
 
       <InputTonalidade setData={setData} />
@@ -140,7 +108,7 @@ const Etapa01 = () => {
           name="bpm"
           maxLength={3}
           onChange={handleChange}
-          value={data.bpm}
+          value={data.bpm || ""}
         />
       </div>
 
@@ -150,7 +118,7 @@ const Etapa01 = () => {
         name="video"
         maxLength={80}
         onChange={handleChange}
-        value={data.video}
+        value={data.video || ""}
       />
 
       <InputData
@@ -158,7 +126,7 @@ const Etapa01 = () => {
         name="hashtags"
         maxLength={50}
         onChange={handleHashtags}
-        value={stringDeHashtags}
+        value={hashtagsEmString}
       />
 
       <InputClassificacao setData={setData} />

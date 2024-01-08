@@ -12,7 +12,7 @@ type InputDataProps =
 
 const InputData = ({
   onChange,
-  value = "",
+  value,
   required = false,
   ...props
 }: InputDataProps) => {

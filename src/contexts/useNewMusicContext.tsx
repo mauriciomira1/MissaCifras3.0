@@ -7,12 +7,21 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
 type ContextNewMusicProps = {
   setSongData: Dispatch<SetStateAction<SongProps>>;
   songData: SongProps;
+  setNomeDoArtista: Dispatch<SetStateAction<string | undefined>>;
+  participantesLabelValue: { label: string; value: string }[];
+  setParticipantesLabelValue: Dispatch<
+    SetStateAction<{ label: string; value: string }[]>
+  >;
+  hashtagsEmString: string;
+  setHashtagsEmString: Dispatch<SetStateAction<string>>;
+  nomeDoArtista: string | undefined;
   EtapaSong01: (data: SongDataProps) => void;
   EtapaSong02: ({
     cifraDaMusica,
@@ -31,10 +40,16 @@ const ContextNewMusic = createContext<ContextNewMusicProps>(
 
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongProps>({} as SongProps);
+  const [nomeDoArtista, setNomeDoArtista] = useState<string>();
+  const [participantesLabelValue, setParticipantesLabelValue] = useState<
+    { label: string; value: string }[]
+  >([]);
+  const [hashtagsEmString, setHashtagsEmString] = useState("");
 
   const EtapaSong01 = (data: SongDataProps) => {
     setSongData((prevState) => ({
       ...prevState,
+      artistaId: data.artistaId,
       musica: data.musica,
       versao: data.versao,
       participacao: data.participacao,
@@ -65,10 +80,20 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
     }));
   };
 
+  useEffect(() => {
+    console.log(songData);
+  }, [songData]);
+
   return (
     <ContextNewMusic.Provider
       value={{
         songData,
+        nomeDoArtista,
+        setNomeDoArtista,
+        participantesLabelValue,
+        setParticipantesLabelValue,
+        hashtagsEmString,
+        setHashtagsEmString,
         setSongData,
         EtapaSong01,
         EtapaSong02,

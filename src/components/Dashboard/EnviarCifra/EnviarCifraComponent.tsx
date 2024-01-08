@@ -54,7 +54,7 @@ const EnviarCifraComponent = () => {
     }
     const completeSong = await prismaClient.cifra.create({
       data: {
-        slug: "",
+        slug: songData.slug,
         artistaId: songData.artistaId,
         userId: songData.userId,
         cifra: songData.cifra,

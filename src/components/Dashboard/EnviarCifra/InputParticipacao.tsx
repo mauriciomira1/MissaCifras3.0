@@ -10,8 +10,6 @@ import CreatableSelect from "react-select/creatable";
 // Tipagem
 import { SongDataProps } from "@/dtos/songDataProps";
 import { Option } from "./InputArtista";
-import criarNovoArtista from "@/functions/dashboard/artista/postNovoArtista";
-import obterArtistas from "@/functions/dashboard/artista/getObterArtistas";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,27 +25,26 @@ import {
   HandleCreate,
   OpenConfirmWindow,
 } from "@/functions/dashboard/artista/criarNovoArtista";
-
-const animatedComponent = makeAnimated();
+import { unknown } from "zod";
+import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 type Props = {
   setData: Dispatch<SetStateAction<SongDataProps>>;
   data: SongDataProps;
 };
 
-const createOption = (label: string) => ({
-  label,
-  value: label,
-});
-
 type NewValueProps = {
   label: string;
   value: string;
 };
 
+const animatedComponent = makeAnimated();
+
 // ----------------------------------------------------------------------------
 
 const InputParticipacao = ({ setData, data }: Props) => {
+  const { participantesLabelValue, setParticipantesLabelValue } = useNewMusic();
+
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
   const [value, setValue] = useState<Option | unknown>();
@@ -104,10 +101,8 @@ const InputParticipacao = ({ setData, data }: Props) => {
   const handleChange = (value: unknown) => {
     setIsLoading(true);
 
-    // [
-    //   { label: 'Eugênio Jorge', value: 'Eugênio Jorge' },
-    //   { label: 'Nelsinho Corrêa', value: 'Nelsinho Corrêa' }
-    // ]
+    setParticipantesLabelValue(value as NewValueProps[]);
+    console.log(value);
 
     setValue(value);
     const valueFormatted = value as NewValueProps[];
@@ -189,7 +184,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
         }
         placeholder="Cantores participantes"
         options={options}
-        value={value ? value : "Carregando..."}
+        value={participantesLabelValue ? participantesLabelValue : unknown}
       />
     </div>
   );
