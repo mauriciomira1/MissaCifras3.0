@@ -8,11 +8,11 @@ import ObterUsuario from "@/functions/usuario/obterUsuario";
 
 const Etapa03 = async () => {
   const { songData } = useNewMusic();
-  const { data } = useSession();
+  const { data, status } = useSession();
 
-  const usuario = await ObterUsuario(data!.user?.email!);
+  if (status === "authenticated") {
+    const usuario = await ObterUsuario(data!.user!.email!);
 
-  if (usuario) {
     const criarNovaCifra = await prismaClient.cifra.create({
       data: {
         musica: songData.musica,
