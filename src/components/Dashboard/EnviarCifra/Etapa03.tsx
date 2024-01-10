@@ -3,32 +3,39 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 import "./etapa03.css";
 
 import { prismaClient } from "@/lib/prisma";
-import { UserProps } from "@/dtos/userProps";
+import { useSession } from "next-auth/react";
+import ObterUsuario from "@/functions/usuario/obterUsuario";
 
 const Etapa03 = async () => {
   const { songData } = useNewMusic();
+  const { data } = useSession();
 
-  const criarNovaCifra = await prismaClient.cifra.create({
-    data: {
-      musica: songData.musica,
-      userId: "",
-      versao: songData.versao,
-      compositor: songData.compositor,
-      slug: "",
-      qtdDeCliques: 0,
-      artistaId: "",
-      participacao: songData.participacao,
-      liturgica: songData.liturgica,
-      acordes: songData.acordes,
-      classificacao: songData.classificacao,
-      hashtags: songData.hashtags,
-      tom: songData.tom,
-      bpm: songData.bpm,
-      video: songData.video,
-      letra: songData.letra,
-      cifra: songData.cifra,
-    },
-  });
+  const usuario = await ObterUsuario(data!.user?.email!);
+
+  if (usuario) {
+    const criarNovaCifra = await prismaClient.cifra.create({
+      data: {
+        musica: songData.musica,
+        slug: songData.slug,
+        versao: songData.versao,
+        compositor: songData.compositor,
+        tom: songData.tom,
+        bpm: songData.bpm,
+        video: songData.video,
+        letra: songData.letra,
+        cifra: songData.cifra,
+        acordes: songData.acordes,
+        thumbnail: "",
+        hashtags: songData.hashtags,
+        classificacao: songData.classificacao,
+        liturgica: songData.liturgica,
+        qtdDeCliques: 0,
+        usuarioQueEnviou: usuario,
+        artistaId: songData.artistaId,
+        participacao: songData.participacao,
+      },
+    });
+  }
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -51,7 +58,7 @@ const Etapa03 = async () => {
             Cantor/Banda: <strong>{songData.artistaId}</strong>
           </p>
           <p>
-            Participação: <strong>{songData.participacao}</strong>
+            Participação especial: <strong>{songData.participacao}</strong>
           </p>
           <p>
             Compositor: <strong>{songData.compositor}</strong>
@@ -69,7 +76,10 @@ const Etapa03 = async () => {
             Palavras-chave: <strong>{songData.hashtags}</strong>
           </p>
           <p>
-            Momento da Missa: <strong>{songData.classificacao}</strong>
+            Classificação: <strong>{songData.classificacao}</strong>
+          </p>
+          <p>
+            Litúrgica: <strong>{songData.liturgica}</strong>
           </p>
         </div>
       </section>

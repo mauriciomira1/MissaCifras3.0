@@ -13,6 +13,8 @@ import InputArtista from "./InputArtista";
 import InputTonalidade from "./InputTonalidade";
 import InputParticipacao from "./InputParticipacao";
 import InputClassificacao from "./InputClassificacao";
+import ObterIdDoUsuario from "@/functions/usuario/obterUsuario";
+import { useSession } from "next-auth/react";
 
 // ----------------------------------------------------------------------------
 
@@ -20,6 +22,7 @@ const Etapa01 = () => {
   // useContext
   const { songData, EtapaSong01, hashtagsEmString, setHashtagsEmString } =
     useNewMusic();
+  const { data: userSessionData } = useSession();
 
   // Criação de useStates
   const [data, setData] = useState<SongDataProps>(songData || {});
@@ -54,9 +57,28 @@ const Etapa01 = () => {
   };
 
   useEffect(() => {
+    // Criar slug
+    if (data.musica) {
+      const slug = data.musica
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/ /g, "-");
+      setData((prevData) => ({ ...prevData, slug }));
+    }
+  }, [data.musica]);
+
+  useEffect(() => {
     EtapaSong01(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => {
+    if (userSessionData?.user?.email) {
+      const userId = ObterIdDoUsuario(userSessionData!.user.email);
+      console.log("usuario->", userId);
+    }
+  }, [userSessionData]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">

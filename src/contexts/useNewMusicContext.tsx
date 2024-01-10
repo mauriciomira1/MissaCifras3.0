@@ -51,6 +51,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
       ...prevState,
       artistaId: data.artistaId,
       musica: data.musica,
+      slug: data.slug,
       versao: data.versao,
       participacao: data.participacao,
       compositor: data.compositor,

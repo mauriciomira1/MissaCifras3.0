@@ -1,5 +1,6 @@
 export type SongDataProps = {
   musica: string;
+  slug: string;
   versao?: string;
   compositor?: string;
   tom:
