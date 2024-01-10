@@ -102,9 +102,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
     }));
   };
 
-  useEffect(() => {
-    console.log(songData);
-  }, [songData]);
+  console.log(songData);
 
   return (
     <ContextNewMusic.Provider

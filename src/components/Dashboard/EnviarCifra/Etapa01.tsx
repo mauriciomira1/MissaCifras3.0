@@ -68,17 +68,11 @@ const Etapa01 = () => {
     }
   }, [data.musica]);
 
+  // Cada vez que um dado do input for alterado, ele altera os dados da música (songData) através da função EtapaSong01
   useEffect(() => {
     EtapaSong01(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-
-  useEffect(() => {
-    if (userSessionData?.user?.email) {
-      const userId = ObterIdDoUsuario(userSessionData!.user.email);
-      console.log("usuario->", userId);
-    }
-  }, [userSessionData]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">

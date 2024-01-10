@@ -102,12 +102,20 @@ const InputParticipacao = ({ setData, data }: Props) => {
     },
   };
 
+  const transformandoArrayDeParticipantesEmString = (
+    arrayDeParticipantes: NewValueProps[],
+  ) => {
+    const participantesEmString = arrayDeParticipantes
+      .map((item) => item.label)
+      .join(", ");
+    setParticipantesEmString(participantesEmString);
+  };
+
   const handleChange = (value: unknown) => {
     setIsLoading(true);
-    setParticipantesEmString(value as string);
+    transformandoArrayDeParticipantesEmString(value as NewValueProps[]);
 
     setParticipantesLabelValue(value as NewValueProps[]);
-    console.log(value);
 
     setValue(value);
     const valueFormatted = value as NewValueProps[];

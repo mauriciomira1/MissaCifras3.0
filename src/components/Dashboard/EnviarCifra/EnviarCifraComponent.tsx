@@ -1,13 +1,10 @@
 "use client";
 
 // Hooks
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Contextos
 import { useNewMusic } from "@/contexts/useNewMusicContext";
-
-// Banco de dados
-import { prismaClient } from "@/lib/prisma";
 
 // Componentes
 import Btn from "@/components/Dashboard/EnviarCifra/Btn";
@@ -33,7 +30,7 @@ const EnviarCifraComponent = () => {
   const btnProximo = (ev: React.FormEvent) => {
     ev.preventDefault();
     setEtapaAtual((etapaAtual) => etapaAtual + 1);
-    if (etapaAtual === 2) {
+    if (etapaAtual === 1) {
       setBtnState(false);
     }
   };
@@ -41,7 +38,7 @@ const EnviarCifraComponent = () => {
   const btnAnterior = (ev: React.FormEvent) => {
     ev.preventDefault();
     setEtapaAtual((etapaAtual) => etapaAtual - 1);
-    if (etapaAtual < 4) {
+    if (etapaAtual < 3) {
       setBtnState(true);
     }
   };
