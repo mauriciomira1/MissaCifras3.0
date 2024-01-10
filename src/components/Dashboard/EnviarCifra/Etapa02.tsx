@@ -29,16 +29,18 @@ const Etapa02 = () => {
   };
 
   const lidandoComMusicaCifrada = (musicaComCifra: string) => {
-    const cifra = musicaComCifra.replace;
+    const cifra = musicaComCifra.replace("&", "");
+    return cifra;
   };
 
   const handleChangeCifra = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     const novaCifra = ev.target.value;
     setMusicaCifrada(novaCifra);
     capturarAcordes(novaCifra);
+    const cifra = lidandoComMusicaCifrada(novaCifra);
     capturarLetraDaMusica(novaCifra);
     EtapaSong02({
-      cifraDaMusica: musicaCifrada,
+      cifraDaMusica: cifra,
       letra: letraDaMusica,
       acordes,
     });
