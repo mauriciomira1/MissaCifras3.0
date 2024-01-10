@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { SongDataProps } from "./songDataProps";
 
 export type SongProps = SongDataProps & {
@@ -7,5 +8,5 @@ export type SongProps = SongDataProps & {
   cifra: string;
   acordes: string[];
   qtdDeCliques: number;
-  userId: string;
+  usuarioQueEnviou: User;
 };

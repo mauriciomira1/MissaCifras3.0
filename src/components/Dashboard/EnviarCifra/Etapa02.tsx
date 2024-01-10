@@ -22,10 +22,14 @@ const Etapa02 = () => {
   };
 
   // Obtendo letra a partir da cifra inserida
-  const capturarLetraDaMusica = (novaCifra: string) => {
-    const capturandoLetraDaMusica = novaCifra.replace(/&[^&\s]+/g, "");
+  const capturarLetraDaMusica = (musicaComCifra: string) => {
+    const capturandoLetraDaMusica = musicaComCifra.replace(/&[^&\s]+/g, "");
 
     setLetraDaMusica(capturandoLetraDaMusica);
+  };
+
+  const lidandoComMusicaCifrada = (musicaComCifra: string) => {
+    const cifra = musicaComCifra.replace;
   };
 
   const handleChangeCifra = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,15 +43,6 @@ const Etapa02 = () => {
       acordes,
     });
   };
-
-  useEffect(() => {
-    EtapaSong02({
-      acordes,
-      cifraDaMusica: musicaCifrada,
-      letra: letraDaMusica,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [musicaCifrada]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">

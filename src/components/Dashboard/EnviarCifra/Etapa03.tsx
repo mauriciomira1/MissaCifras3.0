@@ -1,41 +1,16 @@
+"use client";
 import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 import "./etapa03.css";
 
-import { prismaClient } from "@/lib/prisma";
 import { useSession } from "next-auth/react";
-import ObterUsuario from "@/functions/usuario/obterUsuario";
+import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
 
-const Etapa03 = async () => {
+const Etapa03 = () => {
   const { songData } = useNewMusic();
   const { data, status } = useSession();
 
-  if (status === "authenticated") {
-    const usuario = await ObterUsuario(data!.user!.email!);
-
-    const criarNovaCifra = await prismaClient.cifra.create({
-      data: {
-        musica: songData.musica,
-        slug: songData.slug,
-        versao: songData.versao,
-        compositor: songData.compositor,
-        tom: songData.tom,
-        bpm: songData.bpm,
-        video: songData.video,
-        letra: songData.letra,
-        cifra: songData.cifra,
-        acordes: songData.acordes,
-        thumbnail: "",
-        hashtags: songData.hashtags,
-        classificacao: songData.classificacao,
-        liturgica: songData.liturgica,
-        qtdDeCliques: 0,
-        usuarioQueEnviou: usuario,
-        artistaId: songData.artistaId,
-        participacao: songData.participacao,
-      },
-    });
-  }
+  CriarNovaMusica({ data, status, songData });
 
   return (
     <div className="flex flex-col items-center gap-1.5">

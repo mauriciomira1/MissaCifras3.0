@@ -1,6 +1,5 @@
 "use client";
-import { SongDataProps } from "@/dtos/songDataProps";
-import { SongProps } from "@/dtos/songProps";
+
 import {
   Dispatch,
   ReactNode,
@@ -10,6 +9,10 @@ import {
   useEffect,
   useState,
 } from "react";
+
+// Importação de tipos
+import { SongDataProps } from "@/dtos/songDataProps";
+import { SongProps } from "@/dtos/songProps";
 
 type ContextNewMusicProps = {
   setSongData: Dispatch<SetStateAction<SongProps>>;
