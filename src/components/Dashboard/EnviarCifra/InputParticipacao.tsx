@@ -43,7 +43,11 @@ const animatedComponent = makeAnimated();
 // ----------------------------------------------------------------------------
 
 const InputParticipacao = ({ setData, data }: Props) => {
-  const { participantesLabelValue, setParticipantesLabelValue } = useNewMusic();
+  const {
+    participantesLabelValue,
+    setParticipantesLabelValue,
+    setParticipantesEmString,
+  } = useNewMusic();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<{ label: string }[]>();
@@ -100,6 +104,7 @@ const InputParticipacao = ({ setData, data }: Props) => {
 
   const handleChange = (value: unknown) => {
     setIsLoading(true);
+    setParticipantesEmString(value as string);
 
     setParticipantesLabelValue(value as NewValueProps[]);
     console.log(value);

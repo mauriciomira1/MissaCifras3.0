@@ -17,18 +17,27 @@ import { SongProps } from "@/dtos/songProps";
 type ContextNewMusicProps = {
   setSongData: Dispatch<SetStateAction<SongProps>>;
   songData: SongProps;
+
   setNomeDoArtista: Dispatch<SetStateAction<string | undefined>>;
   participantesLabelValue: { label: string; value: string }[];
+
   setParticipantesLabelValue: Dispatch<
     SetStateAction<{ label: string; value: string }[]>
   >;
+
   hashtagsEmString: string;
   setHashtagsEmString: Dispatch<SetStateAction<string>>;
+
+  participantesEmString: string | undefined;
+  setParticipantesEmString: Dispatch<SetStateAction<string | undefined>>;
+
   nomeDoArtista: string | undefined;
+
   musicaCifradaComCaractereEspecial: string | undefined;
   setMusicaCifradaComCaractereEspecial: Dispatch<
     SetStateAction<string | undefined>
   >;
+
   EtapaSong01: (data: SongDataProps) => void;
   EtapaSong02: ({
     cifraDaMusica,
@@ -56,6 +65,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
     { label: string; value: string }[]
   >([]);
   const [hashtagsEmString, setHashtagsEmString] = useState("");
+  const [participantesEmString, setParticipantesEmString] = useState<string>();
 
   const EtapaSong01 = (data: SongDataProps) => {
     setSongData((prevState) => ({
@@ -106,6 +116,8 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
         setParticipantesLabelValue,
         hashtagsEmString,
         setHashtagsEmString,
+        participantesEmString,
+        setParticipantesEmString,
         setSongData,
         EtapaSong01,
         EtapaSong02,

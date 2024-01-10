@@ -7,7 +7,8 @@ import { useSession } from "next-auth/react";
 import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
 
 const Etapa03 = () => {
-  const { songData, hashtagsEmString } = useNewMusic();
+  const { songData, hashtagsEmString, nomeDoArtista, participantesEmString } =
+    useNewMusic();
   const { data, status } = useSession();
 
   /*   CriarNovaMusica({ data, status, songData }); */
@@ -30,10 +31,10 @@ const Etapa03 = () => {
             Versão: <strong>{songData.versao}</strong>
           </p>
           <p>
-            Cantor/Banda: <strong>{songData.artistaId}</strong>
+            Cantor/Banda: <strong>{nomeDoArtista}</strong>
           </p>
           <p>
-            Participação especial: <strong>{songData.participacao}</strong>
+            Participação especial: <strong>{participantesEmString}</strong>
           </p>
           <p>
             Compositor: <strong>{songData.compositor}</strong>

@@ -112,7 +112,7 @@ const Etapa01 = () => {
       <InputData
         placeholder="Nome do compositor (opcional)"
         name="compositor"
-        maxLength={40}
+        maxLength={200}
         onChange={handleChange}
         value={data.compositor || ""}
       />
