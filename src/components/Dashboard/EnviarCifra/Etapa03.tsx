@@ -7,10 +7,10 @@ import { useSession } from "next-auth/react";
 import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
 
 const Etapa03 = () => {
-  const { songData } = useNewMusic();
+  const { songData, hashtagsEmString } = useNewMusic();
   const { data, status } = useSession();
 
-  CriarNovaMusica({ data, status, songData });
+  /*   CriarNovaMusica({ data, status, songData }); */
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -48,13 +48,13 @@ const Etapa03 = () => {
             Vídeo do Youtube: <strong>{songData.video}</strong>
           </p>
           <p>
-            Palavras-chave: <strong>{songData.hashtags}</strong>
+            Palavras-chave: <strong>{hashtagsEmString}</strong>
           </p>
           <p>
             Classificação: <strong>{songData.classificacao}</strong>
           </p>
           <p>
-            Litúrgica: <strong>{songData.liturgica}</strong>
+            Litúrgica: <strong>{songData.liturgica ? "Sim" : "Não"}</strong>
           </p>
         </div>
       </section>

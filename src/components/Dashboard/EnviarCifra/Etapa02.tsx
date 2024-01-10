@@ -4,7 +4,11 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { useEffect, useState } from "react";
 
 const Etapa02 = () => {
-  const { EtapaSong02 } = useNewMusic();
+  const {
+    EtapaSong02,
+    musicaCifradaComCaractereEspecial,
+    setMusicaCifradaComCaractereEspecial,
+  } = useNewMusic();
 
   const [letraDaMusica, setLetraDaMusica] = useState("");
   const [musicaCifrada, setMusicaCifrada] = useState("");
@@ -37,6 +41,7 @@ const Etapa02 = () => {
     const novaCifra = ev.target.value;
     setMusicaCifrada(novaCifra);
     capturarAcordes(novaCifra);
+    setMusicaCifradaComCaractereEspecial(novaCifra);
     const cifra = lidandoComMusicaCifrada(novaCifra);
     capturarLetraDaMusica(novaCifra);
     EtapaSong02({
@@ -56,8 +61,8 @@ const Etapa02 = () => {
         id=""
         cols={30}
         rows={18}
-        className="w-full rounded bg-gray-200 text-sm"
-        value={musicaCifrada}
+        className="w-full rounded bg-gray-200 p-1 text-sm"
+        value={musicaCifradaComCaractereEspecial || musicaCifrada}
         onChange={handleChangeCifra}
       ></textarea>
     </div>

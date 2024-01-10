@@ -3,7 +3,6 @@ import { Session } from "next-auth";
 
 import ObterUsuario from "@/functions/usuario/obterUsuario";
 import { prismaClient } from "@/lib/prisma";
-import { SongDataProps } from "@/dtos/songDataProps";
 import { SongProps } from "@/dtos/songProps";
 
 type Props = {
@@ -14,7 +13,8 @@ type Props = {
 
 const CriarNovaMusica = async ({ data, status, songData }: Props) => {
   if (status === "authenticated") {
-    const usuario = await ObterUsuario(data!.user!.email!);
+    const email = data!.user!.email!;
+    const usuario = await ObterUsuario(email);
 
     await prismaClient.cifra.create({
       data: {
@@ -33,11 +33,13 @@ const CriarNovaMusica = async ({ data, status, songData }: Props) => {
         classificacao: songData.classificacao,
         liturgica: songData.liturgica,
         qtdDeCliques: 0,
-        usuarioQueEnviou: usuario,
+        userId: usuario!.id,
         artistaId: songData.artistaId,
         participacao: songData.participacao,
       },
     });
+  } else {
+    // criar condição para caso o usuário perca a autenticação, para que seja autenticado novamente.
   }
 };
 

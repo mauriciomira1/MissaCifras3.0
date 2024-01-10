@@ -25,6 +25,10 @@ type ContextNewMusicProps = {
   hashtagsEmString: string;
   setHashtagsEmString: Dispatch<SetStateAction<string>>;
   nomeDoArtista: string | undefined;
+  musicaCifradaComCaractereEspecial: string | undefined;
+  setMusicaCifradaComCaractereEspecial: Dispatch<
+    SetStateAction<string | undefined>
+  >;
   EtapaSong01: (data: SongDataProps) => void;
   EtapaSong02: ({
     cifraDaMusica,
@@ -44,6 +48,10 @@ const ContextNewMusic = createContext<ContextNewMusicProps>(
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongProps>({} as SongProps);
   const [nomeDoArtista, setNomeDoArtista] = useState<string>();
+  const [
+    musicaCifradaComCaractereEspecial,
+    setMusicaCifradaComCaractereEspecial,
+  ] = useState<string>();
   const [participantesLabelValue, setParticipantesLabelValue] = useState<
     { label: string; value: string }[]
   >([]);
@@ -63,7 +71,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
       video: data.video,
       hashtags: data.hashtags,
       classificacao: data.classificacao,
-      liturgica: data.liturgica,
+      liturgica: data.liturgica || false,
     }));
   };
 
@@ -101,6 +109,8 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
         setSongData,
         EtapaSong01,
         EtapaSong02,
+        musicaCifradaComCaractereEspecial,
+        setMusicaCifradaComCaractereEspecial,
       }}
     >
       {props.children}

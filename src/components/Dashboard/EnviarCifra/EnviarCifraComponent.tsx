@@ -52,27 +52,6 @@ const EnviarCifraComponent = () => {
       console.log("Falta dados para o envio ao servidor.");
       return;
     }
-    const completeSong = await prismaClient.cifra.create({
-      data: {
-        slug: songData.slug,
-        artistaId: songData.artistaId,
-        userId: songData.userId,
-        cifra: songData.cifra,
-        musica: songData.musica,
-        versao: songData.versao,
-        participacao: songData.participacao,
-        compositor: songData.compositor,
-        tom: songData.tom,
-        bpm: songData.bpm,
-        video: songData.video,
-        letra: songData.letra,
-        hashtags: songData.hashtags,
-        acordes: songData.acordes,
-        classificacao: songData.classificacao,
-        liturgica: songData.liturgica,
-        qtdDeCliques: 0,
-      },
-    });
   };
 
   const lidarComArtistaInserido = () => {
