@@ -29,7 +29,7 @@ const Etapa02 = () => {
   };
 
   const lidandoComMusicaCifrada = (musicaComCifra: string) => {
-    const cifra = musicaComCifra.replace("&", "");
+    const cifra = musicaComCifra.replace(/&/g, "");
     return cifra;
   };
 
