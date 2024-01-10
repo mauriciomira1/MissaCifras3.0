@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import InputData from "./InputData";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 // Contextos
 import { useNewMusic } from "@/contexts/useNewMusicContext";
@@ -9,20 +8,22 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 import { SongDataProps } from "@/dtos/songDataProps";
 
 // Subcomponentes
+import InputData from "./InputData";
 import InputArtista from "./InputArtista";
 import InputTonalidade from "./InputTonalidade";
 import InputParticipacao from "./InputParticipacao";
 import InputClassificacao from "./InputClassificacao";
-import ObterIdDoUsuario from "@/functions/usuario/obterUsuario";
-import { useSession } from "next-auth/react";
+
+type Props = {
+  setBotaoAtivado: Dispatch<SetStateAction<boolean>>;
+};
 
 // ----------------------------------------------------------------------------
 
-const Etapa01 = () => {
+const Etapa01 = ({ setBotaoAtivado }: Props) => {
   // useContext
   const { songData, EtapaSong01, hashtagsEmString, setHashtagsEmString } =
     useNewMusic();
-  const { data: userSessionData } = useSession();
 
   // Criação de useStates
   const [data, setData] = useState<SongDataProps>(songData || {});
@@ -70,6 +71,16 @@ const Etapa01 = () => {
 
   // Cada vez que um dado do input for alterado, ele altera os dados da música (songData) através da função EtapaSong01
   useEffect(() => {
+    if (
+      !data.musica ||
+      !data.artistaId ||
+      !data.classificacao ||
+      !data.video ||
+      !data.tom
+    ) {
+      setBotaoAtivado(false);
+    } else setBotaoAtivado(true);
+
     EtapaSong01(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -158,6 +169,29 @@ const Etapa01 = () => {
           checked={liturgicaChecked}
           onChange={handleLiturgicaChecked}
         />
+      </div>
+
+      {/*     !data.musica ||
+    !data.artistaId ||
+    !data.classificacao ||
+    !data.video ||
+    !data.tom */}
+
+      <div className="w-full py-2 text-right text-xs italic text-red-600">
+        {!data.musica ||
+        !data.artistaId ||
+        !data.classificacao ||
+        !data.video ||
+        !data.tom ? (
+          <p className="font-bold">Itens obrigatórios para prosseguir:</p>
+        ) : (
+          ""
+        )}
+        {!data.musica && <p>Nome da música</p>}
+        {!data.artistaId && <p>Cantor/banda</p>}
+        {!data.tom && <p>Tonalidade da música</p>}
+        {!data.video && <p>Vídeo do Youtube com a versão</p>}
+        {!data.classificacao && <p>Classificação</p>}
       </div>
     </div>
   );

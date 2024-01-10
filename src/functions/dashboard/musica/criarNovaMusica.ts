@@ -40,6 +40,7 @@ const CriarNovaMusica = async ({ data, status, songData }: Props) => {
     });
   } else {
     // criar condição para caso o usuário perca a autenticação, para que seja autenticado novamente.
+    console.log("Usuário não autenticado.");
   }
 };
 

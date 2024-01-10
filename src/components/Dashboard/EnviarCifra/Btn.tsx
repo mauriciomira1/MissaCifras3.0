@@ -1,13 +1,12 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { ButtonHTMLAttributes, MouseEventHandler } from "react";
 
-interface BtnProps {
+interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: "PRÓXIMO" | "ANTERIOR" | "ENVIAR";
   onClick?: MouseEventHandler;
   id: string;
-  /*   handleSend?: (ev: React.FormEvent) => void; */
 }
 
-const Btn = ({ name, onClick, id }: BtnProps) => {
+const Btn = ({ name, onClick, id, ...props }: BtnProps) => {
   let Colors = "";
   if (name === "PRÓXIMO") {
     Colors = "bg-primaryColor text-white";
@@ -19,8 +18,9 @@ const Btn = ({ name, onClick, id }: BtnProps) => {
 
   return (
     <button
-      className={`${Colors} font-text font-bold w-28 py-1.5 rounded`}
+      className={`${Colors} w-28 rounded py-1.5 font-text font-bold disabled:cursor-not-allowed disabled:opacity-60`}
       onClick={onClick}
+      {...props}
     >
       {name}
     </button>

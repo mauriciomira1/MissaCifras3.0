@@ -11,15 +11,22 @@ import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
+import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
+import { useSession } from "next-auth/react";
+import { Toaster } from "@/components/shadcn/ui/toaster";
+import { useToast } from "@/components/shadcn/ui/use-toast";
 
 // ----------------------------------------------------------------------------
 
 const EnviarCifraComponent = () => {
   const { songData } = useNewMusic();
+  const { data, status } = useSession();
+  const { toast } = useToast();
 
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [btnState, setBtnState] = useState(true);
-  const [artistaAtual, setArtistaAtual] = useState<string>("" as string);
+
+  const [botaoAtivado, setBotaoAtivado] = useState(false);
 
   const selectedBtn =
     "font-text text-green-400 text-xl align-middle font-bold border-2 border-green-400 rounded-md h-8 w-8";
@@ -43,32 +50,28 @@ const EnviarCifraComponent = () => {
     }
   };
 
-  const handleSend = async () => {
-    // Juntando todos os dados para enviar a nova música para o servidor
-    if (!songData.cifra || !songData || !songData.letra || !songData.acordes) {
-      console.log("Falta dados para o envio ao servidor.");
-      return;
+  const enviarNovaMusica = async () => {
+    try {
+      await CriarNovaMusica({ data, status, songData });
+      toast({
+        title: "Música criada com sucesso!",
+        color: "#FFF",
+      });
+    } catch (error) {
+      toast({
+        title: "Não foi possível criar a música. Tente mais tarde.",
+        color: "#FFF",
+      });
     }
   };
-
-  const lidarComArtistaInserido = () => {
-    // verificar se existe no banco. Se sim, só salva ele no data
-    // se não, cria um novo artistan no banco e salva ele no data
-  };
-
-  // useEffect para salvar o Artista (inclui criar um novo artista, caso não exista no Banco de dados) quando artistaAtual for alterado
-  useEffect(() => {
-    /* criarNovoArtista(artistaAtual); */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [artistaAtual]);
 
   const renderDaEtapaAtual = () => {
     switch (etapaAtual) {
       case 0:
-        return <Etapa01 />;
+        return <Etapa01 setBotaoAtivado={setBotaoAtivado} />;
 
       case 1:
-        return <Etapa02 />;
+        return <Etapa02 setBotaoAtivado={setBotaoAtivado} />;
 
       case 2:
         return <Etapa03 />;
@@ -78,9 +81,9 @@ const EnviarCifraComponent = () => {
     }
   };
 
-  const submitEtapa01 = (handleSubmit: any) => {
+  /*  const submitEtapa01 = (handleSubmit: any) => {
     handleSubmit();
-  };
+  }; */
   /*   const submitEtapa01 = ({
     handleSubmit,
   }: UseFormHandleSubmit<FieldValues, undefined>) => {
@@ -100,7 +103,7 @@ const EnviarCifraComponent = () => {
             ev.preventDefault();
             setEtapaAtual(0);
           }}
-          onSubmit={submitEtapa01}
+          /* onSubmit={submitEtapa01} */
         >
           1
         </button>
@@ -125,17 +128,6 @@ const EnviarCifraComponent = () => {
         >
           3
         </button>
-
-        <button
-          className={etapaAtual === 3 ? selectedBtn : inactiveBtn}
-          id="btn04"
-          onClick={(ev) => {
-            ev.preventDefault();
-            setEtapaAtual(3);
-          }}
-        >
-          4
-        </button>
       </div>
       <div className="w-full">{renderDaEtapaAtual()}</div>
       <div className="flex w-full justify-between">
@@ -146,18 +138,24 @@ const EnviarCifraComponent = () => {
         )}
 
         {btnState === true ? (
-          <Btn name="PRÓXIMO" id="btnProximo" onClick={btnProximo} />
+          <Btn
+            name="PRÓXIMO"
+            id="btnProximo"
+            onClick={btnProximo}
+            disabled={!botaoAtivado}
+          />
         ) : (
           <Btn
             name="ENVIAR"
             id="Enviar"
             onClick={(ev) => {
               ev.preventDefault();
-              handleSend();
+              enviarNovaMusica();
             }}
           />
         )}
       </div>
+      <Toaster />
     </form>
   );
 };

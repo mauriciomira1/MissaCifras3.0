@@ -1,9 +1,13 @@
 "use client";
 
 import { useNewMusic } from "@/contexts/useNewMusicContext";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const Etapa02 = () => {
+type Props = {
+  setBotaoAtivado: Dispatch<SetStateAction<boolean>>;
+};
+
+const Etapa02 = ({ setBotaoAtivado }: Props) => {
   const {
     EtapaSong02,
     musicaCifradaComCaractereEspecial,
@@ -50,6 +54,15 @@ const Etapa02 = () => {
       acordes,
     });
   };
+
+  useEffect(() => {
+    if (musicaCifrada.length > 0) {
+      setBotaoAtivado(true);
+    } else {
+      setBotaoAtivado(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [musicaCifrada]);
 
   return (
     <div className="flex flex-col items-center gap-1.5">

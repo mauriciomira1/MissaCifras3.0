@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import postNovoArtista from "./postNovoArtista";
 import ObterArtistas from "./obterArtistas";
 
