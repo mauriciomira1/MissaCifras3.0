@@ -1,32 +1,49 @@
 "use client";
 
 // Hooks
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Contextos
 import { useNewMusic } from "@/contexts/useNewMusicContext";
+import { useSession } from "next-auth/react";
 
 // Componentes
 import Btn from "@/components/Dashboard/EnviarCifra/Btn";
 import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
+
 import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
-import { useSession } from "next-auth/react";
-import { Toaster } from "@/components/shadcn/ui/toaster";
-import { useToast } from "@/components/shadcn/ui/use-toast";
+
+// Componentes Shadcnui
+/* import { ToastContainer, toast } from "react-toastify";
+ */
+import toast, { Toaster } from "react-hot-toast";
+
+import LoadingButton from "@/components/LoadingButton/LoadingButton";
+import { useRouter } from "next/navigation";
 
 // ----------------------------------------------------------------------------
 
 const EnviarCifraComponent = () => {
   const { songData } = useNewMusic();
+
+  // Dados da sessão do usuário e status de login
   const { data, status } = useSession();
-  const { toast } = useToast();
+
+  // Toast para confirmação criação de nova cifra
+
+  // Rotas do Next
+  const router = useRouter();
 
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [btnState, setBtnState] = useState(true);
 
+  // Estado para botão de 'Próximo' apenas quando as condições forem satisfeitas
   const [botaoAtivado, setBotaoAtivado] = useState(false);
+
+  // Loading para o botão de 'Enviar', enquanto a música é criada no banco
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedBtn =
     "font-text text-green-400 text-xl align-middle font-bold border-2 border-green-400 rounded-md h-8 w-8";
@@ -51,18 +68,12 @@ const EnviarCifraComponent = () => {
   };
 
   const enviarNovaMusica = async () => {
+    setIsLoading(true);
     try {
       await CriarNovaMusica({ data, status, songData });
-      toast({
-        title: "Música criada com sucesso!",
-        color: "#FFF",
-      });
-    } catch (error) {
-      toast({
-        title: "Não foi possível criar a música. Tente mais tarde.",
-        color: "#FFF",
-      });
-    }
+    } catch (error) {}
+    setIsLoading(false);
+    router.push("/dashboard");
   };
 
   const renderDaEtapaAtual = () => {
@@ -90,12 +101,20 @@ const EnviarCifraComponent = () => {
     handleSubmit();
   }; */
 
+  const Notificar = () => {
+    toast.promise(enviarNovaMusica(), {
+      loading: "Salvando...",
+      success: <b>Cifra enviada. Obrigado por compartilhar!</b>,
+      error: <b>Não possível salvar. Tente novamente mais tarde.</b>,
+    });
+  };
+
   return (
     <form className="my-6 flex w-full flex-col items-center gap-2">
       <h1 className="font-text text-2xl font-black text-primaryColor md:text-4xl">
         DASHBOARD
       </h1>
-      <div className="mb-5 mt-2 flex w-full justify-center gap-1">
+      {/* <div className="mb-5 mt-2 flex w-full justify-center gap-1">
         <button
           className={etapaAtual === 0 ? selectedBtn : inactiveBtn}
           id="btn01"
@@ -103,7 +122,6 @@ const EnviarCifraComponent = () => {
             ev.preventDefault();
             setEtapaAtual(0);
           }}
-          /* onSubmit={submitEtapa01} */
         >
           1
         </button>
@@ -128,7 +146,7 @@ const EnviarCifraComponent = () => {
         >
           3
         </button>
-      </div>
+      </div> */}
       <div className="w-full">{renderDaEtapaAtual()}</div>
       <div className="flex w-full justify-between">
         {etapaAtual === 0 ? (
@@ -136,7 +154,6 @@ const EnviarCifraComponent = () => {
         ) : (
           <Btn name="ANTERIOR" id="btnAnterior" onClick={btnAnterior} />
         )}
-
         {btnState === true ? (
           <Btn
             name="PRÓXIMO"
@@ -144,18 +161,20 @@ const EnviarCifraComponent = () => {
             onClick={btnProximo}
             disabled={!botaoAtivado}
           />
+        ) : isLoading ? (
+          <LoadingButton iconColor="white" />
         ) : (
           <Btn
             name="ENVIAR"
             id="Enviar"
             onClick={(ev) => {
               ev.preventDefault();
-              enviarNovaMusica();
+              Notificar();
             }}
           />
         )}
+        <Toaster position="bottom-center" reverseOrder={false} />
       </div>
-      <Toaster />
     </form>
   );
 };

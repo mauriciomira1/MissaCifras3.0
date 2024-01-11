@@ -9,9 +9,6 @@ import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
 const Etapa03 = () => {
   const { songData, hashtagsEmString, nomeDoArtista, participantesEmString } =
     useNewMusic();
-  const { data, status } = useSession();
-
-  /*   CriarNovaMusica({ data, status, songData }); */
 
   return (
     <div className="flex flex-col items-center gap-1.5">

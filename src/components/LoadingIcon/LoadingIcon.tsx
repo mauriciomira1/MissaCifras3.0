@@ -1,5 +1,7 @@
-import { VscLoading } from "react-icons/vsc";
 import "./styles.css";
+
+import UseAnimations from "react-useanimations";
+import loading from "react-useanimations/lib/loading";
 
 type Props = {
   color?: string;
@@ -9,7 +11,7 @@ type Props = {
 const LoadingIcon = ({ color, size }: Props) => {
   return (
     <div className="flex h-screen w-full items-center justify-center">
-      <VscLoading className="spin" color={color} size={size} />
+      <UseAnimations animation={loading} strokeColor={color} size={size} />
     </div>
   );
 };

@@ -97,7 +97,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
     setSongData((prevState) => ({
       ...prevState,
       cifra: cifraDaMusica,
-      chordsList: acordes,
+      acordes,
       letra: letra,
     }));
   };

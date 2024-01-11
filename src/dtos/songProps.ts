@@ -8,5 +8,5 @@ export type SongProps = SongDataProps & {
   cifra: string;
   acordes: string[];
   qtdDeCliques: number;
-  usuarioQueEnviou: User;
+  user: User;
 };
