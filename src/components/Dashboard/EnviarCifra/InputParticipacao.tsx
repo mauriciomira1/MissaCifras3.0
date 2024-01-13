@@ -54,9 +54,7 @@ const InputParticipacao = ({ setData }: Props) => {
   const [value, setValue] = useState<Option | unknown>();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [newArtist, setNewArtist] = useState("");
-  const [arrayDeParticipantes, setArrayDeParticipantes] = useState<string[]>([
-    "",
-  ]);
+  const [arrayDeParticipantes, setArrayDeParticipantes] = useState<string[]>();
 
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
@@ -138,6 +136,9 @@ const InputParticipacao = ({ setData }: Props) => {
 
   // Enviando lista de participantes para o 'data' de nova música
   useEffect(() => {
+    const arrayDeParticipantes = participantesLabelValue.map(
+      (value) => value.label,
+    );
     setData((prevData) => ({
       ...prevData,
       participacao: arrayDeParticipantes,

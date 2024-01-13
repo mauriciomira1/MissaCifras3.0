@@ -19,7 +19,7 @@ type Props = {
 
 type ClassificacaoProps = SongDataProps["classificacao"];
 
-type ValueProps = {
+export type ClassificacaoLabelValueProps = {
   label: ClassificacaoOptions;
   value: ClassificacaoOptions;
 };
@@ -81,14 +81,14 @@ const InputClassificacao = ({ setData }: Props) => {
   } = useNewMusic();
 
   const [arrayDeClassificacao, setArrayDeClassificacao] =
-    useState<ClassificacaoProps>([]);
+    useState<ClassificacaoProps>();
 
   const colorStyles: StylesConfig = {
-    control: (styles, { hasValue, isFocused }) => ({
+    control: (styles, { hasValue }) => ({
       ...styles,
       backgroundColor: hasValue ? "white" : "rgb(229 231 235)",
       border: hasValue ? defaults : 0,
-      height: 20,
+      minHeight: 20,
     }),
     option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
@@ -127,7 +127,10 @@ const InputClassificacao = ({ setData }: Props) => {
     },
   };
 
-  const transformandoArrayEmString = (arrayDeClassificacao: ValueProps[]) => {
+  // Transformando em string para aparecer na Etapa03 (Revisão)
+  const transformandoArrayEmString = (
+    arrayDeClassificacao: ClassificacaoLabelValueProps[],
+  ) => {
     const classificacaoEmString = arrayDeClassificacao
       .map((item) => item.label)
       .join(", ");
@@ -135,10 +138,10 @@ const InputClassificacao = ({ setData }: Props) => {
   };
 
   const handleChange = (value: unknown) => {
-    transformandoArrayEmString(value as ValueProps[]);
-    setClassificacaoLabelValue(value as ValueProps[]);
+    transformandoArrayEmString(value as ClassificacaoLabelValueProps[]);
+    setClassificacaoLabelValue(value as ClassificacaoLabelValueProps[]);
 
-    const valueFormatted = value as ValueProps[];
+    const valueFormatted = value as ClassificacaoLabelValueProps[];
 
     const arrayDeClassificacao: ClassificacaoProps = valueFormatted.map(
       (value) => value.label,
@@ -148,6 +151,9 @@ const InputClassificacao = ({ setData }: Props) => {
   };
 
   useEffect(() => {
+    const arrayDeClassificacao: ClassificacaoProps =
+      classificacaoLabelValue.map((value) => value.label);
+
     setData((prevData) => ({
       ...prevData,
       classificacao: arrayDeClassificacao,

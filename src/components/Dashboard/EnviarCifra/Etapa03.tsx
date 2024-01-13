@@ -3,12 +3,14 @@ import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 import "./etapa03.css";
 
-import { useSession } from "next-auth/react";
-import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
-
 const Etapa03 = () => {
-  const { songData, hashtagsEmString, nomeDoArtista, participantesEmString } =
-    useNewMusic();
+  const {
+    songData,
+    hashtagsEmString,
+    nomeDoArtista,
+    participantesEmString,
+    classificacaoEmString,
+  } = useNewMusic();
 
   return (
     <div className="flex flex-col items-center gap-1.5">
@@ -49,7 +51,7 @@ const Etapa03 = () => {
             Palavras-chave: <strong>{hashtagsEmString}</strong>
           </p>
           <p>
-            Classificação: <strong>{songData.classificacao}</strong>
+            Classificação: <strong>{classificacaoEmString}</strong>
           </p>
           <p>
             Litúrgica: <strong>{songData.liturgica ? "Sim" : "Não"}</strong>

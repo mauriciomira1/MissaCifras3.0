@@ -13,6 +13,18 @@ import Etapa01 from "@/components/Dashboard/EnviarCifra/Etapa01";
 import Etapa02 from "@/components/Dashboard/EnviarCifra/Etapa02";
 import Etapa03 from "@/components/Dashboard/EnviarCifra/Etapa03";
 
+// Diálogo para confirmação de criação de nova cifra
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/shadcn/ui/alert-dialog";
+
 import CriarNovaMusica from "@/functions/dashboard/musica/criarNovaMusica";
 
 // Componentes Shadcnui
@@ -22,11 +34,12 @@ import toast, { Toaster } from "react-hot-toast";
 
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
 import { useRouter } from "next/navigation";
+import { SongProps } from "@/dtos/songProps";
 
 // ----------------------------------------------------------------------------
 
 const EnviarCifraComponent = () => {
-  const { songData } = useNewMusic();
+  const { songData, setSongData } = useNewMusic();
 
   // Dados da sessão do usuário e status de login
   const { data, status } = useSession();
@@ -44,6 +57,9 @@ const EnviarCifraComponent = () => {
 
   // Loading para o botão de 'Enviar', enquanto a música é criada no banco
   const [isLoading, setIsLoading] = useState(false);
+
+  // Constante para a janela de confirmação de criação de nova música
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const selectedBtn =
     "font-text text-green-400 text-xl align-middle font-bold border-2 border-green-400 rounded-md h-8 w-8";
@@ -71,9 +87,13 @@ const EnviarCifraComponent = () => {
     setIsLoading(true);
     try {
       await CriarNovaMusica({ data, status, songData });
-    } catch (error) {}
-    setIsLoading(false);
-    router.push("/dashboard");
+      setIsLoading(false);
+      router.push("/dashboard");
+      setSongData({} as SongProps);
+    } catch (error) {
+      toast.error("Não possível salvar. Tente novamente mais tarde.");
+      console.log(error);
+    }
   };
 
   const renderDaEtapaAtual = () => {
@@ -92,10 +112,10 @@ const EnviarCifraComponent = () => {
     }
   };
 
-  /*  const submitEtapa01 = (handleSubmit: any) => {
+  /*   const submitEtapa01 = (handleSubmit: any) => {
     handleSubmit();
-  }; */
-  /*   const submitEtapa01 = ({
+  };
+  const submitEtapa01 = ({
     handleSubmit,
   }: UseFormHandleSubmit<FieldValues, undefined>) => {
     handleSubmit();
@@ -110,11 +130,34 @@ const EnviarCifraComponent = () => {
   };
 
   return (
-    <form className="my-6 flex w-full flex-col items-center gap-2">
-      <h1 className="font-text text-2xl font-black text-primaryColor md:text-4xl">
-        DASHBOARD
-      </h1>
-      {/* <div className="mb-5 mt-2 flex w-full justify-center gap-1">
+    <>
+      <AlertDialog open={isConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Criar nova cifra</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja enviar essa cifra?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setIsConfirmOpen(false);
+              }}
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={() => Notificar()}>
+              Criar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <form className="my-6 flex w-full flex-col items-center gap-2">
+        <h1 className="font-text text-2xl font-black text-primaryColor md:text-4xl">
+          DASHBOARD
+        </h1>
+        {/* <div className="mb-5 mt-2 flex w-full justify-center gap-1">
         <button
           className={etapaAtual === 0 ? selectedBtn : inactiveBtn}
           id="btn01"
@@ -147,35 +190,36 @@ const EnviarCifraComponent = () => {
           3
         </button>
       </div> */}
-      <div className="w-full">{renderDaEtapaAtual()}</div>
-      <div className="flex w-full justify-between">
-        {etapaAtual === 0 ? (
-          <div></div>
-        ) : (
-          <Btn name="ANTERIOR" id="btnAnterior" onClick={btnAnterior} />
-        )}
-        {btnState === true ? (
-          <Btn
-            name="PRÓXIMO"
-            id="btnProximo"
-            onClick={btnProximo}
-            disabled={!botaoAtivado}
-          />
-        ) : isLoading ? (
-          <LoadingButton iconColor="white" />
-        ) : (
-          <Btn
-            name="ENVIAR"
-            id="Enviar"
-            onClick={(ev) => {
-              ev.preventDefault();
-              Notificar();
-            }}
-          />
-        )}
-        <Toaster position="bottom-center" reverseOrder={false} />
-      </div>
-    </form>
+        <div className="w-full">{renderDaEtapaAtual()}</div>
+        <div className="flex w-full justify-between">
+          {etapaAtual === 0 ? (
+            <div></div>
+          ) : (
+            <Btn name="ANTERIOR" id="btnAnterior" onClick={btnAnterior} />
+          )}
+          {btnState === true ? (
+            <Btn
+              name="PRÓXIMO"
+              id="btnProximo"
+              onClick={btnProximo}
+              disabled={!botaoAtivado}
+            />
+          ) : isLoading ? (
+            <LoadingButton iconColor="white" />
+          ) : (
+            <Btn
+              name="ENVIAR"
+              id="Enviar"
+              onClick={(ev) => {
+                ev.preventDefault();
+                setIsConfirmOpen(true);
+              }}
+            />
+          )}
+          <Toaster position="bottom-center" reverseOrder={false} />
+        </div>
+      </form>
+    </>
   );
 };
 

@@ -14,9 +14,9 @@ const Etapa02 = ({ setBotaoAtivado }: Props) => {
     setMusicaCifradaComCaractereEspecial,
   } = useNewMusic();
 
-  const [letraDaMusica, setLetraDaMusica] = useState("");
-  const [musicaCifrada, setMusicaCifrada] = useState("");
-  const [acordes, setAcordes] = useState<string[]>([]);
+  const [letraDaMusica, setLetraDaMusica] = useState<string>();
+  const [musicaCifrada, setMusicaCifrada] = useState<string>();
+  const [acordes, setAcordes] = useState<string[]>();
 
   // Obtendo acordes a partir da cifra inserida
   const capturarAcordes = (novaCifra: string) => {
@@ -36,6 +36,7 @@ const Etapa02 = ({ setBotaoAtivado }: Props) => {
     setLetraDaMusica(capturandoLetraDaMusica);
   };
 
+  // Removendo o "&" da cifra, inserido pelo usuário
   const lidandoComMusicaCifrada = (musicaComCifra: string) => {
     const cifra = musicaComCifra.replace(/&/g, "");
     return cifra;
@@ -46,17 +47,22 @@ const Etapa02 = ({ setBotaoAtivado }: Props) => {
     setMusicaCifrada(novaCifra);
     capturarAcordes(novaCifra);
     setMusicaCifradaComCaractereEspecial(novaCifra);
+
     const cifra = lidandoComMusicaCifrada(novaCifra);
+
     capturarLetraDaMusica(novaCifra);
+
+    // Salvando dados da cifra para revisão final
     EtapaSong02({
       cifraDaMusica: cifra,
-      letra: letraDaMusica,
-      acordes,
+      letra: letraDaMusica!,
+      acordes: acordes!,
     });
   };
 
+  // Se 'musicaCifrada' é alterada, verifica se há conteúdo no textarea para poder avançar.
   useEffect(() => {
-    if (musicaCifrada.length > 0) {
+    if (!musicaCifrada || musicaCifrada.length > 0) {
       setBotaoAtivado(true);
     } else {
       setBotaoAtivado(false);
@@ -74,6 +80,7 @@ const Etapa02 = ({ setBotaoAtivado }: Props) => {
         id=""
         cols={30}
         rows={18}
+        required
         className="w-full rounded bg-gray-200 p-1 text-sm"
         value={musicaCifradaComCaractereEspecial || musicaCifrada}
         onChange={handleChangeCifra}

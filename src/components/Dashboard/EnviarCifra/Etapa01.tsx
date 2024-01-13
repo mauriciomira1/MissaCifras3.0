@@ -59,7 +59,7 @@ const Etapa01 = ({ setBotaoAtivado }: Props) => {
   };
 
   useEffect(() => {
-    // Criar slug
+    // Criar slug a partir do nome da música
     if (data.musica) {
       const slug = data.musica
         .normalize("NFD")
@@ -75,7 +75,7 @@ const Etapa01 = ({ setBotaoAtivado }: Props) => {
     if (
       !data.musica ||
       !data.artistaId ||
-      !data.classificacao ||
+      data.classificacao.length <= 0 ||
       !data.video ||
       !data.tom
     ) {
@@ -192,7 +192,8 @@ const Etapa01 = ({ setBotaoAtivado }: Props) => {
         {!data.artistaId && <p>Cantor/banda</p>}
         {!data.tom && <p>Tonalidade da música</p>}
         {!data.video && <p>Vídeo do Youtube com a versão</p>}
-        {!data.classificacao && <p>Classificação</p>}
+        {!Array.isArray(data.classificacao) ||
+          (data.classificacao.length === 0 && <p>Classificação</p>)}
       </div>
     </div>
   );

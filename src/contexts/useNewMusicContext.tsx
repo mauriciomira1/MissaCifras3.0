@@ -6,13 +6,13 @@ import {
   SetStateAction,
   createContext,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
 // Importação de tipos
 import { SongDataProps } from "@/dtos/songDataProps";
 import { SongProps } from "@/dtos/songProps";
+import { ClassificacaoLabelValueProps } from "@/components/Dashboard/EnviarCifra/InputClassificacao";
 
 type ContextNewMusicProps = {
   setSongData: Dispatch<SetStateAction<SongProps>>;
@@ -31,10 +31,10 @@ type ContextNewMusicProps = {
   >;
 
   classificacaoEmString: string | undefined;
-  classificacaoLabelValue: { label: string; value: string }[];
+  classificacaoLabelValue: ClassificacaoLabelValueProps[];
   setClassificacaoEmString: Dispatch<SetStateAction<string | undefined>>;
   setClassificacaoLabelValue: Dispatch<
-    SetStateAction<{ label: string; value: string }[]>
+    SetStateAction<ClassificacaoLabelValueProps[]>
   >;
 
   nomeDoArtista: string | undefined;
@@ -77,7 +77,7 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [participantesEmString, setParticipantesEmString] = useState<string>();
 
   const [classificacaoLabelValue, setClassificacaoLabelValue] = useState<
-    { label: string; value: string }[]
+    ClassificacaoLabelValueProps[]
   >([]);
   const [classificacaoEmString, setClassificacaoEmString] = useState<string>();
 
