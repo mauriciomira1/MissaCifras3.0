@@ -1,11 +1,15 @@
-import { useNewMusic } from "@/contexts/useNewMusicContext";
-import { SongDataProps } from "@/dtos/songDataProps";
+"use client";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import { defaults } from "autoprefixer";
-import { Dispatch, SetStateAction } from "react";
 import Select, { StylesConfig } from "react-select";
 import makeAnimated from "react-select/animated";
 
-// ----------------------------------------------------------------------------
+// useContext
+import { useNewMusic } from "@/contexts/useNewMusicContext";
+
+// Tipagem
+import { ClassificacaoOptions, SongDataProps } from "@/dtos/songDataProps";
 
 const animatedComponent = makeAnimated();
 
@@ -16,8 +20,8 @@ type Props = {
 type ClassificacaoProps = SongDataProps["classificacao"];
 
 type ValueProps = {
-  label: string;
-  value: string;
+  label: ClassificacaoOptions;
+  value: ClassificacaoOptions;
 };
 
 const options = [
@@ -67,8 +71,17 @@ const options = [
   },
 ];
 
+// ----------------------------------------------------------------------------
+
 const InputClassificacao = ({ setData }: Props) => {
-  const { songData } = useNewMusic();
+  const {
+    classificacaoLabelValue,
+    setClassificacaoLabelValue,
+    setClassificacaoEmString,
+  } = useNewMusic();
+
+  const [arrayDeClassificacao, setArrayDeClassificacao] =
+    useState<ClassificacaoProps>([]);
 
   const colorStyles: StylesConfig = {
     control: (styles, { hasValue, isFocused }) => ({
@@ -114,23 +127,45 @@ const InputClassificacao = ({ setData }: Props) => {
     },
   };
 
+  const transformandoArrayEmString = (arrayDeClassificacao: ValueProps[]) => {
+    const classificacaoEmString = arrayDeClassificacao
+      .map((item) => item.label)
+      .join(", ");
+    setClassificacaoEmString(classificacaoEmString);
+  };
+
   const handleChange = (value: unknown) => {
-    const classificacao = value as ValueProps;
+    transformandoArrayEmString(value as ValueProps[]);
+    setClassificacaoLabelValue(value as ValueProps[]);
+
+    const valueFormatted = value as ValueProps[];
+
+    const arrayDeClassificacao: ClassificacaoProps = valueFormatted.map(
+      (value) => value.label,
+    );
+
+    setArrayDeClassificacao(arrayDeClassificacao);
+  };
+
+  useEffect(() => {
     setData((prevData) => ({
       ...prevData,
-      classificacao: classificacao.label as ClassificacaoProps,
+      classificacao: arrayDeClassificacao,
     }));
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrayDeClassificacao]);
 
   return (
     <div className="w-full">
       <Select
         options={options}
+        isMulti
         isSearchable
         components={animatedComponent}
         onChange={handleChange}
         styles={colorStyles}
-        defaultInputValue={songData.classificacao}
+        value={classificacaoLabelValue}
+        // defaultInputValue={classificacaoEmString}
         placeholder="Classificação..."
       />
     </div>

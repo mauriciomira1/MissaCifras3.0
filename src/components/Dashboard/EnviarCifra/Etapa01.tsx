@@ -52,8 +52,9 @@ const Etapa01 = ({ setBotaoAtivado }: Props) => {
   // Função para lidar com hashtags (transformando em Array)
   const handleHashtags = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setHashtagsEmString(ev.target.value);
-    const { name } = ev.target;
-    const arrayDeHashtags: string[] = hashtagsEmString.split(/[.,;/]/g);
+    const { name, value } = ev.target;
+    const hashtags = value;
+    const arrayDeHashtags: string[] = hashtags.split(/[.,;/]/g);
     setData((prevData) => ({ ...prevData, [name]: arrayDeHashtags }));
   };
 

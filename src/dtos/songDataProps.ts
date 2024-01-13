@@ -1,3 +1,16 @@
+export type ClassificacaoOptions =
+  | "Grupo de Oração/Outros"
+  | "Canto de entrada"
+  | "Ato Penitencial"
+  | "Glória"
+  | "Aclamação"
+  | "Ofertório"
+  | "Santo"
+  | "Cordeiro"
+  | "Comunhão"
+  | "Pós Comunhão"
+  | "Final";
+
 export type SongDataProps = {
   musica: string;
   slug: string;
@@ -21,17 +34,6 @@ export type SongDataProps = {
   artistaId: string;
   participacao: string[];
   hashtags: string[];
-  classificacao:
-    | "Grupo de Oração/Outros"
-    | "Canto de entrada"
-    | "Ato Penitencial"
-    | "Glória"
-    | "Aclamação"
-    | "Ofertório"
-    | "Santo"
-    | "Cordeiro"
-    | "Comunhão"
-    | "Pós Comunhão"
-    | "Final";
+  classificacao: ClassificacaoOptions[];
   liturgica: boolean;
 };

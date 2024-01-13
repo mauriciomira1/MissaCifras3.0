@@ -132,7 +132,7 @@ const InputTonalidade = ({ setData }: Props) => {
         options={options}
         isSearchable
         onChange={handleChange}
-        noOptionsMessage={() => "Carregando..."}
+        noOptionsMessage={() => "Nenhuma tonalidade encontrada com esse valor."}
         components={animatedComponent}
         styles={colorStyles}
         placeholder="Tonalidade da música"

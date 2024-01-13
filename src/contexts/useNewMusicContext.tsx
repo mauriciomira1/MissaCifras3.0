@@ -19,17 +19,23 @@ type ContextNewMusicProps = {
   songData: SongProps;
 
   setNomeDoArtista: Dispatch<SetStateAction<string | undefined>>;
-  participantesLabelValue: { label: string; value: string }[];
-
-  setParticipantesLabelValue: Dispatch<
-    SetStateAction<{ label: string; value: string }[]>
-  >;
 
   hashtagsEmString: string;
   setHashtagsEmString: Dispatch<SetStateAction<string>>;
 
   participantesEmString: string | undefined;
+  participantesLabelValue: { label: string; value: string }[];
   setParticipantesEmString: Dispatch<SetStateAction<string | undefined>>;
+  setParticipantesLabelValue: Dispatch<
+    SetStateAction<{ label: string; value: string }[]>
+  >;
+
+  classificacaoEmString: string | undefined;
+  classificacaoLabelValue: { label: string; value: string }[];
+  setClassificacaoEmString: Dispatch<SetStateAction<string | undefined>>;
+  setClassificacaoLabelValue: Dispatch<
+    SetStateAction<{ label: string; value: string }[]>
+  >;
 
   nomeDoArtista: string | undefined;
 
@@ -56,16 +62,27 @@ const ContextNewMusic = createContext<ContextNewMusicProps>(
 
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongProps>({} as SongProps);
+
+  // Cantor/Banda
   const [nomeDoArtista, setNomeDoArtista] = useState<string>();
   const [
     musicaCifradaComCaractereEspecial,
     setMusicaCifradaComCaractereEspecial,
   ] = useState<string>();
+
+  // Participação especial
   const [participantesLabelValue, setParticipantesLabelValue] = useState<
     { label: string; value: string }[]
   >([]);
-  const [hashtagsEmString, setHashtagsEmString] = useState("");
   const [participantesEmString, setParticipantesEmString] = useState<string>();
+
+  const [classificacaoLabelValue, setClassificacaoLabelValue] = useState<
+    { label: string; value: string }[]
+  >([]);
+  const [classificacaoEmString, setClassificacaoEmString] = useState<string>();
+
+  // Hashtags
+  const [hashtagsEmString, setHashtagsEmString] = useState("");
 
   const EtapaSong01 = (data: SongDataProps) => {
     setSongData((prevState) => ({
@@ -110,12 +127,20 @@ export const NewMusicContextProvider = (props: { children: ReactNode }) => {
         songData,
         nomeDoArtista,
         setNomeDoArtista,
-        participantesLabelValue,
-        setParticipantesLabelValue,
+
         hashtagsEmString,
         setHashtagsEmString,
+
         participantesEmString,
+        participantesLabelValue,
         setParticipantesEmString,
+        setParticipantesLabelValue,
+
+        classificacaoLabelValue,
+        classificacaoEmString,
+        setClassificacaoLabelValue,
+        setClassificacaoEmString,
+
         setSongData,
         EtapaSong01,
         EtapaSong02,

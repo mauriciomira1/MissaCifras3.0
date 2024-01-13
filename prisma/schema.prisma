@@ -35,7 +35,7 @@ model Cifra {
   acordes       String[]
   thumbnail     String?
   hashtags      String[]
-  classificacao String
+  classificacao String[]
   liturgica     Boolean
   qtdDeCliques  Int
   userId        String

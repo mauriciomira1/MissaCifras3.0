@@ -42,7 +42,7 @@ const animatedComponent = makeAnimated();
 
 // ----------------------------------------------------------------------------
 
-const InputParticipacao = ({ setData, data }: Props) => {
+const InputParticipacao = ({ setData }: Props) => {
   const {
     participantesLabelValue,
     setParticipantesLabelValue,
