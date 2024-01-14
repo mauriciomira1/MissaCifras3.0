@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode, createContext } from "react";
-import { useNewMusic } from "./useNewMusicContext";
 
 const ContextMusicWithChords = createContext({});
 

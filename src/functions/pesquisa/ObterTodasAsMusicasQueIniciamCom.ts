@@ -1,3 +1,4 @@
+"use server";
 import { prismaClient } from "@/lib/prisma";
 
 type Props = {
@@ -6,14 +7,19 @@ type Props = {
 
 // Obter todas as músicas do banco que iniciam pela letra passada na chamada da função
 const ObterTodasAsMusicasQueIniciamCom = async ({ primeiraLetra }: Props) => {
-  const musicas = await prismaClient.cifra.findMany({
-    where: {
-      musica: {
-        startsWith: primeiraLetra.toLowerCase(),
+  try {
+    const musicas = await prismaClient.cifra.findMany({
+      where: {
+        musica: {
+          startsWith: primeiraLetra.toUpperCase(),
+        },
       },
-    },
-  });
-  return musicas;
+    });
+    console.log(musicas);
+    return musicas;
+  } catch (error) {
+    console.log("Erro no ObterTodasAsMusicasQueIniciamCom ========>", error);
+  }
 };
 
 export default ObterTodasAsMusicasQueIniciamCom;

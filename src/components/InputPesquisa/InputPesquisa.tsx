@@ -3,9 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 // Animação de janela de pesquisa
-import makeAnimated from "react-select/animated";
 import { StylesConfig } from "react-select";
-import { defaults } from "autoprefixer";
 
 import Select from "react-select";
 
@@ -17,11 +15,11 @@ import { SongProps } from "@/dtos/songProps";
 
 // Funções auxiliares
 import ObterTodasAsMusicasQueIniciamCom from "@/functions/pesquisa/ObterTodasAsMusicasQueIniciamCom";
-
-const animatedComponent = makeAnimated();
+import { useNewMusic } from "@/contexts/useNewMusicContext";
 
 type NewValueProps = {
   label: string;
+  value: string;
 };
 
 // ----------------------------------------------------------------
@@ -29,19 +27,36 @@ type NewValueProps = {
 const InputPesquisa = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listaDeMusicas, setListaDeMusicas] = useState<SongProps[]>([]);
-  const [options, setOptions] = useState<{ label: string }[]>();
-  const [textoDePesquisa, setTextoDePesquisa] = useState<string>("");
+  const [options, setOptions] = useState<NewValueProps[]>();
+  const [textoDePesquisa, setTextoDePesquisa] = useState<string>();
+
+  const { listaDeArtistas } = useNewMusic();
+  console.log(listaDeArtistas);
+
+  const criandoOptions = () => {
+    const novasOpcoes = listaDeMusicas.map((item) => {
+      const artistaDaMusica = listaDeArtistas.filter(
+        (artista) => artista.id === item.artistaId,
+      );
+      console.log(artistaDaMusica);
+      return { label: item.musica, value: item.slug };
+    });
+    return novasOpcoes;
+  };
 
   // Função que retorna todas as músicas do banco que iniciam com a letra pesquisada
   const obterMusicasQueIniciamComALetra = async (textoDePesquisa: string) => {
-    try {
-      const primeiraLetra = textoDePesquisa[0];
-      const musicas = await ObterTodasAsMusicasQueIniciamCom({ primeiraLetra });
-      console.log(musicas);
+    if (textoDePesquisa) {
+      try {
+        const primeiraLetra = textoDePesquisa[0];
+        const musicas = await ObterTodasAsMusicasQueIniciamCom({
+          primeiraLetra,
+        });
 
-      musicas && setListaDeMusicas(musicas as unknown as SongProps[]);
-    } catch (error) {
-      console.log("Erro no InputPesquisa =======>", error);
+        musicas && setListaDeMusicas(musicas as unknown as SongProps[]);
+      } catch (error) {
+        console.log("Erro no InputPesquisa =======>", error);
+      }
     }
   };
 
@@ -107,9 +122,9 @@ const InputPesquisa = () => {
           /> */}
         <Select
           isLoading={isLoading}
+          isSearchable
           placeholder="Vamos louvar?"
           noOptionsMessage={() => "Procure por uma música..."}
-          components={animatedComponent}
           styles={colorStyles}
           value={textoDePesquisa}
           /*           onChange={(newValue: unknown) => {
@@ -118,12 +133,19 @@ const InputPesquisa = () => {
             setNomeDoArtista(valueString.label);
             setValorEmString(valueString.label);
           }} */
-          onChange={(newValue: unknown) => {
+          onInputChange={(newValue: unknown) => {
+            const valorComLabeleValue = newValue as NewValueProps;
+
+            setTextoDePesquisa(newValue as string);
+            obterMusicasQueIniciamComALetra(newValue as string);
+          }}
+          /*           onChange={(newValue: unknown) => {
+            console.log(newValue);
             const valorComLabeleValue = newValue as NewValueProps;
 
             setTextoDePesquisa(valorComLabeleValue.label);
             obterMusicasQueIniciamComALetra(valorComLabeleValue.label);
-          }}
+          }} */
           options={listaDeMusicas}
         />
       </label>

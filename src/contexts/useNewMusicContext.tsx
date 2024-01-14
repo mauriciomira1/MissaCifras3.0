@@ -12,6 +12,8 @@ import {
 // Importação de tipos
 import { SongDataProps } from "@/dtos/songDataProps";
 import { SongProps } from "@/dtos/songProps";
+
+// Importação de componentes
 import { ClassificacaoLabelValueProps } from "@/components/Dashboard/EnviarCifra/InputClassificacao";
 
 type ContextNewMusicProps = {
@@ -62,6 +64,8 @@ const ContextNewMusic = createContext<ContextNewMusicProps>(
 
 export const NewMusicContextProvider = (props: { children: ReactNode }) => {
   const [songData, setSongData] = useState<SongProps>({} as SongProps);
+
+  console.log("rodou o context");
 
   // Cantor/Banda
   const [nomeDoArtista, setNomeDoArtista] = useState<string>();

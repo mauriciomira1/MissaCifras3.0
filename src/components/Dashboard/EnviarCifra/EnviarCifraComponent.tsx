@@ -157,6 +157,7 @@ const EnviarCifraComponent = () => {
         <h1 className="font-text text-2xl font-black text-primaryColor md:text-4xl">
           DASHBOARD
         </h1>
+        {/* Implantar no futuro */}
         {/* <div className="mb-5 mt-2 flex w-full justify-center gap-1">
         <button
           className={etapaAtual === 0 ? selectedBtn : inactiveBtn}
