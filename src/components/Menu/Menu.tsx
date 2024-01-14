@@ -4,11 +4,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-// Hooks do React
-import { useState } from "react";
-
 // Importando Ícones
-import searchIcon from "../../public/images/generic/search-icon.svg";
 import userIcon from "../../public/images/generic/user.svg";
 
 // Importando imagens
@@ -22,14 +18,10 @@ import { useSession, signOut } from "next-auth/react";
 // Ícones
 import { FiUser } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
-
-interface MenuProps {
-  pageSrc: string;
-}
+import InputPesquisa from "../InputPesquisa/InputPesquisa";
 
 const Menu = () => {
   const { data, status } = useSession();
-  const [search, setSearch] = useState("");
 
   const handleLogout = async () => {
     await signOut({
@@ -54,22 +46,7 @@ const Menu = () => {
       </div>
 
       {/* Barra de pesquisa */}
-      <div className="w-52 sm:w-64 lg:w-96">
-        <label className="relative block">
-          <span className="sr-only">Search</span>
-          <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-            <Image src={searchIcon} alt="Pesquisar" width={20} />
-          </span>
-          <input
-            className="block w-full rounded-full border border-slate-300 bg-white py-1.5 pl-9 pr-3 shadow-sm placeholder:font-normal placeholder:text-gray-400 hover:bg-gray-50 focus:border-gray-400 focus:outline-none sm:text-sm"
-            placeholder="Vamos louvar?"
-            type="text"
-            name="search"
-            autoComplete="off"
-            onChange={(ev) => setSearch(ev.target.value)}
-          />
-        </label>
-      </div>
+      <InputPesquisa />
 
       {/* Links de navegação no site */}
       <div className="hidden h-full items-center xl:flex">

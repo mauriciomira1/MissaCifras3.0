@@ -178,7 +178,7 @@ const InputArtista = ({ setData }: Props) => {
         required
         isLoading={isLoading}
         hideSelectedOptions={true}
-        noOptionsMessage={() => "Carregando..."}
+        noOptionsMessage={() => "Pesquise algo"}
         onChange={(newValue: unknown) => {
           setValue(newValue);
           const valueString = newValue as NewValueProps;
