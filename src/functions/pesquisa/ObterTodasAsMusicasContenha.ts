@@ -2,24 +2,24 @@
 import { prismaClient } from "@/lib/prisma";
 
 type Props = {
-  primeiraLetra: string;
+  textoDePesquisa: string;
 };
 
 // Obter todas as músicas do banco que iniciam pela letra passada na chamada da função
-const ObterTodasAsMusicasQueIniciamCom = async ({ primeiraLetra }: Props) => {
+const ObterTodasAsMusicasContenha = async ({ textoDePesquisa }: Props) => {
   try {
     const musicas = await prismaClient.cifra.findMany({
       where: {
         musica: {
-          startsWith: primeiraLetra.toUpperCase(),
+          contains: textoDePesquisa.toUpperCase(),
         },
       },
     });
     console.log(musicas);
     return musicas;
   } catch (error) {
-    console.log("Erro no ObterTodasAsMusicasQueIniciamCom ========>", error);
+    console.log("Erro no ObterTodasAsMusicasContenha ========>", error);
   }
 };
 
-export default ObterTodasAsMusicasQueIniciamCom;
+export default ObterTodasAsMusicasContenha;

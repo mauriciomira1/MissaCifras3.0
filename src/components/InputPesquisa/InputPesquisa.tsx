@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // Animação de janela de pesquisa
@@ -14,12 +14,15 @@ import searchIcon from "../../public/images/generic/search-icon.svg";
 import { SongProps } from "@/dtos/songProps";
 
 // Funções auxiliares
-import ObterTodasAsMusicasQueIniciamCom from "@/functions/pesquisa/ObterTodasAsMusicasQueIniciamCom";
-import { useNewMusic } from "@/contexts/useNewMusicContext";
+import ObterTodasAsMusicasContenha from "@/functions/pesquisa/ObterTodasAsMusicasContenha";
+import {
+  ObterArtistaProvider,
+  useObterArtista,
+} from "@/contexts/useObterArtistaContext";
 
-type NewValueProps = {
-  label: string;
-  value: string;
+type OptionsProps = {
+  label: string; // Nome da música
+  value: string; // Nome do música
 };
 
 // ----------------------------------------------------------------
@@ -27,33 +30,44 @@ type NewValueProps = {
 const InputPesquisa = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listaDeMusicas, setListaDeMusicas] = useState<SongProps[]>([]);
-  const [options, setOptions] = useState<NewValueProps[]>();
+  const [options, setOptions] = useState<OptionsProps[]>([]);
   const [textoDePesquisa, setTextoDePesquisa] = useState<string>();
 
-  const { listaDeArtistas } = useNewMusic();
-  console.log(listaDeArtistas);
+  const { listaDeArtistas } = useObterArtista();
 
   const criandoOptions = () => {
     const novasOpcoes = listaDeMusicas.map((item) => {
       const artistaDaMusica = listaDeArtistas.filter(
         (artista) => artista.id === item.artistaId,
       );
+
       console.log(artistaDaMusica);
+
       return { label: item.musica, value: item.slug };
     });
-    return novasOpcoes;
+
+    setOptions(novasOpcoes);
   };
 
-  // Função que retorna todas as músicas do banco que iniciam com a letra pesquisada
-  const obterMusicasQueIniciamComALetra = async (textoDePesquisa: string) => {
+  // Função que retorna todas as músicas do banco que possuam a letra pesquisada
+  const obterMusicasQueContenham = async (textoDePesquisa: string) => {
     if (textoDePesquisa) {
+      setOptions([]);
       try {
-        const primeiraLetra = textoDePesquisa[0];
-        const musicas = await ObterTodasAsMusicasQueIniciamCom({
-          primeiraLetra,
+        const musicas = await ObterTodasAsMusicasContenha({
+          textoDePesquisa,
         });
 
-        musicas && setListaDeMusicas(musicas as unknown as SongProps[]);
+        // musicas && setListaDeMusicas(musicas as unknown as SongProps[]);
+        musicas &&
+          musicas.map((musica) => {
+            const musicaLabelValue = {
+              label: musica.musica,
+              value: musica.artistaId!,
+            };
+
+            setOptions((prevValue) => [...prevValue, musicaLabelValue]);
+          });
       } catch (error) {
         console.log("Erro no InputPesquisa =======>", error);
       }
@@ -105,51 +119,33 @@ const InputPesquisa = () => {
     },
   };
 
+  console.log(options);
+
   return (
-    <div className="w-52 sm:w-64 lg:w-96">
-      <label className="relative block">
-        <span className="sr-only">Search</span>
-        <span className="absolute inset-y-0 left-0 flex items-center pl-2 ">
-          <Image src={searchIcon} alt="Pesquisar" width={20} />
-        </span>
-        {/* <input
-            className="block w-full rounded-full border border-slate-300 bg-white py-1.5 pl-9 pr-3 shadow-sm placeholder:font-normal placeholder:text-gray-400 hover:bg-gray-50 focus:border-gray-400 focus:outline-none sm:text-sm"
+    <ObterArtistaProvider>
+      <div className="w-52 sm:w-64 lg:w-96">
+        <label className="relative block">
+          <span className="sr-only">Search</span>
+          <span className="absolute inset-y-0 left-0 flex items-center pl-2 ">
+            <Image src={searchIcon} alt="Pesquisar" width={20} />
+          </span>
+
+          <Select
+            isLoading={isLoading}
+            isSearchable
             placeholder="Vamos louvar?"
-            type="text"
-            name="search"
-            autoComplete="off"
-            onChange={(ev) => ev.target.value}
-          /> */}
-        <Select
-          isLoading={isLoading}
-          isSearchable
-          placeholder="Vamos louvar?"
-          noOptionsMessage={() => "Procure por uma música..."}
-          styles={colorStyles}
-          value={textoDePesquisa}
-          /*           onChange={(newValue: unknown) => {
-            setValue(newValue);
-            const valueString = newValue as NewValueProps;
-            setNomeDoArtista(valueString.label);
-            setValorEmString(valueString.label);
-          }} */
-          onInputChange={(newValue: unknown) => {
-            const valorComLabeleValue = newValue as NewValueProps;
-
-            setTextoDePesquisa(newValue as string);
-            obterMusicasQueIniciamComALetra(newValue as string);
-          }}
-          /*           onChange={(newValue: unknown) => {
-            console.log(newValue);
-            const valorComLabeleValue = newValue as NewValueProps;
-
-            setTextoDePesquisa(valorComLabeleValue.label);
-            obterMusicasQueIniciamComALetra(valorComLabeleValue.label);
-          }} */
-          options={listaDeMusicas}
-        />
-      </label>
-    </div>
+            noOptionsMessage={() => "Procure por uma música..."}
+            styles={colorStyles}
+            value={textoDePesquisa}
+            onInputChange={(newValue: unknown) => {
+              setTextoDePesquisa(newValue as string);
+              obterMusicasQueContenham(newValue as string);
+            }}
+            options={options}
+          />
+        </label>
+      </div>
+    </ObterArtistaProvider>
   );
 };
 
