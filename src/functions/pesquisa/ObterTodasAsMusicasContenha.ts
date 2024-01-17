@@ -10,9 +10,23 @@ const ObterTodasAsMusicasContenha = async ({ textoDePesquisa }: Props) => {
   try {
     const musicas = await prismaClient.cifra.findMany({
       where: {
-        musica: {
-          contains: textoDePesquisa.toUpperCase(),
-        },
+        OR: [
+          {
+            musica: {
+              contains: textoDePesquisa.toUpperCase(),
+            },
+          },
+          {
+            musica: {
+              contains: textoDePesquisa,
+            },
+          },
+          {
+            musica: {
+              contains: textoDePesquisa.toLowerCase(),
+            },
+          },
+        ],
       },
     });
     console.log(musicas);

@@ -33,27 +33,11 @@ const InputPesquisa = () => {
   const [options, setOptions] = useState<OptionsProps[]>([]);
   const [textoDePesquisa, setTextoDePesquisa] = useState<string>();
 
-  const { listaDeArtistas } = useObterArtista();
-
-  const criandoOptions = () => {
-    const novasOpcoes = listaDeMusicas.map((item) => {
-      const artistaDaMusica = listaDeArtistas.filter(
-        (artista) => artista.id === item.artistaId,
-      );
-
-      console.log(artistaDaMusica);
-
-      return { label: item.musica, value: item.slug };
-    });
-
-    setOptions(novasOpcoes);
-  };
-
   // Função que retorna todas as músicas do banco que possuam a letra pesquisada
   const obterMusicasQueContenham = async (textoDePesquisa: string) => {
     if (textoDePesquisa) {
-      setOptions([]);
       try {
+        setOptions([]);
         const musicas = await ObterTodasAsMusicasContenha({
           textoDePesquisa,
         });
@@ -82,6 +66,18 @@ const InputPesquisa = () => {
       borderRadius: "5rem",
       paddingLeft: ".3rem",
     }),
+    noOptionsMessage: (styles) => {
+      return {
+        ...styles,
+        fontSize: 12,
+      };
+    },
+    menu: (styles) => {
+      return {
+        ...styles,
+        display: textoDePesquisa ? "block" : "none",
+      };
+    },
     option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
         ...styles,
@@ -119,8 +115,6 @@ const InputPesquisa = () => {
     },
   };
 
-  console.log(options);
-
   return (
     <ObterArtistaProvider>
       <div className="w-52 sm:w-64 lg:w-96">
@@ -131,10 +125,10 @@ const InputPesquisa = () => {
           </span>
 
           <Select
-            isLoading={isLoading}
             isSearchable
+            isLoading={isLoading}
             placeholder="Vamos louvar?"
-            noOptionsMessage={() => "Procure por uma música..."}
+            noOptionsMessage={() => "Pesquise por uma música..."}
             styles={colorStyles}
             value={textoDePesquisa}
             onInputChange={(newValue: unknown) => {
