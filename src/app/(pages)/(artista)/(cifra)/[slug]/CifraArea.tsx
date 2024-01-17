@@ -1,29 +1,24 @@
 "use client";
 import Cifra from "@/components/Cifra/Cifra";
+import { SongProps } from "@/dtos/songProps";
 import Link from "next/link";
 import React from "react";
-import cifra from "@/api/cifras/manda-teus-anjos-anjos-de-resgate.json";
 
 type Props = {
-  musica: string;
-  artista: string;
-  participacao: string[];
-  tom: string;
-  bpm: number;
-  cifra: string;
+  cifra: SongProps;
 };
 
-const CifraArea = (cifra: Props) => {
+const CifraArea = ({ cifra }: Props) => {
   return (
     <div className="font-cifra">
-      <h1 className="font-text font-bold text-primaryColor text-3xl">
+      <h1 className="font-text text-3xl font-bold text-primaryColor">
         {cifra.musica}
       </h1>
       <Link
-        href={cifra.artista}
-        className="font-text text-gray-400 hover:text-secondaryColor hover:font-bold"
+        href={cifra.artistaId}
+        className="font-text text-gray-400 hover:font-bold hover:text-secondaryColor"
       >
-        {cifra.artista}
+        {cifra.artistaId}
       </Link>
       <br />
       <br />
