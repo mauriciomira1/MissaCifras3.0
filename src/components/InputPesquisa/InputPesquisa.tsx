@@ -10,9 +10,6 @@ import Select from "react-select";
 // Ícone de pesquisa
 import searchIcon from "../../public/images/generic/search-icon.svg";
 
-// Tipagem
-import { SongProps } from "@/dtos/songProps";
-
 // Funções auxiliares
 import ObterTodasAsMusicasContenha from "@/functions/pesquisa/ObterTodasAsMusicasContenha";
 import {
@@ -29,7 +26,6 @@ type OptionsProps = {
 
 const InputPesquisa = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [listaDeMusicas, setListaDeMusicas] = useState<SongProps[]>([]);
   const [options, setOptions] = useState<OptionsProps[]>([]);
   const [textoDePesquisa, setTextoDePesquisa] = useState<string>();
 
